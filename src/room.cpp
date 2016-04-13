@@ -4,13 +4,13 @@ Room::Room(void)
 {
 }
 
-Room::Room(int x, int y, int width, int height)
+Room::Room(int x, int y, int w, int h)
 {
 	Dimensions d;
 	d.x = x;
 	d.y = y;
-	d.width = width;
-	d.height = height;
+	d.w = w;
+	d.h = h;
 
 	_dimensions = d;	
 }
