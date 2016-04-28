@@ -16,7 +16,6 @@ public:
 	void  set(int x, int y, Cell* c);
 	int   width(void) const;
 	int   height(void) const;
-	int debug(void) const { return _cells.size(); }
 
 private:
 	std::vector<Cell*> _cells;
