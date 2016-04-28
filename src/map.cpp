@@ -9,14 +9,22 @@ Map::Map(int x, int y) : _x_max(x), _y_max(y)
 	_cells = std::vector<Cell*>(x * y);
 }
 
-Cell& Map::get(int x, int y) const 
+Map::~Map(void)
 {
-	return *_cells.at((y * _y_max) + x);
+	for(std::vector<Cell*>::iterator it = _cells.begin(); it != _cells.end(); it++)
+	{
+		delete *it;
+	}
 }
 
-void Map::set(int x, int y, Cell& c)
+Cell& Map::get(int x, int y) const 
 {
-	_cells[(y * _y_max) + x] = &c;
+	return *_cells.at((y * _x_max) + x);
+}
+
+void Map::set(int x, int y, Cell* c)
+{
+	_cells[(y * _x_max) + x] = c;
 }
 
 int Map::width(void) const

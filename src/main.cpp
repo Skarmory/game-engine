@@ -14,16 +14,16 @@ int main(int argc, char** argv)
 	noecho();
 	raw();
 
-	int mapx, mapy;
+	//int mapx, mapy;
 
-	getmaxyx(stdscr, mapy, mapx);
+	//getmaxyx(stdscr, mapy, mapx);
 
 	Level l;
 	l.load("sira_field");
 	l.draw();
 
-	mvprintw(0, 0, "Scr x: %d", mapx);
-	mvprintw(1, 0, "Scr y: %d", mapy);
+	//mvprintw(0, 0, "Scr x: %d", mapx);
+	//mvprintw(1, 0, "Scr y: %d", mapy);
 	
 	refresh();
 	getch();

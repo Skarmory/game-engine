@@ -6,7 +6,6 @@
 #include <assert.h>
 #include "component.h"
 
-
 class Entity {
 public:
 	Entity(int _id);
@@ -17,7 +16,6 @@ public:
 
 private:
 
-	static int _NEXT_ID;
 	int _id;
 	std::map<const std::string, Component*> _components;
 };
