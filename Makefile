@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-Wall -std=c++14 -lncurses
-SRCS=src/main.cpp src/level.cpp src/map.cpp src/room.cpp src/cell.cpp
+CFLAGS=-Wall -std=c++0x -lncurses
+SRCS=src/main.cpp src/level.cpp src/map.cpp src/cell.cpp src/entity.cpp src/component.cpp src/graphic_component.cpp src/location_component.cpp src/system.cpp src/render_system.cpp
 EXE_NAME=alashack
 
 build:

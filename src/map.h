@@ -9,9 +9,11 @@ class Map {
 public:
 	Map(void);
 	Map(int x, int y);
+
+	~Map(void);
 	
 	Cell& get(int x, int y) const;
-	void  set(int x, int y, Cell& c);
+	void  set(int x, int y, Cell* c);
 	int   width(void) const;
 	int   height(void) const;
 
