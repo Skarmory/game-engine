@@ -8,10 +8,12 @@
 #include "level.h"
 
 class LevelLoader {
+/*
 public:
 	Level* load(std::string level_name);
 private:
-	const levels_dir = "levels";
+	const std::string levels_dir = "levels";
+*/
 };
 
 #endif

@@ -1,10 +1,20 @@
 CC=g++
 CFLAGS=-Wall -std=c++0x -lncurses
-SRCS=src/main.cpp src/level.cpp src/map.cpp src/cell.cpp src/entity.cpp src/component.cpp src/graphic_component.cpp src/location_component.cpp src/system.cpp src/render_system.cpp
-EXE_NAME=alashack
+GAME=incarnate
 
-build:
-	$(CC) $(CFLAGS) $(SRCS) -o $(EXE_NAME)
+SRCS=$(wildcard src/*.cpp)
+INCL=$(wildcard include/*.h)
+OBJS=$(patsubst src/%.cpp,build/%.o,$(SRCS))
+
+.PHONY: all clean default
+default: $(GAME)
+all: default
+
+build/%.o: src/%.cpp $(INCL)
+	$(CC) $(CFLAGS) -I include -c $< -o $@ 
+
+$(GAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(GAME)
 
 clean:
-	rm *.o
+	rm build/*.o; rm $(GAME)

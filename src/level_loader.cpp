@@ -1,5 +1,6 @@
-#include "level-loader.h"
+#include "level_loader.h"
 
+/*
 Level* LevelLoader::load(std::string level_name)
 {
 	std::stringstream sstream;
@@ -29,3 +30,4 @@ Level* LevelLoader::load(std::string level_name)
 
 	return level;
 }
+*/
