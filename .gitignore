@@ -1,6 +1,5 @@
-
+*.o
 tags
-alashack
 incarnate
 *~
 *swp

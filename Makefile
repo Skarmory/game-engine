@@ -14,7 +14,7 @@ build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -I include -c $< -o $@ 
 
 $(GAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(GAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(GAME) -ltinfo
 
 clean:
 	rm build/*.o; rm $(GAME)
