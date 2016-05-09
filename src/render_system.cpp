@@ -21,6 +21,6 @@ void RenderSystem::update(void)
 		lcomponent = dynamic_cast<const LocationComponent*>((*it)->get_component("LocationComponent"));
 		assert(lcomponent != nullptr);
 
-		mvaddch(lcomponent->y(), lcomponent->x(), gcomponent->graphic());
+		mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic());
 	}
 }

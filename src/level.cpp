@@ -89,6 +89,4 @@ void Level::draw(void) const
 	{
 		mvaddch(y, x, _map.get(x, y).get_display());
 	}
-
-	mvprintw(0, 0, "Map: %i, %i", _map.width(), _map.height());
 }

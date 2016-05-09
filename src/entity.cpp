@@ -14,7 +14,7 @@ void Entity::add_component(Component* component)
 	_components[component->name()] = component;	
 }
 
-const Component* Entity::get_component(std::string name)
+Component* Entity::get_component(std::string name) 
 {
 	assert(name.length() > 0);
 

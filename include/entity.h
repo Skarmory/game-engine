@@ -11,8 +11,8 @@ public:
 	Entity(int _id);
 	~Entity(void);
 
-	void			 add_component(Component* component);
-	const Component* get_component(std::string name);
+	void	   add_component(Component* component);
+	Component* get_component(std::string name);
 
 private:
 
