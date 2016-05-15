@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <ncurses.h>
+#include <memory>
 #include "system.h"
 #include "graphic_component.h"
 #include "location_component.h"

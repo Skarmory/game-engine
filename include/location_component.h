@@ -6,6 +6,7 @@
 struct LocationComponent : public Component
 {
 	LocationComponent(int x, int y);
+	~LocationComponent(void);
 
 	int x, y;
 };

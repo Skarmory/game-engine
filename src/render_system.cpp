@@ -11,16 +11,27 @@ RenderSystem::~RenderSystem(void)
 
 void RenderSystem::update(void)
 {
-	const GraphicComponent* gcomponent;
-	const LocationComponent* lcomponent;
-	for(std::vector<Entity*>::iterator it = _entities.begin(); it != _entities.end(); it++)
+	std::shared_ptr<GraphicComponent> gcomponent(nullptr);
+	std::shared_ptr<LocationComponent> lcomponent(nullptr);
+	for(std::vector<std::weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
 	{
-		gcomponent = dynamic_cast<const GraphicComponent*>((*it)->get_component("GraphicComponent"));
-		assert(gcomponent != nullptr);
+		std::shared_ptr<Entity> e = (*it).lock();
+		
+		if(e != nullptr)
+		{
+			gcomponent = e->get_component<GraphicComponent>();
+			assert(gcomponent != nullptr);
 
-		lcomponent = dynamic_cast<const LocationComponent*>((*it)->get_component("LocationComponent"));
-		assert(lcomponent != nullptr);
+			lcomponent = e->get_component<LocationComponent>();
+			assert(lcomponent != nullptr);
 
-		mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic());
+			mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic());
+
+			it++;
+		}
+		else
+		{
+			it = _entities.erase(it);
+		}
 	}
 }

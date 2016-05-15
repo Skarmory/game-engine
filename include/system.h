@@ -2,6 +2,7 @@
 #define system_h
 
 #include <vector>
+#include <memory>
 #include "entity.h"
 
 class System {
@@ -10,10 +11,10 @@ public:
 	virtual ~System(void);
 
 	virtual void update(void) = 0;
-	virtual void add_entity(Entity* entity);
+	virtual void add_entity(std::shared_ptr<Entity>&);
 
 protected:
-	std::vector<Entity*> _entities;
+	std::vector<std::weak_ptr<Entity>> _entities;
 };
 
 #endif

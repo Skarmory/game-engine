@@ -21,12 +21,10 @@ int main(int argc, char** argv)
 	curs_set(0);
 	timeout(1);
 
-	Entity* e = new Entity(0);
-	LocationComponent lc(10, 10);
-	GraphicComponent  gc('@');
-	
-	e->add_component(&lc);
-	e->add_component(&gc);
+	std::shared_ptr<Entity> e = std::make_shared<Entity>(0);
+
+	e->add_component(std::make_shared<LocationComponent>(10, 10));
+	e->add_component(std::make_shared<GraphicComponent>('@'));
 
 	RenderSystem r_sys;
 	r_sys.add_entity(e);
@@ -41,7 +39,7 @@ int main(int argc, char** argv)
 	bool running = true;
 	InputManager input(e, running);
 	
-	Command::ICommand* input_command;
+	std::unique_ptr<Command::ICommand> input_command(nullptr);
 	while(running)
 	{	
 		input_command = input.handle_input();
@@ -49,14 +47,11 @@ int main(int argc, char** argv)
 		if(input_command != nullptr)
 		{
 			input_command->execute();
-			delete input_command;
 		}
 		
 		l.draw();
 		r_sys.update();
 	}
-
-	delete e;
 
 	refresh();
 	getch();
