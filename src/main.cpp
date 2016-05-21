@@ -29,15 +29,15 @@ int main(int argc, char** argv)
 	RenderSystem r_sys;
 	r_sys.add_entity(e);
 
-	Level l;
-	l.load("sira_field");
-	l.draw();
+	std::shared_ptr<Level> l = std::make_shared<Level>();
+	l->load("sira_field");
+	l->draw();
 
 	r_sys.update();
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(e, running);
+	InputManager input(e, l, running);
 	
 	std::unique_ptr<Command::ICommand> input_command(nullptr);
 	while(running)
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 			input_command->execute();
 		}
 		
-		l.draw();
+		l->draw();
 		r_sys.update();
 	}
 

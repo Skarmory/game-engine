@@ -4,6 +4,7 @@
 #include <memory>
 #include <ncurses.h>
 #include "entity.h"
+#include "level.h"
 #include "location_component.h"
 
 namespace Command {
@@ -19,11 +20,12 @@ public:
 class MoveCommand : public ICommand
 {
 public:
-	MoveCommand(std::weak_ptr<Entity>, int, int);
+	MoveCommand(std::weak_ptr<Entity>, std::weak_ptr<Level>, int, int);
 	virtual void execute(void);
 
 private:
 	std::weak_ptr<Entity> _entity;
+	std::weak_ptr<Level> _level;
 	int _x, _y;
 };
 

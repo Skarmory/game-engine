@@ -1,16 +1,27 @@
 #include "command.h"
 using namespace Command;
 
-MoveCommand::MoveCommand(std::weak_ptr<Entity> e, int x, int y) : _entity(e), _x(x), _y(y) {}
+MoveCommand::MoveCommand(std::weak_ptr<Entity> e, std::weak_ptr<Level> l, int x, int y) :
+   	_entity(e), _level(l), _x(x), _y(y) {}
 
 void MoveCommand::execute(void)
 {
 	if(std::shared_ptr<Entity> e = _entity.lock())
 	{
-		std::shared_ptr<LocationComponent> lc = e->get_component<LocationComponent>();
-	
-		lc->x += _x;
-		lc->y += _y;	
+		if(std::shared_ptr<Level> lev = _level.lock())
+		{
+			int dx, dy;
+			std::shared_ptr<LocationComponent> lc = e->get_component<LocationComponent>();
+				
+			dx = lc->x + _x;
+			dy = lc->y + _y;
+
+			if(lev->is_walkable(dx, dy))
+			{
+				lc->x = dx;
+				lc->y = dy;	
+			}
+		}
 	}
 }
 

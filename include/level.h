@@ -22,6 +22,7 @@ public:
 	void load(std::string level_name);
 
 	int levelnumber(void) const;
+	bool is_walkable(int, int) const;
 	
 private:
 	static int _NEXT;

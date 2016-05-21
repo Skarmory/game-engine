@@ -14,8 +14,11 @@ public:
 	
 	Cell& get(int x, int y) const;
 	void  set(int x, int y, Cell* c);
+
 	int   width(void) const;
 	int   height(void) const;
+
+	bool is_walkable(int x, int y) const;
 
 private:
 	std::vector<Cell*> _cells;

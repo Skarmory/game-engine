@@ -45,7 +45,11 @@ void Level::load(std::string level_name)
 				for(int x = 0; x < _map.width(); x++)
 				{
 					char ch = line[x];
-					_map.set(x, y, new Cell(ch));
+					bool b = true;
+					if(ch != '.')
+						b = false;
+
+					_map.set(x, y, new Cell(ch, b));
 					assert(_map.get(x, y).get_display() == ch);
 				}	
 
@@ -89,4 +93,9 @@ void Level::draw(void) const
 	{
 		mvaddch(y, x, _map.get(x, y).get_display());
 	}
+}
+
+bool Level::is_walkable(int x, int y) const
+{
+	return _map.is_walkable(x, y);
 }

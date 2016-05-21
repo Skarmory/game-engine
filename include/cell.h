@@ -4,14 +4,16 @@
 class Cell {
 public:
 	Cell(void);
-	Cell(char display);
+	Cell(char, bool);
 	~Cell(void);
 
 	char get_display(void) const;
-	void display(char c);
+	void display(char);
+	bool is_walkable(void) const;
 
 private:
 	char _display;
+	bool _walkable;
 };
 
 #endif

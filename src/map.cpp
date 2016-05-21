@@ -36,3 +36,8 @@ int Map::height(void) const
 {
 	return _y_max;
 }
+
+bool Map::is_walkable(int x, int y) const
+{
+	return get(x, y).is_walkable();
+}
