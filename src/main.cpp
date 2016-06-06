@@ -21,9 +21,7 @@ int main(int argc, char** argv)
 	curs_set(0);
 	timeout(1);
 
-	EntityManager e_manager;
-
-	std::shared_ptr<Entity> e = e_manager.create_entity();
+	std::shared_ptr<Entity> e = EntityManager::get_instance().create_entity();
 
 	e->add_component(std::make_shared<LocationComponent>(10, 10));
 	e->add_component(std::make_shared<GraphicComponent>('@'));
