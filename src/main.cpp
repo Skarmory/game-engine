@@ -11,17 +11,19 @@
 #include "location_component.h"
 #include "input.h"
 #include "command.h"
+#include "entity_manager.h"
 
 int main(int argc, char** argv)
 {
-	srand(time(NULL));
 	initscr();
 	noecho();
 	raw();
 	curs_set(0);
 	timeout(1);
 
-	std::shared_ptr<Entity> e = std::make_shared<Entity>(0);
+	EntityManager e_manager;
+
+	std::shared_ptr<Entity> e = e_manager.create_entity();
 
 	e->add_component(std::make_shared<LocationComponent>(10, 10));
 	e->add_component(std::make_shared<GraphicComponent>('@'));

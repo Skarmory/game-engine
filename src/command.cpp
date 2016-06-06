@@ -25,17 +25,19 @@ void MoveCommand::execute(void)
 	}
 }
 
+AttackCommand::AttackCommand(std::weak_ptr<Entity> e, int x, int y) : _entity(e), _x(x), _y(y) {}
+
+void AttackCommand::execute(void)
+{
+	if(std::shared_ptr<Entity> e = _entity.lock())
+	{
+
+	}
+}	
+
 QuitCommand::QuitCommand(bool& game_state) : _state(game_state) {}
 
 void QuitCommand::execute(void)
 {
 	_state = false;
 }
-
-Debug_KillPlayerCommand::Debug_KillPlayerCommand(std::shared_ptr<Entity>& e) : _entity(e) {}
-
-void Debug_KillPlayerCommand::execute(void)
-{
-	_entity.reset();
-}
-

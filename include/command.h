@@ -7,8 +7,8 @@
 #include "level.h"
 #include "location_component.h"
 
-namespace Command {
-
+namespace Command 
+{
 
 class ICommand
 {
@@ -38,13 +38,14 @@ private:
 	bool& _state;
 };
 
-class Debug_KillPlayerCommand : public ICommand
+class AttackCommand : public ICommand
 {
 public:
-	Debug_KillPlayerCommand(std::shared_ptr<Entity>&);
+	AttackCommand(std::weak_ptr<Entity>, int, int);
 	virtual void execute(void);
 private:
-	std::shared_ptr<Entity>& _entity;
+	std::weak_ptr<Entity> _entity;
+	int _x, _y;
 };
 
 }
