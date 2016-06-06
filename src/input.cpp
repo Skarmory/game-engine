@@ -31,8 +31,6 @@ CPtr InputManager::handle_input(void)
 			return CPtr(new MoveCommand(_player, _level, 1, 1));
 		case 'q':
 			return CPtr(new QuitCommand(_is_running));
-		case 'z':
-			return CPtr(new Debug_KillPlayerCommand(_player));
 		case ERR:
 		default:
 			return nullptr;
