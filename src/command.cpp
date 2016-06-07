@@ -30,10 +30,6 @@ AttackCommand::AttackCommand(std::weak_ptr<Entity> attacker, int x, int y)
 
 void AttackCommand::execute(void)
 {
-	if(std::shared_ptr<Entity> e = _entity.lock())
-	{
-
-	}
 }	
 
 QuitCommand::QuitCommand(bool& game_state) : _state(game_state) {}
