@@ -25,7 +25,8 @@ void MoveCommand::execute(void)
 	}
 }
 
-AttackCommand::AttackCommand(std::weak_ptr<Entity> e, int x, int y) : _entity(e), _x(x), _y(y) {}
+AttackCommand::AttackCommand(std::weak_ptr<Entity> attacker, int x, int y) 
+	: _attacker(attacker), _x(x), _y(y) {}
 
 void AttackCommand::execute(void)
 {

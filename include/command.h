@@ -44,7 +44,7 @@ public:
 	AttackCommand(std::weak_ptr<Entity>, int, int);
 	virtual void execute(void);
 private:
-	std::weak_ptr<Entity> _entity;
+	std::weak_ptr<Entity> _attacker;
 	int _x, _y;
 };
 
