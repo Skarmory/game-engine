@@ -23,6 +23,7 @@ public:
 
 	int levelnumber(void) const;
 	bool is_walkable(int, int) const;
+	bool is_in_bounds(int, int) const;
 	
 private:
 	static int _NEXT;

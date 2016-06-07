@@ -99,3 +99,8 @@ bool Level::is_walkable(int x, int y) const
 {
 	return _map.is_walkable(x, y);
 }
+
+bool Level::is_in_bounds(int x, int y) const
+{
+	return (x >= 0 && x < _map.width() && y >= 0 && y < _map.height());
+}

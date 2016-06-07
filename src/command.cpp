@@ -16,7 +16,7 @@ void MoveCommand::execute(void)
 			dx = lc->x + _x;
 			dy = lc->y + _y;
 
-			if(lev->is_walkable(dx, dy))
+			if(lev->is_in_bounds(dx, dy) && lev->is_walkable(dx, dy))
 			{
 				lc->x = dx;
 				lc->y = dy;	
