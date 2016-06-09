@@ -3,16 +3,12 @@
 
 #include "component.h"
 
-class GraphicComponent : public Component
+struct GraphicComponent : public Component
 {
-public:
 	GraphicComponent(char graphic);
 	~GraphicComponent(void);
 
-	char graphic(void) const { return _graphic; }
-
-private:
-	char _graphic;
+	char graphic;
 };
 
 #endif

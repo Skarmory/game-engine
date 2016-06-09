@@ -25,7 +25,7 @@ void RenderSystem::update(void)
 			lcomponent = e->get_component<LocationComponent>();
 			assert(lcomponent != nullptr);
 
-			mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic());
+			mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic);
 
 			it++;
 		}

@@ -9,6 +9,7 @@
 #include "entity.h"
 #include "graphic_component.h"
 #include "location_component.h"
+#include "damage_component.h"
 #include "input.h"
 #include "command.h"
 #include "entity_manager.h"
