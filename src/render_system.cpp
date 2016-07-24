@@ -1,14 +1,5 @@
 #include "render_system.h"
 
-RenderSystem::RenderSystem(void)
-{
-
-}
-
-RenderSystem::~RenderSystem(void)
-{
-}
-
 void RenderSystem::update(void)
 {
 	std::shared_ptr<GraphicComponent> gcomponent(nullptr);

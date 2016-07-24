@@ -7,7 +7,7 @@
 struct CollidedComponent : public Component
 {
 	CollidedComponent(Entity const& collided_with) : 
-		Component("CollidedComponent"), collided_with(collided_with)
+		Component("CollidedComponent"), collided_with(collided_with) {}
 
 	Entity const& collided_with;
 };
