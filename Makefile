@@ -11,6 +11,7 @@ default: $(GAME)
 all: default
 
 build/%.o: src/%.cpp $(INCL)
+	mkdir -p build
 	$(CC) $(CFLAGS) -I include -c $< -o $@ 
 
 $(GAME): $(OBJS)
