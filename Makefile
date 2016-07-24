@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++14 -lncurses -ltinfo
+CFLAGS=-Wall -std=c++11 -lncurses -ltinfo
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
