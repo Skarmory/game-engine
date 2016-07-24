@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++14 -lncurses
+CFLAGS=-Wall -std=c++11 -lncurses -ltinfo
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
@@ -11,6 +11,7 @@ default: $(GAME)
 all: default
 
 build/%.o: src/%.cpp $(INCL)
+	mkdir -p build
 	$(CC) $(CFLAGS) -I include -c $< -o $@ 
 
 $(GAME): $(OBJS)
