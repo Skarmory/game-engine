@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++11 -lncurses -ltinfo
+override CFLAGS+=-Wall -std=c++11 -lncurses
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
@@ -18,4 +18,5 @@ $(GAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(GAME)
 
 clean:
-	rm build/*.o; rm $(GAME)
+	@rm -f build/*.o
+	@rm -f $(GAME)
