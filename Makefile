@@ -7,11 +7,13 @@ INCL=$(wildcard include/*.h)
 OBJS=$(patsubst src/%.cpp,build/%.o,$(SRCS))
 
 .PHONY: all clean default
-default: $(GAME)
+default: setup $(GAME)
 all: default
 
-build/%.o: src/%.cpp $(INCL)
+setup:	
 	mkdir -p build
+
+build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -I include -c $< -o $@ 
 
 $(GAME): $(OBJS)
