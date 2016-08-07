@@ -16,6 +16,8 @@
 #include "collision_system.h"
 #include "damage_system.h"
 
+#include <exception>
+
 int main(int argc, char** argv)
 {
 	initscr();
@@ -52,8 +54,10 @@ int main(int argc, char** argv)
 	coll_sys.add_entity(e);
 	coll_sys.add_entity(fire);
 
+	d_sys.add_entity(e);
+
 	std::shared_ptr<Level> l = std::make_shared<Level>();
-	l->load("sira_field");
+	l->load("testing_map");
 	l->draw();
 
 	r_sys.update();
@@ -70,14 +74,14 @@ int main(int argc, char** argv)
 		if(input_command != nullptr)
 		{
 			input_command->execute();
-		}
 		
-		coll_sys.update();
-		d_sys.update();
+			coll_sys.update();
+			d_sys.update();
 
-		l->draw();
-		r_sys.update();
-
+			l->draw();
+			r_sys.update();
+		}
+	
 		mvprintw(0,0, "HP: %i", e->get_component<HealthComponent>()->health);
 		mvprintw(20,0, "Player: %i, %i", e->get_component<LocationComponent>()->x, e->get_component<LocationComponent>()->y);
 		mvprintw(21,0, "  Fire: %i, %i", fire->get_component<LocationComponent>()->x, fire->get_component<LocationComponent>()->y);

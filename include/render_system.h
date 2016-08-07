@@ -10,8 +10,8 @@
 
 class RenderSystem : public System {
 public:
-	RenderSystem(void);
-	~RenderSystem(void);
+	RenderSystem(void) {};
+	~RenderSystem(void) {};
 
 	virtual void update(void) override;
 };
