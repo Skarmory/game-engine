@@ -1,5 +1,6 @@
 CC=g++
-override CFLAGS+=-Wall -std=c++11 -lncurses
+CFLAGS=-Wall -std=c++11
+override HEADERS+=-lncurses
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
@@ -17,7 +18,7 @@ build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -I include -c $< -o $@ 
 
 $(GAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(GAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(GAME) $(HEADERS)
 
 clean:
 	@rm -f build/*.o
