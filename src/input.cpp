@@ -9,29 +9,34 @@ InputManager::InputManager(
 
 CPtr InputManager::handle_input(void)
 {
-	int in = getch();
+	TCOD_key_t in;
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &in, NULL);
+	//int in = getch();
 	
-	switch(in)
+	switch(in.vk)
 	{
-		case 'h':
-			return CPtr(new MoveCommand(_player, _level, -1, 0));
-		case 'j':
-			return CPtr(new MoveCommand(_player, _level,  0, 1));
-		case 'k':
-			return CPtr(new MoveCommand(_player, _level, 0, -1));
-		case 'l':
-			return CPtr(new MoveCommand(_player, _level, 1, 0));
-		case 'y':
-			return CPtr(new MoveCommand(_player, _level, -1, -1));
-		case 'u':
-			return CPtr(new MoveCommand(_player, _level, 1, -1));
-		case 'b':
-			return CPtr(new MoveCommand(_player, _level, -1, 1));
-		case 'n':
-			return CPtr(new MoveCommand(_player, _level, 1, 1));
-		case 'q':
-			return CPtr(new QuitCommand(_is_running));
-		case ERR:
+		case TCODK_CHAR:
+			switch(in.c)
+			{
+				case 'h':
+					return CPtr(new MoveCommand(_player, _level, -1, 0));
+				case 'j':
+					return CPtr(new MoveCommand(_player, _level,  0, 1));
+				case 'k':
+					return CPtr(new MoveCommand(_player, _level, 0, -1));
+				case 'l':
+					return CPtr(new MoveCommand(_player, _level, 1, 0));
+				case 'y':
+					return CPtr(new MoveCommand(_player, _level, -1, -1));
+				case 'u':
+					return CPtr(new MoveCommand(_player, _level, 1, -1));
+				case 'b':
+					return CPtr(new MoveCommand(_player, _level, -1, 1));
+				case 'n':
+					return CPtr(new MoveCommand(_player, _level, 1, 1));
+				case 'q':
+					return CPtr(new QuitCommand(_is_running));
+			}
 		default:
 			return nullptr;
 	}

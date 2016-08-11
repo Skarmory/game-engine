@@ -16,7 +16,7 @@ void RenderSystem::update(void)
 			lcomponent = e->get_component<LocationComponent>();
 			assert(lcomponent != nullptr);
 
-			mvaddch(lcomponent->y, lcomponent->x, gcomponent->graphic);
+			TCODConsole::root->putChar(lcomponent->x, lcomponent->y, gcomponent->graphic);
 
 			it++;
 		}

@@ -1,7 +1,9 @@
 #ifndef main_h
 #define main_h
 
-#include <ncurses.h>
+//#include <ncurses.h>
+#include "libtcod/libtcod.hpp"
+
 #include <vector>
 #include <time.h>
 #include "level.h"
@@ -16,15 +18,16 @@
 #include "collision_system.h"
 #include "damage_system.h"
 
-#include <exception>
-
 int main(int argc, char** argv)
 {
-	initscr();
-	noecho();
-	raw();
-	curs_set(0);
-	timeout(1);
+	TCODConsole::initRoot(100, 100, "Words of Command", false);
+
+
+	//initscr();
+	//noecho();
+	//raw();
+	//curs_set(0);
+	//timeout(1);
 
 	// Create the player entity
 	// TODO: Create some entity factory or builder
@@ -67,12 +70,16 @@ int main(int argc, char** argv)
 	InputManager input(e, l, running);
 	
 	std::unique_ptr<Command::ICommand> input_command(nullptr);
-	while(running)
+
+	while(running && !TCODConsole::isWindowClosed())
 	{	
+		// TODO: Make the input manager handle all of this
 		input_command = input.handle_input();
 		
 		if(input_command != nullptr)
 		{
+			TCODConsole::root->clear();
+
 			input_command->execute();
 		
 			coll_sys.update();
@@ -80,17 +87,19 @@ int main(int argc, char** argv)
 
 			l->draw();
 			r_sys.update();
+
+			TCODConsole::flush();
 		}
 	
-		mvprintw(0,0, "HP: %i", e->get_component<HealthComponent>()->health);
-		mvprintw(20,0, "Player: %i, %i", e->get_component<LocationComponent>()->x, e->get_component<LocationComponent>()->y);
-		mvprintw(21,0, "  Fire: %i, %i", fire->get_component<LocationComponent>()->x, fire->get_component<LocationComponent>()->y);
+		//mvprintw(0,0, "HP: %i", e->get_component<HealthComponent>()->health);
+		//mvprintw(20,0, "Player: %i, %i", e->get_component<LocationComponent>()->x, e->get_component<LocationComponent>()->y);
+		//mvprintw(21,0, "  Fire: %i, %i", fire->get_component<LocationComponent>()->x, fire->get_component<LocationComponent>()->y);
 	}
 
-	refresh();
-	getch();
+	//refresh();
+	//getch();
 	
-	endwin();
+	//endwin();
 	return 0;
 }
 

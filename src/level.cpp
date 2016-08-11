@@ -91,7 +91,8 @@ void Level::draw(void) const
 	for(int y = 0; y < _map.height(); y++)
 	for(int x = 0; x < _map.width(); x++)
 	{
-		mvaddch(y, x, _map.get(x, y).get_display());
+
+		TCODConsole::root->putChar(x, y, _map.get(x, y).get_display());
 	}
 }
 

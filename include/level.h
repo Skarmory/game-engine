@@ -1,7 +1,10 @@
 #ifndef level_h
 #define level_h
 
-#include <ncurses.h>
+//#include <ncurses.h>
+
+#include "libtcod/libtcod.hpp"
+
 #include <stdlib.h>
 #include <vector>
 #include <random>

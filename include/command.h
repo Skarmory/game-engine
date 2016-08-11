@@ -2,7 +2,7 @@
 #define command_h
 
 #include <memory>
-#include <ncurses.h>
+//#include <ncurses.h>
 #include "entity.h"
 #include "level.h"
 #include "location_component.h"
