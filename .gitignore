@@ -3,5 +3,4 @@ tags
 incarnate
 *~
 *.sw*
-*/libtcod/*
 *.png
