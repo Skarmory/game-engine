@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-Wall -std=c++11
-override HEADERS+=-lncurses
+CFLAGS=-Wall -std=c++11 -Iinclude -Iinclude/libtcod
+override LIBS=-Llib -ltcod -ltcodxx -Wl,-rpath=lib
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
@@ -15,10 +15,10 @@ setup:
 	mkdir -p build
 
 build/%.o: src/%.cpp $(INCL)
-	$(CC) $(CFLAGS) -I include -c $< -o $@ 
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(GAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(GAME) $(HEADERS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(GAME) $(LIBS)
 
 clean:
 	@rm -f build/*.o

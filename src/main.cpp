@@ -1,8 +1,7 @@
 #ifndef main_h
 #define main_h
 
-//#include <ncurses.h>
-#include "libtcod/libtcod.hpp"
+#include "libtcod.hpp"
 
 #include <vector>
 #include <time.h>
@@ -21,13 +20,6 @@
 int main(int argc, char** argv)
 {
 	TCODConsole::initRoot(100, 100, "Words of Command", false);
-
-
-	//initscr();
-	//noecho();
-	//raw();
-	//curs_set(0);
-	//timeout(1);
 
 	// Create the player entity
 	// TODO: Create some entity factory or builder
@@ -78,28 +70,22 @@ int main(int argc, char** argv)
 		
 		if(input_command != nullptr)
 		{
-			TCODConsole::root->clear();
-
 			input_command->execute();
 		
 			coll_sys.update();
 			d_sys.update();
-
-			l->draw();
-			r_sys.update();
-
-			TCODConsole::flush();
 		}
+
+		TCODConsole::root->clear();
+		l->draw();
+		r_sys.update();
+		TCODConsole::flush();
 	
 		//mvprintw(0,0, "HP: %i", e->get_component<HealthComponent>()->health);
 		//mvprintw(20,0, "Player: %i, %i", e->get_component<LocationComponent>()->x, e->get_component<LocationComponent>()->y);
 		//mvprintw(21,0, "  Fire: %i, %i", fire->get_component<LocationComponent>()->x, fire->get_component<LocationComponent>()->y);
 	}
 
-	//refresh();
-	//getch();
-	
-	//endwin();
 	return 0;
 }
 
