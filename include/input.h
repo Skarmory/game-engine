@@ -1,9 +1,7 @@
 #ifndef input_h
 #define input_h
 
-//#include <ncurses.h>
-
-#include "libtcod/libtcod.hpp"
+#include "libtcod.hpp"
 
 #include <memory>
 #include "command.h"

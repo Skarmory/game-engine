@@ -2,9 +2,8 @@
 #define render_system_h
 
 #include <vector>
-//#include <ncurses.h>
 
-#include "libtcod/libtcod.hpp"
+#include "libtcod.hpp"
 
 #include <memory>
 #include "system.h"
