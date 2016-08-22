@@ -15,12 +15,13 @@ all: setup $(GAME)
 setup:	
 	mkdir -p build;\
 	cd libtcod-1.5.1/;\
-	if [ $(BITS) == 64 ]; then\
+	if [ $(BITS) -eq 64 ]; then\
 		make -f makefiles/makefile-linux64 clean all;\
 	else\
 		make -f makefiles/makefile-linux clean all;\
 	fi;\
 	cd ..;
+	if [ ! -f terminal.png ]; then cp libtcod-1.5.1/terminal.png terminal.png; fi;\
 
 build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -c $< -o $@ 
