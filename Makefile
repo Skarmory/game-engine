@@ -13,14 +13,14 @@ default: $(GAME)
 all: setup $(GAME)
 
 setup:	
-	mkdir -p build
-	cd libtcod-1.5.1/
-	if [ $(BITS) == 64 ]; then 
-		make -f makefiles/makefile-linux64 clean all;
-	else
-		make -f makefiles/makefile-linux clean all;
-	fi;
-	cd ..
+	mkdir -p build;\
+	cd libtcod-1.5.1/;\
+	if [ $(BITS) == 64 ]; then\
+		make -f makefiles/makefile-linux64 clean all;\
+	else\
+		make -f makefiles/makefile-linux clean all;\
+	fi;\
+	cd ..;
 
 build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -c $< -o $@ 
