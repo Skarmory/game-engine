@@ -8,20 +8,19 @@ INCL=$(wildcard include/*.h)
 OBJS=$(patsubst src/%.cpp,build/%.o,$(SRCS))
 BITS=$(shell getconf LONG_BIT)
 
-.PHONY: all clean default
-default: setup $(GAME)
-all: default
+.PHONY: all clean default setup
+default: $(GAME)
+all: setup $(GAME)
 
 setup:	
-	mkdir -p build;
-	if [ ! -d libtcod-1.5.1 ]; then\
-		if [ -f libtcod-1.5.1.tar.gz ]; then gunzip libtcod-1.5.1.tar.gz; fi;\
-		tar xf libtcod-1.5.1.tar;\
-		cd libtcod-1.5.1 &&\
-		if [ $(BITS) -eq 64 ]; then echo "Making 64 bit" && make -f makefiles/makefile-linux64 clean all; else echo "Making 32 bit" && make -f makefiles/makefile-linux clean all; fi;\
-		cd ..;\
-		if [ ! -f terminal.png ]; then cp libtcod-1.5.1/terminal.png terminal.png; fi;\
-	fi
+	mkdir -p build
+	cd libtcod-1.5.1/
+	if [ $(BITS) == 64 ]; then 
+		make -f makefiles/makefile-linux64 clean all;
+	else
+		make -f makefiles/makefile-linux clean all;
+	fi;
+	cd ..
 
 build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -c $< -o $@ 
