@@ -19,14 +19,14 @@
 
 int main(int argc, char** argv)
 {
-	TCODConsole::initRoot(100, 100, "Words of Command", false);
+	TCODConsole::initRoot(80, 40, "Words of Command", false);
 
 	// Create the player entity
 	// TODO: Create some entity factory or builder
 	std::shared_ptr<Entity> e = EntityManager::get_instance().create_entity();
 
 	e->add_component(std::make_shared<LocationComponent>(10, 10));
-	e->add_component(std::make_shared<GraphicComponent>('@'));
+	e->add_component(std::make_shared<GraphicComponent>('@', TCODColor::white));
 	e->add_component(std::make_shared<CollisionComponent>());
 	e->add_component(std::make_shared<HealthComponent>(1));
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	std::shared_ptr<Entity> fire = EntityManager::get_instance().create_entity();
 	
 	fire->add_component(std::make_shared<LocationComponent>(5, 5));
-	fire->add_component(std::make_shared<GraphicComponent>('F'));
+	fire->add_component(std::make_shared<GraphicComponent>('F', TCODColor::orange));
 	fire->add_component(std::make_shared<CollisionComponent>());
 	fire->add_component(std::make_shared<DamageComponent>(1));
 

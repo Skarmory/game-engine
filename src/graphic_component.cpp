@@ -1,6 +1,6 @@
 #include "graphic_component.h"
 
-GraphicComponent::GraphicComponent(char graphic) : Component("GraphicComponent"), graphic(graphic) 
+GraphicComponent::GraphicComponent(char graphic, TCODColor colour) : Component("GraphicComponent"), graphic(graphic), colour(colour)  
 {
 }
 
