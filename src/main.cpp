@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <time.h>
+#include <chrono>
+
 #include "level.h"
 #include "render_system.h"
 #include "entity.h"
@@ -53,9 +55,12 @@ int main(int argc, char** argv)
 
 	std::shared_ptr<Level> l = std::make_shared<Level>();
 	l->load("testing_map");
-	l->draw();
 
-	r_sys.update();
+	int turn = 1;
+	std::chrono::duration<double> turn_time(3);
+	std::chrono::time_point<std::chrono::high_resolution_clock> now, previous;
+	std::chrono::duration<double> elapsed;
+	previous = std::chrono::high_resolution_clock::now();
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
@@ -63,27 +68,44 @@ int main(int argc, char** argv)
 	
 	std::unique_ptr<Command::ICommand> input_command(nullptr);
 
+	// Initial draw
+	TCODConsole::root->clear();
+	l->draw();
+	r_sys.update();
+	TCODConsole::root->print(0, 0, "T: %i", turn);
+	TCODConsole::flush();
+
 	while(running && !TCODConsole::isWindowClosed())
 	{	
 		// TODO: Make the input manager handle all of this
-		input_command = input.handle_input();
+		// Input
+		do 
+		{
+			now = std::chrono::high_resolution_clock::now();
+			elapsed = now - previous;
+			input_command = input.handle_input();
+		} 
+		while(input_command == nullptr && elapsed < turn_time);
 		
 		if(input_command != nullptr)
 		{
 			input_command->execute();
-		
-			coll_sys.update();
-			d_sys.update();
 		}
 
+		turn++;
+		previous = now;
+
+		// Logic
+		coll_sys.update();
+		d_sys.update();
+
+		// Drawing
 		TCODConsole::root->clear();
 		l->draw();
 		r_sys.update();
+		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::flush();
-	
-		//mvprintw(0,0, "HP: %i", e->get_component<HealthComponent>()->health);
-		//mvprintw(20,0, "Player: %i, %i", e->get_component<LocationComponent>()->x, e->get_component<LocationComponent>()->y);
-		//mvprintw(21,0, "  Fire: %i, %i", fire->get_component<LocationComponent>()->x, fire->get_component<LocationComponent>()->y);
+
 	}
 
 	return 0;
