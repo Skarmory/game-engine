@@ -18,6 +18,7 @@
 #include "entity_manager.h"
 #include "collision_system.h"
 #include "damage_system.h"
+#include "game_time.h"
 
 int main(int argc, char** argv)
 {
@@ -56,11 +57,9 @@ int main(int argc, char** argv)
 	std::shared_ptr<Level> l = std::make_shared<Level>();
 	l->load("testing_map");
 
+	GameTime game_time;
+	Timer turn_timer(3);
 	int turn = 1;
-	std::chrono::duration<double> turn_time(3);
-	std::chrono::time_point<std::chrono::high_resolution_clock> now, previous;
-	std::chrono::duration<double> elapsed;
-	previous = std::chrono::high_resolution_clock::now();
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
@@ -73,27 +72,30 @@ int main(int argc, char** argv)
 	l->draw();
 	r_sys.update();
 	TCODConsole::root->print(0, 0, "T: %i", turn);
+	TCODConsole::root->print(0, 1, "E: 0.00");
 	TCODConsole::flush();
 
 	while(running && !TCODConsole::isWindowClosed())
-	{	
+	{
 		// TODO: Make the input manager handle all of this
 		// Input
 		do 
 		{
-			now = std::chrono::high_resolution_clock::now();
-			elapsed = now - previous;
+			game_time.tick();
+			turn_timer.tick(game_time);
 			input_command = input.handle_input();
+			TCODConsole::root->print(0,1,"E: %1.2f", turn_timer.time_elapsed());
+			TCODConsole::flush();
 		} 
-		while(input_command == nullptr && elapsed < turn_time);
+		while(input_command == nullptr && !turn_timer.finished());
 		
+
 		if(input_command != nullptr)
 		{
 			input_command->execute();
 		}
 
 		turn++;
-		previous = now;
 
 		// Logic
 		coll_sys.update();
@@ -106,6 +108,7 @@ int main(int argc, char** argv)
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::flush();
 
+		turn_timer.reset();
 	}
 
 	return 0;
