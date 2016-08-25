@@ -20,8 +20,12 @@ void RenderSystem::update(void)
 		loc = e->get_component<LocationComponent>();
 		assert(loc != nullptr);
 
+
 		TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
-		TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->colour);
+		TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->fg_colour);
+		
+		if(gfx->bg_colour != TCODColor::black)
+			TCODConsole::root->setCharBackground(loc->x, loc->y, gfx->bg_colour);
 	}
 }
 

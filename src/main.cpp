@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	std::shared_ptr<Entity> e = EntityManager::get_instance().create_entity();
 
 	e->add_component(std::make_shared<LocationComponent>(10, 10));
-	e->add_component(std::make_shared<GraphicComponent>('@', TCODColor::white, DrawLayer::CREATURE));
+	e->add_component(std::make_shared<GraphicComponent>('@', TCODColor::white, TCODColor::black, DrawLayer::CREATURE));
 	e->add_component(std::make_shared<CollisionComponent>());
 	e->add_component(std::make_shared<HealthComponent>(1));
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 	std::shared_ptr<Entity> fire = EntityManager::get_instance().create_entity();
 	
 	fire->add_component(std::make_shared<LocationComponent>(5, 5));
-	fire->add_component(std::make_shared<GraphicComponent>('F', TCODColor::orange, DrawLayer::EFFECT));
+	fire->add_component(std::make_shared<GraphicComponent>('F', TCODColor::orange, TCODColor::darkOrange, DrawLayer::EFFECT));
 	fire->add_component(std::make_shared<CollisionComponent>());
 	fire->add_component(std::make_shared<DamageComponent>(1));
 

@@ -14,10 +14,11 @@ enum DrawLayer
 
 struct GraphicComponent : public Component
 {
-	GraphicComponent(char graphic, TCODColor colour, DrawLayer layer);
+	GraphicComponent(char graphic, TCODColor fg_colour, TCODColor bg_colour, DrawLayer layer);
 
 	char 	  graphic;
-	TCODColor colour;
+	TCODColor fg_colour;
+	TCODColor bg_colour;
 	DrawLayer layer;
 };
 
