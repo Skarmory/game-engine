@@ -8,17 +8,13 @@
 #include <chrono>
 
 #include "level.h"
-#include "render_system.h"
 #include "entity.h"
-#include "graphic_component.h"
-#include "location_component.h"
-#include "damage_component.h"
 #include "input.h"
 #include "command.h"
 #include "entity_manager.h"
-#include "collision_system.h"
-#include "damage_system.h"
 #include "game_time.h"
+#include "systems.h"
+#include "components.h"
 
 int main(int argc, char** argv)
 {
@@ -45,6 +41,7 @@ int main(int argc, char** argv)
 	RenderSystem    r_sys;
 	CollisionSystem coll_sys;
 	DamageSystem	d_sys;
+	TimeSystem		t_sys;
 
 	r_sys.add_entity(e);
 	r_sys.add_entity(fire);
@@ -98,6 +95,7 @@ int main(int argc, char** argv)
 		turn++;
 
 		// Logic
+		t_sys.update();
 		coll_sys.update();
 		d_sys.update();
 
@@ -109,6 +107,7 @@ int main(int argc, char** argv)
 		TCODConsole::flush();
 
 		turn_timer.reset();
+		EntityManager::get_instance().update();
 	}
 
 	return 0;
