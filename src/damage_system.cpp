@@ -2,12 +2,14 @@
 
 #include <exception>
 
+using namespace std;
+
 void DamageSystem::update(void)
 {
-	for(std::vector<std::weak_ptr<Entity>>::iterator it = _entities.begin();
-			it != _entities.end(); it++)
+	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
+			it != _entities.end();)
 	{
-		std::shared_ptr<Entity> e = it->lock();
+		shared_ptr<Entity> e = it->lock();
 
 		if(e == nullptr)
 		{
@@ -17,15 +19,15 @@ void DamageSystem::update(void)
 				
 		if(e->has_component<HealthComponent>() && e->has_component<CollidedComponent>())
 		{
-			std::shared_ptr<CollidedComponent> cc = e->get_component<CollidedComponent>();
-			std::shared_ptr<HealthComponent>   hc = e->get_component<HealthComponent>();
-			const std::shared_ptr<const DamageComponent> dc = cc->collided_with.get_component<const DamageComponent>();
+			shared_ptr<CollidedComponent> cc = e->get_component<CollidedComponent>();
+			shared_ptr<HealthComponent>   hc = e->get_component<HealthComponent>();
+			const shared_ptr<const DamageComponent> dc = cc->collided_with.get_component<const DamageComponent>();
 
 			hc->health -= dc->damage;
 		}
 
 		e->remove_component<CollidedComponent>();
-	}
 
-	//_entities.clear();
+		it++;
+	}
 }

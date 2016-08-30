@@ -8,7 +8,7 @@ void RenderSystem::update(void)
 	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
-	shared_ptr<GraphicComponent> gfx(nullptr);
+	shared_ptr<GraphicComponent>  gfx(nullptr);
 	shared_ptr<LocationComponent> loc(nullptr);
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end(); it++)
 	{
@@ -20,9 +20,11 @@ void RenderSystem::update(void)
 		loc = e->get_component<LocationComponent>();
 		assert(loc != nullptr);
 
-
-		TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
-		TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->fg_colour);
+		if(gfx->graphic != ' ')
+		{
+			TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
+			TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->fg_colour);
+		}
 		
 		if(gfx->bg_colour != TCODColor::black)
 			TCODConsole::root->setCharBackground(loc->x, loc->y, gfx->bg_colour);
