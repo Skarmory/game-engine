@@ -3,8 +3,9 @@
 
 #include <memory>
 #include "entity.h"
+#include "entity_manager.h"
 #include "level.h"
-#include "location_component.h"
+#include "components.h"
 
 namespace Command 
 {
