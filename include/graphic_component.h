@@ -9,7 +9,8 @@ enum DrawLayer
 	EFFECT   = 0,
 	OBJECT   = 1,
 	ITEM     = 2,
-	CREATURE = 3
+	CREATURE = 3,
+	AREADMG  = 4
 };
 
 struct GraphicComponent : public Component
