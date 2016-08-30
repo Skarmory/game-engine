@@ -30,9 +30,9 @@ public:
 		_components.erase(typeid(T));
 	}
 
-	// Return pointer to component
+	// Return const pointer to component
 	template<class T>
-	shared_ptr<T> get_component(void)
+	const shared_ptr<T> get_component(void)
 	{
 		if(has_component<T>())
 			return static_pointer_cast<T>(_components.at(typeid(T)));
@@ -60,6 +60,13 @@ public:
 		return false;
 	}
 
+	int get_id(void) const
+	{
+		return _id;
+	}
+
+
+	bool obsolete;
 private:
 
 	int _id;
