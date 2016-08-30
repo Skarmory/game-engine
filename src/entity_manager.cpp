@@ -10,3 +10,16 @@ std::shared_ptr<Entity> EntityManager::create_entity(void)
 
 	return eptr;
 }
+
+void EntityManager::update(void)
+{
+	for(std::map<int, shared_ptr<Entity>>::iterator it = _entities.begin(); it !=_entities.end();)
+	{
+		if(it->second->obsolete)
+		{
+			it = _entities.erase(it);
+		}
+
+		it++;
+	}	
+}

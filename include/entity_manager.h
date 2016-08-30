@@ -20,6 +20,7 @@ public:
 	void operator=(EntityManager const&) = delete;
 
 	std::shared_ptr<Entity> create_entity(void);
+	void update(void);
 
 private:
 	EntityManager(void) {};
