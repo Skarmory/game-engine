@@ -1,17 +1,16 @@
 #include "input.h"
 using namespace Command;
 
-typedef std::unique_ptr<ICommand> CPtr;
+typedef std::unique_ptr<ICommand> c_uptr;
 
 InputManager::InputManager(
 		std::shared_ptr<Entity>& player, std::shared_ptr<Level> level, bool& is_running) 
 	: _player(player),_level(level), _is_running(is_running) {}
 
-CPtr InputManager::handle_input(void)
+c_uptr InputManager::handle_input(void)
 {
 	TCOD_key_t in;
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &in, NULL);
-	//int in = getch();
 	
 	switch(in.vk)
 	{
@@ -19,23 +18,39 @@ CPtr InputManager::handle_input(void)
 			switch(in.c)
 			{
 				case 'h':
-					return CPtr(new MoveCommand(_player, _level, -1, 0));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, -1, 0));
+					return c_uptr(new MoveCommand(_player, _level, -1, 0));
 				case 'j':
-					return CPtr(new MoveCommand(_player, _level,  0, 1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, 0, 1));
+					return c_uptr(new MoveCommand(_player, _level,  0, 1));
 				case 'k':
-					return CPtr(new MoveCommand(_player, _level, 0, -1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, 0, -1));
+					return c_uptr(new MoveCommand(_player, _level, 0, -1));
 				case 'l':
-					return CPtr(new MoveCommand(_player, _level, 1, 0));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, 1, 0));
+					return c_uptr(new MoveCommand(_player, _level, 1, 0));
 				case 'y':
-					return CPtr(new MoveCommand(_player, _level, -1, -1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, -1, -1));
+					return c_uptr(new MoveCommand(_player, _level, -1, -1));
 				case 'u':
-					return CPtr(new MoveCommand(_player, _level, 1, -1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, 1, -1));
+					return c_uptr(new MoveCommand(_player, _level, 1, -1));
 				case 'b':
-					return CPtr(new MoveCommand(_player, _level, -1, 1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, -1, 1));
+					return c_uptr(new MoveCommand(_player, _level, -1, 1));
 				case 'n':
-					return CPtr(new MoveCommand(_player, _level, 1, 1));
+					if(in.shift)
+						return c_uptr(new AttackCommand(_player, 1, 1));
+					return c_uptr(new MoveCommand(_player, _level, 1, 1));
 				case 'q':
-					return CPtr(new QuitCommand(_is_running));
+					return c_uptr(new QuitCommand(_is_running));
 			}
 		default:
 			return nullptr;

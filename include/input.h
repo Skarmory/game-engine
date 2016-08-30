@@ -6,13 +6,16 @@
 #include <memory>
 #include "command.h"
 
+using namespace std;
+using namespace Command;
+
 class InputManager {
 public:
-	InputManager(std::shared_ptr<Entity>&, std::shared_ptr<Level>, bool&);
-	std::unique_ptr<Command::ICommand> handle_input(void);
+	InputManager(shared_ptr<Entity>&, shared_ptr<Level>, bool&);
+	unique_ptr<ICommand> handle_input(void);
 private:
-	std::shared_ptr<Entity>& _player;
-	std::shared_ptr<Level> _level;
+	shared_ptr<Entity>& _player;
+	shared_ptr<Level> _level;
 	bool& _is_running;
 };
 
