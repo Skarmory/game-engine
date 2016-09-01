@@ -5,3 +5,4 @@ incarnate
 *.sw*
 *.png
 *libtcod*
+*.supp
