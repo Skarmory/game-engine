@@ -20,7 +20,7 @@ void RenderSystem::update(void)
 		loc = e->get_component<LocationComponent>();
 		assert(loc != nullptr);
 
-		if(gfx->graphic != ' ')
+		if(gfx->fg_colour != TCODColor::black)
 		{
 			TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
 			TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->fg_colour);
@@ -53,4 +53,10 @@ bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Enti
 	shared_ptr<Entity> s2 = w2.lock();
 
 	return s1->get_component<GraphicComponent>()->layer < s2->get_component<GraphicComponent>()->layer;
+}
+
+void RenderSystem::on_notify(const shared_ptr<Entity>& entity, Event event)
+{
+	if(entity->has_component<LocationComponent>() && entity->has_component<GraphicComponent>())
+		add_entity(entity);
 }
