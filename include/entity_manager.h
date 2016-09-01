@@ -18,8 +18,8 @@ public:
 	
 	EntityManager(void) {};
 
-	EntityManager(EntityManager const&)  = delete;
-	void operator=(EntityManager const&) = delete;
+	//EntityManager(EntityManager const&)  = delete;
+	//void operator=(EntityManager const&) = delete;
 
 	//void create_entity(string entity_type);
 	shared_ptr<Entity> create_entity(string entity_type);

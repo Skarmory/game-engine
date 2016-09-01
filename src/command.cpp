@@ -36,7 +36,7 @@ void AttackCommand::execute(void)
 		if(atker->has_component<LocationComponent>())
 		{
 			shared_ptr<LocationComponent> loc = atker->get_component<LocationComponent>();
-			shared_ptr<Entity> e = _entity_manager->create_entity_at_loc("fire", loc->x + _x, loc->y + _y);
+			shared_ptr<Entity> e = _entity_manager->create_entity_at_loc("damage", loc->x + _x, loc->y + _y);
 		}
 	}
 }	
