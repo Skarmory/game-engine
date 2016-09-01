@@ -14,7 +14,7 @@ using namespace std;
 
 class Entity {
 public:
-	Entity(int _id);
+	Entity(int id);
 	~Entity(void);
 
 	// Add component to the entity

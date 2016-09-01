@@ -5,6 +5,7 @@
 
 struct LocationComponent : public Component
 {
+	LocationComponent() : Component("LocationComponent"), x(0), y(0) {}
 	LocationComponent(int x, int y);
 	~LocationComponent(void);
 
