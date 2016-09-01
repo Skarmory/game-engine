@@ -26,8 +26,8 @@ void MoveCommand::execute(void)
 	}
 }
 
-AttackCommand::AttackCommand(weak_ptr<Entity> attacker, int x, int y) 
-	: _attacker(attacker), _x(x), _y(y) {}
+AttackCommand::AttackCommand(const shared_ptr<EntityManager>& entity_manager, weak_ptr<Entity> attacker, int x, int y) 
+	: _entity_manager(entity_manager), _attacker(attacker), _x(x), _y(y) {}
 
 void AttackCommand::execute(void)
 {
@@ -36,14 +36,7 @@ void AttackCommand::execute(void)
 		if(atker->has_component<LocationComponent>())
 		{
 			shared_ptr<LocationComponent> loc = atker->get_component<LocationComponent>();
-
-			// TODO: Remove hardcoded damage
-			shared_ptr<Entity> en = EntityManager::get_instance().create_entity();
-			en->add_component(make_shared<LocationComponent>(loc->x + _x, loc->y + _y));
-			en->add_component(make_shared<DamageComponent>(1)); 			
-			en->add_component(make_shared<GraphicComponent>(' ', TCODColor::black, TCODColor::yellow, DrawLayer::AREADMG));
-			en->add_component(make_shared<TimedLifeComponent>(1));
-			en->add_component(make_shared<CollisionComponent>());
+			shared_ptr<Entity> e = _entity_manager->create_entity_at_loc("fire", loc->x + _x, loc->y + _y);
 		}
 	}
 }	

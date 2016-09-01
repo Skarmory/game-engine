@@ -3,28 +3,33 @@
 
 #include <map>
 #include <memory>
-#include "entity.h"
+#include <string>
 
-class EntityManager
+#include "entity.h"
+#include "components.h"
+#include "observer.h"
+#include "entity_factory.h"
+
+using namespace std;
+
+class EntityManager : public Subject
 {
 public:
 	
-	static EntityManager& get_instance(void)
-	{
-		static EntityManager instance;
-
-		return instance;
-	}
+	EntityManager(void) {};
 
 	EntityManager(EntityManager const&)  = delete;
 	void operator=(EntityManager const&) = delete;
 
-	std::shared_ptr<Entity> create_entity(void);
+	//void create_entity(string entity_type);
+	shared_ptr<Entity> create_entity(string entity_type);
+	//void create_entity_at_loc(string entity_type, int x, int y);
+	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);
 	void update(void);
 
 private:
-	EntityManager(void) {};
-	std::map<int, std::shared_ptr<Entity>> _entities;
+	map<int, shared_ptr<Entity>> _entities;
+	EntityFactory _factory;
 
 	static int NEXT_ID;
 };
