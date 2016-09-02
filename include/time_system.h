@@ -8,11 +8,7 @@ class TimeSystem : public System
 {
 	public:
 		virtual	void update(void) override;
-		virtual void on_notify(const shared_ptr<Entity>& entity, Event event) override
-		{
-			if(entity->has_component<TimedLifeComponent>())
-				add_entity(entity);
-		}		
+		virtual void on_notify(const shared_ptr<Entity>& e, Event evt) override;
 };
 
 #endif

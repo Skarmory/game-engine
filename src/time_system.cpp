@@ -27,3 +27,14 @@ void TimeSystem::update(void)
 		it++;
 	}
 }
+
+void TimeSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+{
+	switch(evt)
+	{
+		case Event::ENTITY_CREATED:
+			if(entity->has_component<TimedLifeComponent>())
+				add_entity(entity);
+			break;
+	}
+}

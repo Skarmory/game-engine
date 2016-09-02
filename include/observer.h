@@ -9,7 +9,8 @@ using namespace std;
 
 enum Event
 {
-	EVENT_ENTITY_CREATED = 0
+	ENTITY_CREATED = 0,
+	ENTITY_COLLISION = 1
 };
 
 class Observer
@@ -19,7 +20,8 @@ class Observer
 		virtual void on_notify(const shared_ptr<Entity>&, Event) = 0;
 };
 
-class Subject
+
+class Observable
 {
 	public:
 		void add_observer(const shared_ptr<Observer>& observer)

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++11 -Iinclude -Ilibtcod-1.5.1/include
+CFLAGS=-Wall -std=c++11 -pthread -Iinclude -Ilibtcod-1.5.1/include
 override LIBS=-Llibtcod-1.5.1 -ltcod -ltcodxx -Wl,-rpath=libtcod-1.5.1
 GAME=incarnate
 

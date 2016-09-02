@@ -52,15 +52,12 @@ int main(int argc, char** argv)
 
 	eman->add_observer(r_sys);
 	eman->add_observer(t_sys);
+	eman->add_observer(coll_sys);
+	coll_sys->add_observer(d_sys);
 
 	shared_ptr<Entity> player = eman->create_entity_at_loc("player", 10, 10);
 	shared_ptr<Entity> fire   = eman->create_entity_at_loc("fire", 5, 5);
 	shared_ptr<Entity> damage = eman->create_entity_at_loc("damage", 20, 20);
-
-	//coll_sys.add_entity(player);
-	//coll_sys.add_entity(fire);
-
-	//d_sys.add_entity(player);
 
 	shared_ptr<Level> l = make_shared<Level>();
 	l->load("testing_map");

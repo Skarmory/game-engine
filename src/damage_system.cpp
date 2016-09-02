@@ -16,18 +16,32 @@ void DamageSystem::update(void)
 			it = _entities.erase(it);
 			continue;
 		}
-				
-		if(e->has_component<HealthComponent>() && e->has_component<CollidedComponent>())
-		{
-			shared_ptr<CollidedComponent> cc = e->get_component<CollidedComponent>();
-			shared_ptr<HealthComponent>   hc = e->get_component<HealthComponent>();
-			const shared_ptr<const DamageComponent> dc = cc->collided_with.get_component<const DamageComponent>();
+			
+		shared_ptr<CollidedComponent> cc = e->get_component<CollidedComponent>();
+		shared_ptr<HealthComponent>   hc = e->get_component<HealthComponent>();
 
-			hc->health -= dc->damage;
+		for(vector<shared_ptr<Entity>&>::iterator it = cc->collided_with.begin(); it != cc->collided_with.end(); it++)
+		{
+			if(it->has_component<DamageComponent>())
+			{
+				hc->health -= (*it)->get_component<const DamageComponent>()->damage;
+			}
 		}
 
-		e->remove_component<CollidedComponent>();
+		if(hc->health < 0)
+			e->obsolete = true;
 
 		it++;
+	}
+}
+
+void DamageSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+{
+	switch(evt)
+	{
+		case Event::ENTITY_COLLISION:
+			if(e->has_component<HealthComponent>())
+				add_entity(e);
+			break;
 	}
 }

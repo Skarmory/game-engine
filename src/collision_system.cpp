@@ -33,9 +33,29 @@ void CollisionSystem::update(void)
 
 			if(lc->x == check_lc->x && lc->y == check_lc->y)
 			{
-				e->add_component(std::make_shared<CollidedComponent>(*check_e));
-				check_e->add_component(std::make_shared<CollidedComponent>(*e));
+				if(e->has_component<CollidedComponent>())
+					e->get_component<CollidedComponent>()->collided_with.push_back(check_e);
+				else
+					e->add_component(std::make_shared<CollidedComponent>(check_e));
+
+				if(check_e->has_component<CollidedComponent>())
+					check_e->get_component<CollidedComponent>()->collided_with.push_back(e);
+				else
+					check_e->add_component(std::make_shared<CollidedComponent>(e));
+
+				notify(e, Event::ENTITY_COLLISION);
+				notify(check_e, Event::ENTITY_COLLISION);
 			}
 		}
+	}
+}
+
+void CollisionSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+{
+	switch(evt)
+	{
+		case Event::ENTITY_CREATED:
+			if(e->has_component<CollisionComponent>() && e->has_component<LocationComponent>())
+				add_entity(e);
 	}
 }

@@ -12,19 +12,15 @@
 
 using namespace std;
 
-class EntityManager : public Subject
+class EntityManager : public Observable
 {
 public:
 	
 	EntityManager(void) {};
 
-	//EntityManager(EntityManager const&)  = delete;
-	//void operator=(EntityManager const&) = delete;
-
-	//void create_entity(string entity_type);
 	shared_ptr<Entity> create_entity(string entity_type);
-	//void create_entity_at_loc(string entity_type, int x, int y);
 	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);
+	
 	void update(void);
 
 private:

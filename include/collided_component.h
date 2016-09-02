@@ -4,12 +4,16 @@
 #include "component.h"
 #include "entity.h"
 
+using namespace std;
+
 struct CollidedComponent : public Component
 {
-	CollidedComponent(Entity const& collided_with) : 
-		Component("CollidedComponent"), collided_with(collided_with) {}
+	CollidedComponent(const shared_ptr<Entity>& collided) : Component("CollidedComponent") 
+	{
+		collided_with.push_back(collided);
+	}
 
-	Entity const& collided_with;
+	vector<shared_ptr<Entity>> collided_with;
 };
 
 #endif

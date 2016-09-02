@@ -6,14 +6,14 @@
 #include "collision_component.h"
 #include "collided_component.h"
 
-class CollisionSystem : public System
+class CollisionSystem : public System, public Observable
 {
 	public:
 		CollisionSystem(void)  {};
 		~CollisionSystem(void) {};
 
 		virtual void update(void) override;
-		virtual void on_notify(const shared_ptr<Entity>&, Event) override {}
+		virtual void on_notify(const shared_ptr<Entity>&, Event) override;
 };
 
 #endif
