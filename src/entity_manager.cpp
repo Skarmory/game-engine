@@ -11,7 +11,7 @@ shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 
 	NEXT_ID++;
 
-	notify(e, Event::EVENT_ENTITY_CREATED);	
+	notify(e, Event::ENTITY_CREATED);	
 
 	return e;
 }

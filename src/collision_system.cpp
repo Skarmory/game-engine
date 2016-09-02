@@ -3,7 +3,7 @@
 void CollisionSystem::update(void)
 {
 	for(std::vector<std::weak_ptr<Entity>>::iterator it = _entities.begin();
-			it != _entities.end(); it++)
+			it != _entities.end();)
 	{
 		std::shared_ptr<Entity> e = it->lock();
 
@@ -18,7 +18,7 @@ void CollisionSystem::update(void)
 
 		// Check for collision with other entities. Game is simple enough that no spatial hashing is necessary
 		for(std::vector<std::weak_ptr<Entity>>::iterator check_it = it + 1;
-				check_it != _entities.end(); check_it++)
+				check_it != _entities.end();)
 		{
 			std::shared_ptr<Entity> check_e = check_it->lock();
 
@@ -46,7 +46,11 @@ void CollisionSystem::update(void)
 				notify(e, Event::ENTITY_COLLISION);
 				notify(check_e, Event::ENTITY_COLLISION);
 			}
+
+			check_it++;
 		}
+
+		it++;
 	}
 }
 

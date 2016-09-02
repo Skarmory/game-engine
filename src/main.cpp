@@ -23,32 +23,14 @@ using namespace Command;
 int main(int argc, char** argv)
 {
 	TCODConsole::initRoot(80, 40, "Words of Command", false);
-	// Create the player entity
-	// TODO: Create some entity factory or builder
-	/*
-	shared_ptr<Entity> e = EntityManager::get_instance().create_entity();
-
-	e->add_component(make_shared<LocationComponent>(10, 10));
-	e->add_component(make_shared<GraphicComponent>('@', TCODColor::white, TCODColor::black, DrawLayer::CREATURE));
-	e->add_component(make_shared<CollisionComponent>());
-	e->add_component(make_shared<HealthComponent>(1));
-
-	// Create a fire entity for the purposes of testing damage
-	shared_ptr<Entity> fire = EntityManager::get_instance().create_entity();
-	
-	fire->add_component(make_shared<LocationComponent>(5, 5));
-	fire->add_component(make_shared<GraphicComponent>('F', TCODColor::orange, TCODColor::darkOrange, DrawLayer::EFFECT));
-	fire->add_component(make_shared<CollisionComponent>());
-	fire->add_component(make_shared<DamageComponent>(1));
-	*/
 
 	shared_ptr<EntityManager> eman = make_shared<EntityManager>();
 
 	// Setup systems
 	shared_ptr<RenderSystem> r_sys = make_shared<RenderSystem>();
 	shared_ptr<TimeSystem> t_sys = make_shared<TimeSystem>();
-	CollisionSystem coll_sys;
-	DamageSystem	d_sys;
+	shared_ptr<CollisionSystem> coll_sys = make_shared<CollisionSystem>();
+	shared_ptr<DamageSystem> d_sys = make_shared<DamageSystem>();
 
 	eman->add_observer(r_sys);
 	eman->add_observer(t_sys);
@@ -56,8 +38,8 @@ int main(int argc, char** argv)
 	coll_sys->add_observer(d_sys);
 
 	shared_ptr<Entity> player = eman->create_entity_at_loc("player", 10, 10);
-	shared_ptr<Entity> fire   = eman->create_entity_at_loc("fire", 5, 5);
-	shared_ptr<Entity> damage = eman->create_entity_at_loc("damage", 20, 20);
+	eman->create_entity_at_loc("fire", 5, 5);
+	eman->create_entity_at_loc("damage", 20, 20);
 
 	shared_ptr<Level> l = make_shared<Level>();
 	l->load("testing_map");
@@ -104,8 +86,8 @@ int main(int argc, char** argv)
 
 		// Logic
 		t_sys->update();
-		coll_sys.update();
-		d_sys.update();
+		coll_sys->update();
+		d_sys->update();
 
 		// Drawing
 		TCODConsole::root->clear();

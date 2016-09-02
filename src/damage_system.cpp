@@ -20,11 +20,11 @@ void DamageSystem::update(void)
 		shared_ptr<CollidedComponent> cc = e->get_component<CollidedComponent>();
 		shared_ptr<HealthComponent>   hc = e->get_component<HealthComponent>();
 
-		for(vector<shared_ptr<Entity>&>::iterator it = cc->collided_with.begin(); it != cc->collided_with.end(); it++)
+		for(vector<shared_ptr<Entity>>::iterator c_it = cc->collided_with.begin(); c_it != cc->collided_with.end(); c_it++)
 		{
-			if(it->has_component<DamageComponent>())
+			if((*c_it)->has_component<DamageComponent>())
 			{
-				hc->health -= (*it)->get_component<const DamageComponent>()->damage;
+				hc->health -= (*c_it)->get_component<const DamageComponent>()->damage;
 			}
 		}
 
