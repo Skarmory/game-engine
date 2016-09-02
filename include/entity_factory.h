@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include "libtcod-1.5.1/libtcod.h"
+#include "libtcod.hpp"
 #include "components.h"
 
 using namespace std;
