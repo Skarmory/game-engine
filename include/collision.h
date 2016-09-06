@@ -3,12 +3,11 @@
 
 #include "component.h"
 
-struct CollisionComponent : public Component
+struct Collision : public Component
 {
 	// Will eventually contain some data to determine which other collidable entities it collides with
 
-	CollisionComponent(void) : Component("CollisionComponent") {}
-	~CollisionComponent(void) {}
+	Collision(void) : Component("CollisionComponent") {}
 };
 
 #endif

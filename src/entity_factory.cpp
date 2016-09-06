@@ -18,30 +18,30 @@ shared_ptr<Entity> EntityFactory::create(int id, string type)
 shared_ptr<Entity> EntityFactory::create_player(int id)
 {
 	shared_ptr<Entity> e = make_shared<Entity>(id);
-	e->add_component(make_shared<LocationComponent>());
-	e->add_component(make_shared<GraphicComponent>('@', TCODColor::white, TCODColor::black, DrawLayer::CREATURE));
-	e->add_component(make_shared<CollisionComponent>());
-	e->add_component(make_shared<HealthComponent>(1));
+	e->add_component(make_shared<Location>());
+	e->add_component(make_shared<Graphic>('@', TCODColor::white, TCODColor::black, DrawLayer::CREATURE));
+	e->add_component(make_shared<Collision>());
+	e->add_component(make_shared<Health>(1));
 	return e;
 }
 
 shared_ptr<Entity> EntityFactory::create_fire(int id)
 {
 	shared_ptr<Entity> e = make_shared<Entity>(id);
-	e->add_component(make_shared<LocationComponent>());
-	e->add_component(make_shared<GraphicComponent>('F', TCODColor::orange, TCODColor::darkOrange, DrawLayer::EFFECT));
-	e->add_component(make_shared<CollisionComponent>());
-	e->add_component(make_shared<DamageComponent>(1));
+	e->add_component(make_shared<Location>());
+	e->add_component(make_shared<Graphic>('F', TCODColor::orange, TCODColor::darkOrange, DrawLayer::EFFECT));
+	e->add_component(make_shared<Collision>());
+	e->add_component(make_shared<Damage>(1));
 	return e;
 }
 
 shared_ptr<Entity> EntityFactory::create_damage(int id)
 {
 	shared_ptr<Entity> e = make_shared<Entity>(id);
-	e->add_component(make_shared<LocationComponent>());
-	e->add_component(make_shared<GraphicComponent>('.', TCODColor::black, TCODColor::darkerYellow, DrawLayer::AREADMG));
-	e->add_component(make_shared<CollisionComponent>());
-	e->add_component(make_shared<DamageComponent>(1));
-	e->add_component(make_shared<TimedLifeComponent>(1));
+	e->add_component(make_shared<Location>());
+	e->add_component(make_shared<Graphic>('.', TCODColor::black, TCODColor::darkerYellow, DrawLayer::AREADMG));
+	e->add_component(make_shared<Collision>());
+	e->add_component(make_shared<Damage>(1));
+	e->add_component(make_shared<TimedLife>(1));
 	return e;
 }

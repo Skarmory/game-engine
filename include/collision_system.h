@@ -2,9 +2,7 @@
 #define collision_system_h
 
 #include "system.h"
-#include "location_component.h"
-#include "collision_component.h"
-#include "collided_component.h"
+#include "components.h"
 
 class CollisionSystem : public System, public Observable
 {

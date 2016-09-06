@@ -8,8 +8,7 @@
 #include "libtcod.hpp"
 
 #include "system.h"
-#include "graphic_component.h"
-#include "location_component.h"
+#include "components.h"
 
 using namespace std;
 

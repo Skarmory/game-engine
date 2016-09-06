@@ -19,7 +19,7 @@ shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 shared_ptr<Entity> EntityManager::create_entity_at_loc(string entity_type, int x, int y)
 {
 	shared_ptr<Entity> e = create_entity(entity_type);
-	shared_ptr<LocationComponent> loc = e->get_component<LocationComponent>();
+	shared_ptr<Location> loc = e->get_component<Location>();
 	loc->x = x;
 	loc->y = y;
 

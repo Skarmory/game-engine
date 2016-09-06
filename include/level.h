@@ -1,8 +1,6 @@
 #ifndef level_h
 #define level_h
 
-#include "libtcod.hpp"
-
 #include <stdlib.h>
 #include <vector>
 #include <random>
@@ -10,6 +8,8 @@
 #include <sstream>
 #include <fstream>
 #include <assert.h>
+
+#include "libtcod.hpp"
 #include "cell.h"
 #include "map.h"
 

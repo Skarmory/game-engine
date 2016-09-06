@@ -6,9 +6,9 @@
 
 using namespace std;
 
-struct CollidedComponent : public Component
+struct Collided : public Component
 {
-	CollidedComponent(const shared_ptr<Entity>& collided) : Component("CollidedComponent") 
+	Collided(const shared_ptr<Entity>& collided) : Component("CollidedComponent") 
 	{
 		collided_with.push_back(collided);
 	}

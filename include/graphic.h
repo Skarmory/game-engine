@@ -13,9 +13,11 @@ enum DrawLayer
 	AREADMG  = 4
 };
 
-struct GraphicComponent : public Component
+struct Graphic : public Component
 {
-	GraphicComponent(char graphic, TCODColor fg_colour, TCODColor bg_colour, DrawLayer layer);
+	Graphic(char graphic, TCODColor fg_colour, TCODColor bg_colour, DrawLayer layer) 
+		: Component("GraphicComponent"), graphic(graphic), fg_colour(fg_colour), bg_colour(bg_colour), layer(layer) 
+	{}
 
 	char 	  graphic;
 	TCODColor fg_colour;

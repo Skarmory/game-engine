@@ -59,8 +59,8 @@ int main(int argc, char** argv)
 	r_sys->update();
 	TCODConsole::root->print(0, 0, "T: %i", turn);
 	TCODConsole::root->print(0, 1, "E: 0.00");
-	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<HealthComponent>()->health);
-	TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<HealthComponent>()->health);
+	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
+	TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
 	TCODConsole::flush();
 
 	while(running && !TCODConsole::isWindowClosed())
@@ -97,8 +97,8 @@ int main(int argc, char** argv)
 		l->draw();
 		r_sys->update();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
-		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<HealthComponent>()->health);
-		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<HealthComponent>()->health);
+		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
+		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
 		TCODConsole::flush();
 		
 		// Cleanup

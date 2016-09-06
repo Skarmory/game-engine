@@ -1,10 +1,9 @@
 #ifndef input_h
 #define input_h
 
-#include "libtcod.hpp"
-
 #include <memory>
 
+#include "libtcod.hpp"
 #include "command.h"
 #include "level.h"
 #include "entity.h"

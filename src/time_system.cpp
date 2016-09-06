@@ -7,7 +7,7 @@ void TimeSystem::update(void)
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
 	{
 		shared_ptr<Entity> e;
-		shared_ptr<TimedLifeComponent> tlc;
+		shared_ptr<TimedLife> tlc;
 
 		if((e = it->lock()) == nullptr)
 		{
@@ -15,7 +15,7 @@ void TimeSystem::update(void)
 			continue;	
 		}
 
-		if((tlc = e->get_component<TimedLifeComponent>()) != nullptr)
+		if((tlc = e->get_component<TimedLife>()) != nullptr)
 		{
 			tlc->turns_passed++;
 			tlc->expires_in--;
@@ -33,8 +33,10 @@ void TimeSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
 	switch(evt)
 	{
 		case Event::ENTITY_CREATED:
-			if(e->has_component<TimedLifeComponent>())
+			if(e->has_component<TimedLife>())
 				add_entity(e);
+			break;
+		case Event::ENTITY_COLLISION:
 			break;
 	}
 }

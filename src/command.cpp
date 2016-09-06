@@ -12,7 +12,7 @@ void MoveCommand::execute(void)
 		if(shared_ptr<Level> lev = _level.lock())
 		{
 			int dx, dy;
-			shared_ptr<LocationComponent> lc = e->get_component<LocationComponent>();
+			shared_ptr<Location> lc = e->get_component<Location>();
 				
 			dx = lc->x + _x;
 			dy = lc->y + _y;
@@ -33,9 +33,9 @@ void AttackCommand::execute(void)
 {
 	if(shared_ptr<Entity> atker = _attacker.lock())
 	{
-		if(atker->has_component<LocationComponent>())
+		if(atker->has_component<Location>())
 		{
-			shared_ptr<LocationComponent> loc = atker->get_component<LocationComponent>();
+			shared_ptr<Location> loc = atker->get_component<Location>();
 			shared_ptr<Entity> e = _entity_manager->create_entity_at_loc("damage", loc->x + _x, loc->y + _y);
 		}
 	}

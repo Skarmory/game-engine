@@ -8,16 +8,16 @@ void RenderSystem::update(void)
 	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
-	shared_ptr<GraphicComponent>  gfx(nullptr);
-	shared_ptr<LocationComponent> loc(nullptr);
+	shared_ptr<Graphic>  gfx(nullptr);
+	shared_ptr<Location> loc(nullptr);
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end(); it++)
 	{
 		shared_ptr<Entity> e = (*it).lock();
 
-		gfx = e->get_component<GraphicComponent>();
+		gfx = e->get_component<Graphic>();
 		assert(gfx != nullptr);
 
-		loc = e->get_component<LocationComponent>();
+		loc = e->get_component<Location>();
 		assert(loc != nullptr);
 
 		if(gfx->fg_colour != TCODColor::black)
@@ -52,11 +52,11 @@ bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Enti
 	shared_ptr<Entity> s1 = w1.lock();
 	shared_ptr<Entity> s2 = w2.lock();
 
-	return s1->get_component<GraphicComponent>()->layer < s2->get_component<GraphicComponent>()->layer;
+	return s1->get_component<Graphic>()->layer < s2->get_component<Graphic>()->layer;
 }
 
 void RenderSystem::on_notify(const shared_ptr<Entity>& entity, Event event)
 {
-	if(entity->has_component<LocationComponent>() && entity->has_component<GraphicComponent>())
+	if(entity->has_component<Location>() && entity->has_component<Graphic>())
 		add_entity(entity);
 }

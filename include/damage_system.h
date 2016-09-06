@@ -2,9 +2,7 @@
 #define damage_system_h
 
 #include "system.h"
-#include "collided_component.h"
-#include "health_component.h"
-#include "damage_component.h"
+#include "components.h"
 
 class DamageSystem : public System
 {
