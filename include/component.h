@@ -3,15 +3,19 @@
 
 #include <string>
 
+using namespace std;
+
 class Component {
 public:
-	 Component(std::string);
-	 virtual ~Component(void);
+	 Component(string name) : _name(name), _enabled(true) {}
+	 virtual ~Component(void) {}
 
- 	 const std::string name(void) const { return _name; }
+ 	 const string name(void) const { return _name; }
+	 bool enabled(void) const { return _enabled; }
 
 protected:
-	 std::string _name;
+	 string _name;
+	 bool _enabled;
 };
 
 #endif
