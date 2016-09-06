@@ -20,7 +20,7 @@ void TimeSystem::update(void)
 			tlc->turns_passed++;
 			tlc->expires_in--;
 
-			if(tlc->expires_in == 0)
+			if(tlc->expires_in <= 0)
 				e->obsolete = true;
 		}
 

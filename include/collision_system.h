@@ -13,6 +13,7 @@ class CollisionSystem : public System, public Observable
 		~CollisionSystem(void) {};
 
 		virtual void update(void) override;
+		void clean(void);
 		virtual void on_notify(const shared_ptr<Entity>&, Event) override;
 };
 

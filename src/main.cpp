@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 	coll_sys->add_observer(d_sys);
 
 	shared_ptr<Entity> player = eman->create_entity_at_loc("player", 10, 10);
+	shared_ptr<Entity> enemy  = eman->create_entity_at_loc("player", 8, 8);
 	eman->create_entity_at_loc("fire", 5, 5);
 	eman->create_entity_at_loc("damage", 20, 20);
 
@@ -58,6 +59,8 @@ int main(int argc, char** argv)
 	r_sys->update();
 	TCODConsole::root->print(0, 0, "T: %i", turn);
 	TCODConsole::root->print(0, 1, "E: 0.00");
+	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<HealthComponent>()->health);
+	TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<HealthComponent>()->health);
 	TCODConsole::flush();
 
 	while(running && !TCODConsole::isWindowClosed())
@@ -94,9 +97,13 @@ int main(int argc, char** argv)
 		l->draw();
 		r_sys->update();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
+		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<HealthComponent>()->health);
+		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<HealthComponent>()->health);
 		TCODConsole::flush();
-
+		
+		// Cleanup
 		turn_timer.reset();
+		coll_sys->clean();
 		eman->update();
 	}
 

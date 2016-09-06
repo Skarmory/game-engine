@@ -1,7 +1,5 @@
 #include "damage_system.h"
 
-#include <exception>
-
 using namespace std;
 
 void DamageSystem::update(void)
@@ -31,7 +29,7 @@ void DamageSystem::update(void)
 		if(hc->health < 0)
 			e->obsolete = true;
 
-		it++;
+		it = _entities.erase(it);
 	}
 }
 
@@ -39,8 +37,10 @@ void DamageSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
 {
 	switch(evt)
 	{
+		case Event::ENTITY_CREATED:
+			break;
 		case Event::ENTITY_COLLISION:
-			if(e->has_component<HealthComponent>())
+			if(e->has_component<HealthComponent>() && e->has_component<CollidedComponent>())
 				add_entity(e);
 			break;
 	}
