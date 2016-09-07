@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void DamageSystem::update(void)
+void DamageSystem::update(const EventManager& evm)
 {
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
 			it != _entities.end();)
@@ -33,15 +33,11 @@ void DamageSystem::update(void)
 	}
 }
 
-void DamageSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+void DamageSystem::receive(const CollisionEvent& event)
 {
-	switch(evt)
-	{
-		case Event::ENTITY_CREATED:
-			break;
-		case Event::ENTITY_COLLISION:
-			if(e->has_component<Health>() && e->has_component<Collided>())
-				add_entity(e);
-			break;
-	}
+	if(event.e1->has_component<Health>() && event.e1->has_component<Collided>())
+		add_entity(event.e1);
+
+	if(event.e2->has_component<Health>() && event.e2->has_component<Collided>())
+		add_entity(event.e2);
 }

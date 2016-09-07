@@ -12,10 +12,10 @@
 
 using namespace std;
 
-class RenderSystem : public System {
+class RenderSystem : public System, Observer<EntityCreated> {
 public:
-	virtual void update(void) override;
-	virtual void on_notify(const shared_ptr<Entity>& e, Event ev);
+	virtual void update(const EventManager& evm) override;
+	virtual void receive(const EntityCreated& e);
 
 private:
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void RenderSystem::update(void)
+void RenderSystem::update(const EventManager& evm)
 {
 	clean();	
 	
@@ -55,8 +55,8 @@ bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Enti
 	return s1->get_component<Graphic>()->layer < s2->get_component<Graphic>()->layer;
 }
 
-void RenderSystem::on_notify(const shared_ptr<Entity>& entity, Event event)
+void RenderSystem::receive(const EntityCreated& event)
 {
-	if(entity->has_component<Location>() && entity->has_component<Graphic>())
-		add_entity(entity);
+	if(event.entity->has_component<Location>() && event.entity->has_component<Graphic>())
+		add_entity(event.entity);
 }

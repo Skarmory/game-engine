@@ -15,35 +15,31 @@
 #include "game_time.h"
 #include "systems.h"
 #include "components.h"
-#include "observer.h"
+#include "event.h"
 
 using namespace std;
 using namespace Command;
 
 int main(int argc, char** argv)
 {
-	TCODConsole::initRoot(80, 40, "Words of Command", false);
+	TCODConsole::initRoot(80, 40, "", false);
 
-	shared_ptr<EntityManager> eman = make_shared<EntityManager>();
+	EntityManager em;
+	EventManager evm;
 
 	// Setup systems
-	shared_ptr<RenderSystem> r_sys = make_shared<RenderSystem>();
-	shared_ptr<TimeSystem> t_sys = make_shared<TimeSystem>();
-	shared_ptr<CollisionSystem> coll_sys = make_shared<CollisionSystem>();
-	shared_ptr<DamageSystem> d_sys = make_shared<DamageSystem>();
+	RenderSystem r_sys;
+	TimeSystem t_sys;
+	CollisionSystem coll_sys;
+	DamageSystem d_sys;
 
-	eman->add_observer(r_sys);
-	eman->add_observer(t_sys);
-	eman->add_observer(coll_sys);
-	coll_sys->add_observer(d_sys);
+	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
+	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
+	em->create_entity_at_loc("fire", 5, 5);
+	em->create_entity_at_loc("damage", 20, 20);
 
-	shared_ptr<Entity> player = eman->create_entity_at_loc("player", 10, 10);
-	shared_ptr<Entity> enemy  = eman->create_entity_at_loc("player", 8, 8);
-	eman->create_entity_at_loc("fire", 5, 5);
-	eman->create_entity_at_loc("damage", 20, 20);
-
-	shared_ptr<Level> l = make_shared<Level>();
-	l->load("testing_map");
+	Level l;
+	l.load("testing_map");
 
 	GameTime game_time;
 	Timer turn_timer(3);
@@ -51,12 +47,12 @@ int main(int argc, char** argv)
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(player, l, running, eman);
+	InputManager input(player, l, running, em);
 	
 	// Initial draw
 	TCODConsole::root->clear();
-	l->draw();
-	r_sys->update();
+	l.draw();
+	r_sys.update();
 	TCODConsole::root->print(0, 0, "T: %i", turn);
 	TCODConsole::root->print(0, 1, "E: 0.00");
 	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
@@ -88,14 +84,14 @@ int main(int argc, char** argv)
 		turn++;
 
 		// Logic
-		t_sys->update();
-		coll_sys->update();
-		d_sys->update();
+		t_sys.update();
+		coll_sys.update();
+		d_sys.update();
 
 		// Drawing
 		TCODConsole::root->clear();
-		l->draw();
-		r_sys->update();
+		l.draw();
+		r_sys.update();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
 		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
@@ -103,8 +99,8 @@ int main(int argc, char** argv)
 		
 		// Cleanup
 		turn_timer.reset();
-		coll_sys->clean();
-		eman->update();
+		coll_sys.clean();
+		em.update();
 	}
 
 	return 0;

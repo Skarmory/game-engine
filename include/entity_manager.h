@@ -7,16 +7,17 @@
 
 #include "entity.h"
 #include "components.h"
-#include "observer.h"
 #include "entity_factory.h"
+#include "events.h"
 
 using namespace std;
 
-class EntityManager : public Observable
+class EntityManager
 {
 public:
 	
-	EntityManager(void) {};
+	explicit EntityManager(EventManager& evm) : _event_manager(evm)
+	{};
 
 	shared_ptr<Entity> create_entity(string entity_type);
 	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);
@@ -25,6 +26,7 @@ public:
 
 private:
 	map<int, shared_ptr<Entity>> _entities;
+	EventManager& _event_manager;
 	EntityFactory _factory;
 
 	static int NEXT_ID;

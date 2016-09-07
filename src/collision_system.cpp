@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void CollisionSystem::update(void)
+void CollisionSystem::update(const EventManager& evm)
 {
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
 			it != _entities.end();)
@@ -44,9 +44,10 @@ void CollisionSystem::update(void)
 					check_e->get_component<Collided>()->collided_with.push_back(e);
 				else
 					check_e->add_component(make_shared<Collided>(e));
-
+				/*
 				notify(e, Event::ENTITY_COLLISION);
 				notify(check_e, Event::ENTITY_COLLISION);
+				*/
 			}
 
 			check_it++;
@@ -74,14 +75,8 @@ void CollisionSystem::clean(void)
 	}
 }
 
-void CollisionSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+void CollisionSystem::receive(const EntityCreated& e)
 {
-	switch(evt)
-	{
-		case Event::ENTITY_CREATED:
-			if(e->has_component<Collision>() && e->has_component<Location>())
-				add_entity(e);
-		case Event::ENTITY_COLLISION:
-			break;
-	}
+	if(e.entity->has_component<Collision>() && e.entity->has_component<Location>())
+		add_entity(e.entity);
 }
