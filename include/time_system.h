@@ -3,12 +3,13 @@
 
 #include "system.h"
 #include "components.h"
+#include "events.h"
 
-class TimeSystem : public System
+class TimeSystem : public System, Observer<EntityCreated>
 {
 	public:
-		virtual	void update(void) override;
-		virtual void on_notify(const shared_ptr<Entity>& e, Event evt) override;
+		virtual	void update(const EventManager& evm) override;
+		virtual void receive(const EntityCreated& event) override;
 };
 
 #endif

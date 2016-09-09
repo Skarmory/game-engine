@@ -9,10 +9,11 @@
 
 #include "system.h"
 #include "components.h"
+#include "events.h"
 
 using namespace std;
 
-class RenderSystem : public System, Observer<EntityCreated> {
+class RenderSystem : public System, public Observer<EntityCreated> {
 public:
 	virtual void update(const EventManager& evm) override;
 	virtual void receive(const EntityCreated& e);

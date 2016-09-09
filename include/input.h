@@ -16,16 +16,16 @@ class InputManager {
 public:
 	InputManager(
 		const shared_ptr<Entity>& player, 
-		const shared_ptr<Level>& level, 
+		const Level& level, 
 		bool& is_running, 
-		const shared_ptr<EntityManager>& entity_manager
+		EntityManager& entity_manager
 	);
 	unique_ptr<ICommand> handle_input(void);
 private:
 	const shared_ptr<Entity>& _player;
-	const shared_ptr<Level>& _level;
+	const Level& _level;
 	bool& _is_running;
-	const shared_ptr<EntityManager>& _entity_manager;
+	EntityManager& _entity_manager;
 };
 
 #endif

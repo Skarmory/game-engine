@@ -21,52 +21,104 @@ class BaseObserver
 		virtual ~BaseObserver(void) {}
 };
 
-template<typename EventType>
+template<typename E>
 class Observer : public BaseObserver
 {
 	public:
-		virtual ~Observer() {}
-		virtual void receive(const EventType& e) {} 
+		virtual ~Observer() {};
+		virtual void receive(const E& e) = 0;
+
 };
+
+/*
+template<typename E>
+class Broadcaster
+{
+	typedef function<void(const Event&)> Connection;
+	public:
+		void connect(Connection&& connection)
+		{
+			_connections.push_back(move(connection));
+		}
+
+		void broadcast(const Event& event)
+		{
+			for(const auto& connection : _connections)
+			{
+				connection(event);
+			}
+		}
+
+	private:
+		vector<Connection> _connections;
+}
+*/
+
 
 class EventManager
 {
+	struct BaseCallback;
+
 	public:
 		EventManager(void)  = default;
 		~EventManager(void) = default;
 
-		template<typename EventType>
-		void subscribe(BaseObserver& o)
+		template<typename E, typename Observer>
+		void subscribe(Observer& o)
 		{
-			_observers[typeid(EventType)].push_back(&o);
+			//void(Observer<E>::*receive)(const E&) = &Observer::receive;
+			_observers[typeid(E)].push_back(Callback<E>(&Observer::receive));
 		}
-		
-		template<typename EventType>
+	
+		/*	
+		template<typename E>
 		void unsubscribe(BaseObserver& o)
 		{
-			vector<BaseObserver*>* v = &_observers[typeid(EventType)];
+			vector<BaseObserver*>* v = &_observers[typeid(E)];
 			v->erase(remove(v->begin(), v->end(), &o), v->end());
 		}
+		*/
 
-		template<typename EventType>
-		void broadcast(const EventType& event)
+		template<typename E>
+		void broadcast(const E& event)
 		{
-			vector<BaseObserver*>* v = &_observers[typeid(EventType)];
+			for(vector<BaseCallback>::iterator it = _observers[typeid(E)].begin(); it != _observers[typeid(E)].end(); it++)
+			{
+				dynamic_cast<Callback<E>>(*it)(event);
+			}
+
+
+			/*
+			vector<BaseObserver*>* v = &_observers[typeid(E)];
 			for(vector<BaseObserver*>::iterator it = v->begin(); it != v->end(); it++)
 			{
-				static_cast<Observer<EventType>*>(*it)->receive(event);
+				(*it)->receive(event);
 			}
+			*/
 		}
 
-		template<typename EventType, typename ... Args>
+		template<typename E, typename ... Args>
 		void broadcast(Args && ... args)
 		{
-			EventType event(forward<Args>(args) ...);
+			E event(forward<Args>(args) ...);
 			broadcast(&event);
 		}
 
 	private:
-		map<type_index, vector<BaseObserver*>> _observers;
+		map<type_index, vector<BaseCallback*>> _observers;
+		//map<type_index, vector<BaseObserver*>> _observers;
+		
+		struct BaseCallback {
+			virtual ~BaseCallback() {}
+		};
+
+		template<typename E>
+		struct Callback : public BaseCallback 
+		{ 
+			Callback(function<void(const E&)> callback) : callback(callback) {}
+			void operator()(const void* event) { callback(*(static_cast<const E*>(event))); }
+			function<void(const E&)> callback;
+		};
 };
 
 /*

@@ -5,9 +5,9 @@ typedef std::unique_ptr<ICommand> c_uptr;
 
 InputManager::InputManager(
 		const std::shared_ptr<Entity>& player, 
-		const std::shared_ptr<Level>& level, 
+		const Level& level, 
 		bool& is_running, 
-		const shared_ptr<EntityManager>& entity_manager) 
+		EntityManager& entity_manager) 
 	: _player(player),_level(level), _is_running(is_running), _entity_manager(entity_manager) 
 {}
 

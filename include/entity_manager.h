@@ -16,8 +16,7 @@ class EntityManager
 {
 public:
 	
-	explicit EntityManager(EventManager& evm) : _event_manager(evm)
-	{};
+	explicit EntityManager(EventManager& evm) : _event_manager(evm)	{};
 
 	shared_ptr<Entity> create_entity(string entity_type);
 	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);

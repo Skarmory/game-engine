@@ -2,31 +2,28 @@
 using namespace std;
 using namespace Command;
 
-MoveCommand::MoveCommand(weak_ptr<Entity> e, weak_ptr<Level> l, int x, int y) :
+MoveCommand::MoveCommand(weak_ptr<Entity> e, const Level& l, int x, int y) :
    	_entity(e), _level(l), _x(x), _y(y) {}
 
 void MoveCommand::execute(void)
 {
 	if(shared_ptr<Entity> e = _entity.lock())
 	{
-		if(shared_ptr<Level> lev = _level.lock())
-		{
-			int dx, dy;
-			shared_ptr<Location> lc = e->get_component<Location>();
-				
-			dx = lc->x + _x;
-			dy = lc->y + _y;
+		int dx, dy;
+		shared_ptr<Location> lc = e->get_component<Location>();
+			
+		dx = lc->x + _x;
+		dy = lc->y + _y;
 
-			if(lev->is_in_bounds(dx, dy) && lev->is_walkable(dx, dy))
-			{
-				lc->x = dx;
-				lc->y = dy;	
-			}
+		if(_level.is_in_bounds(dx, dy) && _level.is_walkable(dx, dy))
+		{
+			lc->x = dx;
+			lc->y = dy;	
 		}
 	}
 }
 
-AttackCommand::AttackCommand(const shared_ptr<EntityManager>& entity_manager, weak_ptr<Entity> attacker, int x, int y) 
+AttackCommand::AttackCommand(EntityManager& entity_manager, weak_ptr<Entity> attacker, int x, int y) 
 	: _entity_manager(entity_manager), _attacker(attacker), _x(x), _y(y) {}
 
 void AttackCommand::execute(void)
@@ -36,7 +33,7 @@ void AttackCommand::execute(void)
 		if(atker->has_component<Location>())
 		{
 			shared_ptr<Location> loc = atker->get_component<Location>();
-			shared_ptr<Entity> e = _entity_manager->create_entity_at_loc("damage", loc->x + _x, loc->y + _y);
+			shared_ptr<Entity> e = _entity_manager.create_entity_at_loc("damage", loc->x + _x, loc->y + _y);
 		}
 	}
 }	

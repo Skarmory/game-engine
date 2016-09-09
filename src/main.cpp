@@ -24,8 +24,8 @@ int main(int argc, char** argv)
 {
 	TCODConsole::initRoot(80, 40, "", false);
 
-	EntityManager em;
 	EventManager evm;
+	EntityManager em(evm);
 
 	// Setup systems
 	RenderSystem r_sys;
@@ -33,10 +33,12 @@ int main(int argc, char** argv)
 	CollisionSystem coll_sys;
 	DamageSystem d_sys;
 
+	evm.subscribe<EntityCreated>(r_sys);
+
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
-	em->create_entity_at_loc("fire", 5, 5);
-	em->create_entity_at_loc("damage", 20, 20);
+	em.create_entity_at_loc("fire", 5, 5);
+	em.create_entity_at_loc("damage", 20, 20);
 
 	Level l;
 	l.load("testing_map");
@@ -52,7 +54,7 @@ int main(int argc, char** argv)
 	// Initial draw
 	TCODConsole::root->clear();
 	l.draw();
-	r_sys.update();
+	r_sys.update(evm);
 	TCODConsole::root->print(0, 0, "T: %i", turn);
 	TCODConsole::root->print(0, 1, "E: 0.00");
 	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
@@ -84,14 +86,14 @@ int main(int argc, char** argv)
 		turn++;
 
 		// Logic
-		t_sys.update();
-		coll_sys.update();
-		d_sys.update();
+		t_sys.update(evm);
+		coll_sys.update(evm);
+		d_sys.update(evm);
 
 		// Drawing
 		TCODConsole::root->clear();
 		l.draw();
-		r_sys.update();
+		r_sys.update(evm);
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
 		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);

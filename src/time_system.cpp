@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void TimeSystem::update(void)
+void TimeSystem::update(const EventManager& evm)
 {
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
 	{
@@ -28,15 +28,8 @@ void TimeSystem::update(void)
 	}
 }
 
-void TimeSystem::on_notify(const shared_ptr<Entity>& e, Event evt)
+void TimeSystem::receive(const EntityCreated& event)
 {
-	switch(evt)
-	{
-		case Event::ENTITY_CREATED:
-			if(e->has_component<TimedLife>())
-				add_entity(e);
-			break;
-		case Event::ENTITY_COLLISION:
-			break;
-	}
+	if(event.entity->has_component<TimedLife>())
+		add_entity(event.entity);
 }

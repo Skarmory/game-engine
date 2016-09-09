@@ -20,12 +20,12 @@ public:
 class MoveCommand : public ICommand
 {
 public:
-	MoveCommand(std::weak_ptr<Entity>, std::weak_ptr<Level>, int, int);
+	MoveCommand(std::weak_ptr<Entity>, const Level&, int, int);
 	virtual void execute(void) override;
 
 private:
 	std::weak_ptr<Entity> _entity;
-	std::weak_ptr<Level> _level;
+	const Level& _level;
 	int _x, _y;
 };
 
@@ -41,10 +41,10 @@ private:
 class AttackCommand : public ICommand
 {
 public:
-	AttackCommand(const shared_ptr<EntityManager>& entity_manager, std::weak_ptr<Entity>, int, int);
+	AttackCommand(EntityManager& entity_manager, std::weak_ptr<Entity>, int x, int y);
 	virtual void execute(void) override;
 private:
-	const shared_ptr<EntityManager> _entity_manager;
+	EntityManager& _entity_manager;
 	std::weak_ptr<Entity> _attacker;
 	int _x, _y;
 };
