@@ -66,42 +66,23 @@ class EventManager
 		template<typename E, typename Observer>
 		void subscribe(Observer& o)
 		{
-			//void(Observer<E>::*receive)(const E&) = &Observer::receive;
-			_observers[typeid(E)].push_back(Callback<E>(&Observer::receive));
+			_observers[typeid(E)].push_back(new Callback<E>(std::bind(&Observer::receive, &o, std::placeholders::_1)));
 		}
-	
-		/*	
-		template<typename E>
-		void unsubscribe(BaseObserver& o)
-		{
-			vector<BaseObserver*>* v = &_observers[typeid(E)];
-			v->erase(remove(v->begin(), v->end(), &o), v->end());
-		}
-		*/
 
 		template<typename E>
 		void broadcast(const E& event)
 		{
-			for(vector<BaseCallback>::iterator it = _observers[typeid(E)].begin(); it != _observers[typeid(E)].end(); it++)
+			for(auto callback : _observers[typeid(E)])
 			{
-				dynamic_cast<Callback<E>>(*it)(event);
+				(*dynamic_cast<Callback<E>*>(callback))(event);
 			}
-
-
-			/*
-			vector<BaseObserver*>* v = &_observers[typeid(E)];
-			for(vector<BaseObserver*>::iterator it = v->begin(); it != v->end(); it++)
-			{
-				(*it)->receive(event);
-			}
-			*/
 		}
 
 		template<typename E, typename ... Args>
 		void broadcast(Args && ... args)
 		{
 			E event(forward<Args>(args) ...);
-			broadcast(&event);
+			broadcast(event);
 		}
 
 	private:
@@ -116,7 +97,7 @@ class EventManager
 		struct Callback : public BaseCallback 
 		{ 
 			Callback(function<void(const E&)> callback) : callback(callback) {}
-			void operator()(const void* event) { callback(*(static_cast<const E*>(event))); }
+			void operator()(const E& event) { callback(event); }
 			function<void(const E&)> callback;
 		};
 };
