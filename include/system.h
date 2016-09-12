@@ -17,6 +17,8 @@ public:
 	System(void) {};
 	virtual ~System(void) {};
 
+	virtual void init(EventManager& evm) = 0;
+
 	virtual void update(const EventManager& evm) = 0;
 	
 	virtual void add_entity(const shared_ptr<Entity>& entity)
@@ -35,18 +37,41 @@ public:
 
 	typedef map<type_index, shared_ptr<System>>::iterator system_iterator;
 
+	void init(void)
+	{
+		for(auto system : _systems)
+			system.second->init(_event_manager);
+	}
+
 	template<class S>
 	void add(shared_ptr<S> system)
 	{
 		_systems[typeid(S)] = system;
 	}
 
+	template<class S, class ... Args>
+	void create(Args&& ... args)
+	{
+		_systems[typeid(S)] = make_shared<S>(forward<Args>(args) ...);
+	}
+
+	template<class S>
 	void update(void)
 	{
+		_systems[typeid(S)]->update(_event_manager);
+	}
+
+	void update(void)
+	{
+		/*
 		for(system_iterator it = _systems.begin(); it != _systems.end(); it++)
 		{
 			(*it).second->update(_event_manager);
 		}
+		*/
+
+		for(auto system : _systems)
+			system.second->update(_event_manager);
 	}
 
 private:

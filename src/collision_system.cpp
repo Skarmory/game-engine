@@ -2,8 +2,15 @@
 
 using namespace std;
 
+void CollisionSystem::init(EventManager& evm)
+{
+	evm.subscribe<EntityCreated>(*this);	
+}
+
 void CollisionSystem::update(const EventManager& evm)
 {
+	clean();
+
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
 			it != _entities.end();)
 	{

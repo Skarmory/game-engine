@@ -26,14 +26,19 @@ int main(int argc, char** argv)
 
 	EventManager evm;
 	EntityManager em(evm);
+	SystemManager sm(evm);
+
+	sm.create<RenderSystem>();
 
 	// Setup systems
+	/*
 	RenderSystem r_sys;
 	TimeSystem t_sys;
 	CollisionSystem coll_sys;
 	DamageSystem d_sys;
-
+	
 	evm.subscribe<EntityCreated>(r_sys);
+	*/
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
@@ -54,19 +59,34 @@ int main(int argc, char** argv)
 	// Initial draw
 	TCODConsole::root->clear();
 	l.draw();
-	r_sys.update(evm);
-	TCODConsole::root->print(0, 0, "T: %i", turn);
-	TCODConsole::root->print(0, 1, "E: 0.00");
-	TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
-	TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
-	TCODConsole::flush();
+	//r_sys.update(evm);
+	//TCODConsole::root->print(0, 0, "T: %i", turn);
+	//TCODConsole::root->print(0, 1, "E: 0.00");
+	//TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
+	//TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
+	//TCODConsole::flush();
 
 	while(running && !TCODConsole::isWindowClosed())
 	{
-		unique_ptr<ICommand> input_command(nullptr);
+		game_time.tick();
+		unique_ptr<ICommand> input_command = input.handle_input();
 
 		// TODO: Make the input manager handle all of this
 		// Input
+		if(input_command == nullptr && !turn_timer.finished())
+		{
+			turn_timer.tick(game_time);
+		}
+		else
+		{
+			turn_timer.reset();
+			turn++;
+
+			if(input_command != nullptr)
+				input_command->execute();
+		}
+
+		/*
 		do 
 		{
 			game_time.tick();
@@ -76,32 +96,35 @@ int main(int argc, char** argv)
 			TCODConsole::flush();
 		} 
 		while(input_command == nullptr && !turn_timer.finished());
-		
 
 		if(input_command != nullptr)
 		{
 			input_command->execute();
 		}
+		*/
 
-		turn++;
 
+		/*
 		// Logic
 		t_sys.update(evm);
 		coll_sys.update(evm);
 		d_sys.update(evm);
-
+		
 		// Drawing
 		TCODConsole::root->clear();
-		l.draw();
 		r_sys.update(evm);
+		*/
+		
+		TCODConsole::root->clear();
+		l.draw();
+		sm.update<RenderSystem>();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
 		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
 		TCODConsole::flush();
 		
 		// Cleanup
-		turn_timer.reset();
-		coll_sys.clean();
+		//coll_sys.clean();
 		em.update();
 	}
 

@@ -2,6 +2,11 @@
 
 using namespace std;
 
+void RenderSystem::init(EventManager& evm)
+{
+	evm.subscribe<EntityCreated>(*this);
+}
+
 void RenderSystem::update(const EventManager& evm)
 {
 	clean();	
