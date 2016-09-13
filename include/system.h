@@ -39,7 +39,7 @@ public:
 
 	void init(void)
 	{
-		for(auto system : _systems)
+		for(auto& system : _systems)
 			system.second->init(_event_manager);
 	}
 
@@ -63,14 +63,7 @@ public:
 
 	void update(void)
 	{
-		/*
-		for(system_iterator it = _systems.begin(); it != _systems.end(); it++)
-		{
-			(*it).second->update(_event_manager);
-		}
-		*/
-
-		for(auto system : _systems)
+		for(auto& system : _systems)
 			system.second->update(_event_manager);
 	}
 

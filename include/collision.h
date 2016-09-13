@@ -7,7 +7,7 @@ struct Collision : public Component
 {
 	// Will eventually contain some data to determine which other collidable entities it collides with
 
-	Collision(void) : Component("CollisionComponent") {}
+	Collision(void) {}
 };
 
 #endif

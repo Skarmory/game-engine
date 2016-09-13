@@ -7,6 +7,5 @@
 #include "damage.h"
 #include "collision.h"
 #include "collided.h"
-#include "timed_life.h"
 
 #endif

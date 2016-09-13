@@ -47,7 +47,7 @@ class EventManager
 		template<typename E>
 		void broadcast(const E& event)
 		{
-			for(auto callback : _observers[typeid(E)])
+			for(auto& callback : _observers[typeid(E)])
 			{
 				(*dynamic_cast<Callback<E>*>(callback))(event);
 			}

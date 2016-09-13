@@ -5,8 +5,15 @@
 
 struct Health : public Component
 {
-	Health(int health) : Component("HealthComponent"), health(health) {} 
+	Health(int health) : health(health) {} 
 	int health;
+};
+
+struct TimedHealth : public Component
+{
+	TimedHealth(int turns) : turns(turns), remaining(turns) {} 
+	const int turns;
+	int remaining;
 };
 
 #endif

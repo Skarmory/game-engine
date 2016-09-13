@@ -5,8 +5,8 @@
 
 struct Location : public Component
 {
-	Location() : Component("LocationComponent"), x(0), y(0) {}
-	Location(int x, int y) : Component("LocationComponent"), x(x), y(y) {}
+	Location() : x(0), y(0) {}
+	Location(int x, int y) : x(x), y(y) {}
 
 	int x, y;
 };

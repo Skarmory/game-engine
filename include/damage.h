@@ -5,9 +5,17 @@
 
 struct Damage : public Component
 {
-	Damage(int damage) : Component("DamageComponent"), damage(damage) {}
+	Damage(int damage) : damage(damage) {}
 
 	int damage;
+};
+
+struct PeriodicDamage : public Damage
+{
+	PeriodicDamage(int damage, int per_turns) : Damage(damage), per_turns(per_turns) {}
+
+	int per_turns;
+	int current_turns;
 };
 
 #endif
