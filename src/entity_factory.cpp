@@ -41,7 +41,7 @@ shared_ptr<Entity> EntityFactory::create_damage(int id)
 	e->add_component(make_shared<Location>());
 	e->add_component(make_shared<Graphic>('.', TCODColor::black, TCODColor::darkerYellow, DrawLayer::AREADMG));
 	e->add_component(make_shared<Collision>());
-	e->add_component(make_shared<PeriodicDamage>(1, 1));
-	e->add_component(make_shared<TimedHealth>(1));
+	e->add_component(make_shared<PeriodicDamage>(1, 2));
+	e->add_component(make_shared<TimedHealth>(2));
 	return e;
 }

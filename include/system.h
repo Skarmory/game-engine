@@ -11,6 +11,8 @@
 
 using namespace std;
 
+typedef vector<weak_ptr<Entity>>::iterator entity_iterator;
+
 class System 
 {
 public:
@@ -18,8 +20,7 @@ public:
 	virtual ~System(void) {};
 
 	virtual void init(EventManager& evm) = 0;
-
-	virtual void update(const EventManager& evm) = 0;
+	virtual void update(EventManager& evm) = 0;
 	
 	virtual void add_entity(const shared_ptr<Entity>& entity)
 	{

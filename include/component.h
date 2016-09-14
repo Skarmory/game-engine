@@ -7,13 +7,10 @@ using namespace std;
 
 class Component {
 public:
-	 Component() : _enabled(true) {}
+	 Component() : enabled(true) {}
 	 virtual ~Component(void) {}
 
-	 bool enabled(void) const { return _enabled; }
-
-protected:
-	 bool _enabled;
+	 bool enabled;
 };
 
 #endif

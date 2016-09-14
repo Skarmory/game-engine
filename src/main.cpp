@@ -29,19 +29,16 @@ int main(int argc, char** argv)
 	SystemManager sm(evm);
 
 	sm.create<RenderSystem>();
+	sm.create<PeriodicDamageUpdateSystem>();
+	sm.create<DamageSystem>();
+	sm.create<TimedHealthSystem>();
+	sm.create<CollisionSystem>();
+	
 	sm.init();
-	// Setup systems
-	/*
-	RenderSystem r_sys;
-	TimeSystem t_sys;
-	CollisionSystem coll_sys;
-	DamageSystem d_sys;
-	*/
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
 	em.create_entity_at_loc("fire", 5, 5);
-	em.create_entity_at_loc("damage", 20, 20);
 
 	Level l;
 	l.load("testing_map");
@@ -71,7 +68,10 @@ int main(int argc, char** argv)
 			if(input_command != nullptr)
 				input_command->execute();
 
-			sm.update();
+			sm.update<PeriodicDamageUpdateSystem>();
+			sm.update<CollisionSystem>();
+			sm.update<DamageSystem>();
+			sm.update<TimedHealthSystem>();
 		}
 
 		// Drawing

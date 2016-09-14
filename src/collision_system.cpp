@@ -7,12 +7,11 @@ void CollisionSystem::init(EventManager& evm)
 	evm.subscribe<EntityCreated>(*this);	
 }
 
-void CollisionSystem::update(const EventManager& evm)
+void CollisionSystem::update(EventManager& evm)
 {
 	clean();
 
-	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
-			it != _entities.end();)
+	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{
 		shared_ptr<Entity> e = it->lock();
 
@@ -26,8 +25,7 @@ void CollisionSystem::update(const EventManager& evm)
 		shared_ptr<Collision> cc = e->get_component<Collision>();
 
 		// Check for collision with other entities. Game is simple enough that no spatial hashing is necessary
-		for(vector<weak_ptr<Entity>>::iterator check_it = it + 1;
-				check_it != _entities.end();)
+		for(entity_iterator check_it = it + 1; check_it != _entities.end();)
 		{
 			shared_ptr<Entity> check_e = check_it->lock();
 
@@ -51,10 +49,8 @@ void CollisionSystem::update(const EventManager& evm)
 					check_e->get_component<Collided>()->collided_with.push_back(e);
 				else
 					check_e->add_component(make_shared<Collided>(e));
-				/*
-				notify(e, Event::ENTITY_COLLISION);
-				notify(check_e, Event::ENTITY_COLLISION);
-				*/
+
+				evm.broadcast<CollisionEvent>(e, check_e);
 			}
 
 			check_it++;

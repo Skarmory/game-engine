@@ -11,9 +11,7 @@ shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 
 	NEXT_ID++;
 
-	EntityCreated ec(e);
-	_event_manager.broadcast<EntityCreated>(ec);
-	//_event_manager.broadcast<EntityCreated>(e);
+	_event_manager.broadcast<EntityCreated>(e);
 
 	return e;
 }

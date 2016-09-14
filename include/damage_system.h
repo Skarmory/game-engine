@@ -5,13 +5,14 @@
 #include "components.h"
 #include "events.h"
 
-class DamageSystem : public System, Observer<CollisionEvent>
+class DamageSystem : public System, public Observer<CollisionEvent>
 {
 	public:
 		DamageSystem(void) {}
 		~DamageSystem(void) {}
-
-		virtual void update(const EventManager& evm) override;
+		
+		virtual void init(EventManager& evm) override;
+		virtual void update(EventManager& evm) override;
 		virtual void receive(const CollisionEvent& event) override;
 
 };

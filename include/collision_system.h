@@ -12,7 +12,7 @@ class CollisionSystem : public System, public Observer<EntityCreated>
 		~CollisionSystem(void) {};
 
 		virtual void init(EventManager& evm)   override;
-		virtual void update(const EventManager& evm) override;
+		virtual void update(EventManager& evm) override;
 		virtual void receive(const EntityCreated& e) override;
 
 	private:

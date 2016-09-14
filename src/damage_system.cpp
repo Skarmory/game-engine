@@ -2,32 +2,38 @@
 
 using namespace std;
 
-void DamageSystem::update(const EventManager& evm)
+void DamageSystem::init(EventManager& evm)
 {
-	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin();
-			it != _entities.end();)
+	evm.subscribe<CollisionEvent>(*this);
+}
+
+void DamageSystem::update(EventManager& evm)
+{
+	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{
 		shared_ptr<Entity> e = it->lock();
-
-		if(e == nullptr)
+		if(e != nullptr)
 		{
-			it = _entities.erase(it);
-			continue;
-		}
-			
-		shared_ptr<Collided> cc = e->get_component<Collided>();
-		shared_ptr<Health>   hc = e->get_component<Health>();
+			shared_ptr<Collided> cc = e->get_component<Collided>();
+			shared_ptr<Health>   hc = e->get_component<Health>();
 
-		for(vector<shared_ptr<Entity>>::iterator c_it = cc->collided_with.begin(); c_it != cc->collided_with.end(); c_it++)
-		{
-			if((*c_it)->has_component<Damage>())
+			for(auto& collided : cc->collided_with)
 			{
-				hc->health -= (*c_it)->get_component<const Damage>()->damage;
+				if(collided->has_component<Damage>())
+				{
+					hc->health -= collided->get_component<const Damage>()->damage;
+				}
+				else if(collided->has_component<PeriodicDamage>())
+				{
+					hc->health -= collided->get_component<const PeriodicDamage>()->damage;
+				}
+			}
+
+			if(hc->health < 0)
+			{
+				e->obsolete = true;
 			}
 		}
-
-		if(hc->health < 0)
-			e->obsolete = true;
 
 		it = _entities.erase(it);
 	}
@@ -35,9 +41,9 @@ void DamageSystem::update(const EventManager& evm)
 
 void DamageSystem::receive(const CollisionEvent& event)
 {
-	if(event.e1->has_component<Health>() && event.e1->has_component<Collided>())
+	if(event.e1->has_component<Health>() && (event.e2->has_component<Damage>() || event.e2->has_component<PeriodicDamage>()))
 		add_entity(event.e1);
 
-	if(event.e2->has_component<Health>() && event.e2->has_component<Collided>())
+	if(event.e2->has_component<Health>() && (event.e1->has_component<Damage>() || event.e2->has_component<PeriodicDamage>()))
 		add_entity(event.e2);
 }

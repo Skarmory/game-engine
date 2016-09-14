@@ -7,7 +7,7 @@ void RenderSystem::init(EventManager& evm)
 	evm.subscribe<EntityCreated>(*this);
 }
 
-void RenderSystem::update(const EventManager& evm)
+void RenderSystem::update(EventManager& evm)
 {
 	clean();	
 	
@@ -15,9 +15,9 @@ void RenderSystem::update(const EventManager& evm)
 
 	shared_ptr<Graphic>  gfx(nullptr);
 	shared_ptr<Location> loc(nullptr);
-	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end(); it++)
+	for(entity_iterator it = _entities.begin(); it != _entities.end(); it++)
 	{
-		shared_ptr<Entity> e = (*it).lock();
+		shared_ptr<Entity> e = it->lock();
 
 		gfx = e->get_component<Graphic>();
 		assert(gfx != nullptr);
@@ -38,7 +38,7 @@ void RenderSystem::update(const EventManager& evm)
 
 void RenderSystem::clean(void)
 {
-	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
+	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
 		shared_ptr<Entity> e = it->lock();
 

@@ -12,7 +12,7 @@ struct Damage : public Component
 
 struct PeriodicDamage : public Damage
 {
-	PeriodicDamage(int damage, int per_turns) : Damage(damage), per_turns(per_turns) {}
+	PeriodicDamage(int damage, int per_turns) : Damage(damage), per_turns(per_turns), current_turns(0) {}
 
 	int per_turns;
 	int current_turns;
