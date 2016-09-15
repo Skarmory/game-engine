@@ -6,7 +6,7 @@ int EntityManager::NEXT_ID = 0;
 
 shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 {
-	shared_ptr<Entity> e = _factory.create(NEXT_ID, entity_type);
+	shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
 	_entities[NEXT_ID] = e;
 
 	NEXT_ID++;

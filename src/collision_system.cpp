@@ -23,6 +23,12 @@ void CollisionSystem::update(EventManager& evm)
 
 		shared_ptr<Location>  lc = e->get_component<Location>();
 		shared_ptr<Collision> cc = e->get_component<Collision>();
+		
+		if(!cc->enabled)
+		{
+			it++;
+			continue;
+		}
 
 		// Check for collision with other entities. Game is simple enough that no spatial hashing is necessary
 		for(entity_iterator check_it = it + 1; check_it != _entities.end();)
@@ -37,6 +43,12 @@ void CollisionSystem::update(EventManager& evm)
 
 			shared_ptr<Location>  check_lc = check_e->get_component<Location>();
 			shared_ptr<Collision> check_cc = check_e->get_component<Collision>();
+
+			if(!check_cc->enabled)
+			{
+				check_it++;
+				continue;
+			}
 
 			if(lc->x == check_lc->x && lc->y == check_lc->y)
 			{

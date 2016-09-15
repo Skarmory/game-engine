@@ -15,23 +15,25 @@ void DamageSystem::update(EventManager& evm)
 		if(e != nullptr)
 		{
 			shared_ptr<Collided> cc = e->get_component<Collided>();
-			shared_ptr<Health>   hc = e->get_component<Health>();
+			shared_ptr<Health>   hc;
+			shared_ptr<Damage>   dmg;
+
+			if(e->has_component<PeriodicDamage>())
+				dmg = e->get_component<PeriodicDamage>();
+			else	
+				dmg = e->get_component<Damage>();
 
 			for(auto& collided : cc->collided_with)
 			{
-				if(collided->has_component<Damage>())
+				if((hc = collided->get_component<Health>()) != nullptr)
 				{
-					hc->health -= collided->get_component<const Damage>()->damage;
-				}
-				else if(collided->has_component<PeriodicDamage>())
-				{
-					hc->health -= collided->get_component<const PeriodicDamage>()->damage;
-				}
-			}
+					hc->health -= dmg->damage;
 
-			if(hc->health < 0)
-			{
-				e->obsolete = true;
+					if(hc->health < 0)
+					{
+						collided->obsolete = true;
+					}
+				}
 			}
 		}
 
@@ -41,9 +43,9 @@ void DamageSystem::update(EventManager& evm)
 
 void DamageSystem::receive(const CollisionEvent& event)
 {
-	if(event.e1->has_component<Health>() && (event.e2->has_component<Damage>() || event.e2->has_component<PeriodicDamage>()))
+	if(event.e1->has_component<Damage>() || event.e2->has_component<PeriodicDamage>())
 		add_entity(event.e1);
 
-	if(event.e2->has_component<Health>() && (event.e1->has_component<Damage>() || event.e2->has_component<PeriodicDamage>()))
+	if(event.e2->has_component<Damage>() || event.e2->has_component<PeriodicDamage>())
 		add_entity(event.e2);
 }

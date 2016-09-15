@@ -30,15 +30,22 @@ int main(int argc, char** argv)
 
 	sm.create<RenderSystem>();
 	sm.create<PeriodicDamageUpdateSystem>();
+	sm.create<CollisionSystem>();
 	sm.create<DamageSystem>();
 	sm.create<TimedHealthSystem>();
-	sm.create<CollisionSystem>();
 	
 	sm.init();
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
 	em.create_entity_at_loc("fire", 5, 5);
+	em.create_entity_at_loc("aoe_dmg", 10, 30);
+	em.create_entity_at_loc("aoe_dmg", 10, 31);
+	em.create_entity_at_loc("aoe_dmg", 9, 30);
+	em.create_entity_at_loc("aoe_dmg", 10, 32);
+	em.create_entity_at_loc("aoe_dmg", 9, 31);
+	em.create_entity_at_loc("aoe_dmg", 9, 29);
+	em.create_entity_at_loc("aoe_dmg", 10, 33);
 
 	Level l;
 	l.load("testing_map");
