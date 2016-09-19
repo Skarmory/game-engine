@@ -65,17 +65,17 @@ int main(int argc, char** argv)
 
 		unique_ptr<ICommand> input_command = input.handle_input();
 
-		// TODO: Make the input manager handle all of this
 		// Input
 		if(input_command != nullptr || turn_timer.finished())
 		{
 			turn_timer.reset();
 			turn++;
 
+			sm.update<PeriodicDamageUpdateSystem>();
+			
 			if(input_command != nullptr)
 				input_command->execute();
 
-			sm.update<PeriodicDamageUpdateSystem>();
 			sm.update<CollisionSystem>();
 			sm.update<DamageSystem>();
 			sm.update<TimedHealthSystem>();
