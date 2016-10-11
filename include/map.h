@@ -12,13 +12,22 @@ public:
 
 	~Map(void);
 	
+	Cell& get(int x, int y);
 	Cell& get(int x, int y) const;
+
 	void  set(int x, int y, Cell* c);
 
 	int   width(void) const;
 	int   height(void) const;
 
+	bool is_walkable(int x, int y);
+	bool is_explored(int x, int y);
+	
 	bool is_walkable(int x, int y) const;
+	bool is_explored(int x, int y) const;
+
+	void set_explored(int x, int y, bool explored);
+	void set_light_intensity(int x, int y, float intensity);
 
 private:
 	std::vector<Cell*> _cells;

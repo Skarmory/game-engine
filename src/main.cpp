@@ -28,7 +28,10 @@ int main(int argc, char** argv)
 	EntityManager em(evm);
 	SystemManager sm(evm);
 
-	sm.create<RenderSystem>();
+	Level l;
+
+	sm.create<RenderSystem>(l);
+	sm.create<LightSystem>(l);
 	sm.create<PeriodicDamageUpdateSystem>();
 	sm.create<CollisionSystem>();
 	sm.create<DamageSystem>();
@@ -37,8 +40,8 @@ int main(int argc, char** argv)
 	sm.init();
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
-	shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
-	em.create_entity_at_loc("fire", 5, 5);
+	//shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
+	//em.create_entity_at_loc("fire", 5, 5);
 	em.create_entity_at_loc("aoe_dmg", 10, 30);
 	em.create_entity_at_loc("aoe_dmg", 10, 31);
 	em.create_entity_at_loc("aoe_dmg", 9, 30);
@@ -47,7 +50,6 @@ int main(int argc, char** argv)
 	em.create_entity_at_loc("aoe_dmg", 9, 29);
 	em.create_entity_at_loc("aoe_dmg", 10, 33);
 
-	Level l;
 	l.load("testing_map");
 
 	GameTime game_time;
@@ -84,10 +86,12 @@ int main(int argc, char** argv)
 		// Drawing
 		TCODConsole::root->clear();
 		l.draw();
+		sm.update<LightSystem>();
+		l.draw();
 		sm.update<RenderSystem>();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
-		TCODConsole::root->print(0, 2, "HP: %i", player->get_component<Health>()->health);
-		TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
+		TCODConsole::root->print(0, 2, "C: %i, %i", player->get_component<Location>()->x, player->get_component<Location>()->y);
+		//TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
 		TCODConsole::flush();
 		
 		// Cleanup

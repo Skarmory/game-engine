@@ -19,13 +19,24 @@ public:
 	Level(void);
 	~Level(void);	
 	
-	void draw(void) const;
+	void draw(void);
 	void load(std::string level_name);
 
 	int levelnumber(void) const;
+
 	bool is_walkable(int, int) const;
+	bool is_walkable(int, int);
+
+	bool is_explored(int, int) const;
+	bool is_explored(int, int);
+
 	bool is_in_bounds(int, int) const;
 	
+	void set_explored(int, int, bool);
+	void set_light_intensity(int, int, float);
+
+	void set_cell_light(int x, int y, float value);
+
 private:
 	static int _NEXT;
 

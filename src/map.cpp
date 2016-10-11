@@ -17,6 +17,11 @@ Map::~Map(void)
 	}
 }
 
+Cell& Map::get(int x, int y)
+{
+	return *_cells.at((y * _x_max) + x);
+}
+
 Cell& Map::get(int x, int y) const 
 {
 	return *_cells.at((y * _x_max) + x);
@@ -37,7 +42,33 @@ int Map::height(void) const
 	return _y_max;
 }
 
+bool Map::is_walkable(int x, int y)
+{
+	return get(x, y).is_walkable();
+}
+
+bool Map::is_explored(int x, int y)
+{
+	return get(x, y).explored;
+}
+
 bool Map::is_walkable(int x, int y) const
 {
 	return get(x, y).is_walkable();
+}
+
+bool Map::is_explored(int x, int y) const
+{
+	return get(x, y).explored;
+}
+
+void Map::set_explored(int x, int y, bool explored)
+{
+	get(x, y).explored = explored;
+}
+
+void Map::set_light_intensity(int x, int y, float intensity)
+{
+	get(x, y).get_foreground_colour().setSaturation(intensity);
+	get(x, y).get_background_colour().setSaturation(intensity);
 }

@@ -7,5 +7,6 @@
 #include "damage.h"
 #include "collision.h"
 #include "collided.h"
+#include "light.h"
 
 #endif

@@ -66,6 +66,9 @@ void Level::load(std::string level_name)
 						bg = TCODColor(10,10,10);
 					}
 
+					fg.setSaturation(0.2);
+					bg.setSaturation(0.2);
+
 					_map.set(x, y, new Cell(ch, fg, bg, b));
 					assert(_map.get(x, y).get_display() == ch);
 				}	
@@ -103,22 +106,63 @@ void Level::load(std::string level_name)
 	file.close();	
 }
 
-void Level::draw(void) const
+void Level::draw(void)
 {
 	for(int y = 0; y < _map.height(); y++)
 	for(int x = 0; x < _map.width(); x++)
 	{
 		Cell& cell = _map.get(x, y);
+
+		set_cell_light(x, y, 0.1f);
+
 		TCODConsole::root->putCharEx(x, y, cell.get_display(), cell.get_foreground_colour(), cell.get_background_colour());
 	}
 }
+
+void Level::set_cell_light(int x, int y, float value)
+{
+	Cell& cell = _map.get(x, y);
+
+	TCODColor& fg = cell.get_foreground_colour();
+	TCODColor& bg = cell.get_background_colour();
+
+	fg.setValue(value);
+	bg.setValue(value);
+}
+
 
 bool Level::is_walkable(int x, int y) const
 {
 	return _map.is_walkable(x, y);
 }
 
+bool Level::is_walkable(int x, int y)
+{
+	return _map.is_walkable(x, y);
+}
+
+bool Level::is_explored(int x, int y) const
+{
+	return _map.is_explored(x, y);
+}
+
+bool Level::is_explored(int x, int y)
+{
+	return _map.is_explored(x, y);
+}
+
 bool Level::is_in_bounds(int x, int y) const
 {
 	return (x >= 0 && x < _map.width() && y >= 0 && y < _map.height());
+}
+
+
+void Level::set_explored(int x, int y, bool explored) 
+{
+	_map.set_explored(x, y, explored);
+}
+
+void Level::set_light_intensity(int x, int y, float intensity)
+{
+	_map.set_light_intensity(x, y, intensity);
 }

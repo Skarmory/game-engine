@@ -5,14 +5,21 @@
 
 class Cell {
 public:
-	Cell(char, TCODColor, TCODColor, bool);
+	Cell(char disp, TCODColor fg, TCODColor bg, bool walkable);
 	~Cell(void);
 
-	char 	  get_display(void) const;
-	TCODColor get_foreground_colour(void) const;
-	TCODColor get_background_colour(void) const;
-	bool 	  is_walkable(void) const;
+	char get_display(void) const;
 
+	const TCODColor& get_foreground_colour(void) const;
+	TCODColor& 		 get_foreground_colour(void);
+
+	const TCODColor& get_background_colour(void) const;
+	TCODColor&		 get_background_colour(void);
+
+	bool is_walkable(void);
+	bool is_walkable(void) const;
+	
+	bool 	  explored;
 private:
 	char 	  _display;
 	TCODColor _foreground_colour;
