@@ -67,8 +67,10 @@ void Map::set_explored(int x, int y, bool explored)
 	get(x, y).explored = explored;
 }
 
+/*
 void Map::set_light_intensity(int x, int y, float intensity)
 {
 	get(x, y).get_foreground_colour().setSaturation(intensity);
 	get(x, y).get_background_colour().setSaturation(intensity);
 }
+*/

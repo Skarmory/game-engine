@@ -27,7 +27,7 @@ public:
 	bool is_explored(int x, int y) const;
 
 	void set_explored(int x, int y, bool explored);
-	void set_light_intensity(int x, int y, float intensity);
+	//void set_light_intensity(int x, int y, float intensity);
 
 private:
 	std::vector<Cell*> _cells;

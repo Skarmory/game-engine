@@ -24,38 +24,35 @@ void LightSystem::update(EventManager& em)
 		int x = light->radius;
 		int y = 0;	
 		int err = 0;
+		int _x = 0;
+		int _y = 0;
 
 		while(x >= y)
 		{
-			for(int _x = x0; _x <= (x0 + x); _x++)
-			{
-				//(100.0 - (abs(_x - x0) * light->dropoff))
-				if(_level->is_in_bounds(_x, y0 + y))
-					_level->set_cell_light(_x, y0 + y, 5.0f);
+			_y = y0 + y;
+			for(int _x = x0; _x <= x0 + x; _x++)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			for(int _x = x0; _x >= x0 - x; _x--)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			
+			_y = y0 - y;
+			for(int _x = x0; _x <= x0 + x; _x++)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			for(int _x = x0; _x >= x0 - x; _x--)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
 
-				if(_level->is_in_bounds(_x, y0 - y))
-					_level->set_cell_light(_x, y0 - y, 5.0f);
 
-				if(_level->is_in_bounds(x0 + y, _x))
-					_level->set_cell_light(x0 + y, _x, 5.0f);
-
-				if(_level->is_in_bounds(x0 - y, _x))
-					_level->set_cell_light(x0 - y, _x, 5.0f);
-				
-				int __x = abs(x0 - _x);
-
-				if(_level->is_in_bounds(x0 - __x, y0 + y))
-					_level->set_cell_light(x0 - __x, y0 + y, 5.0f);
-
-				if(_level->is_in_bounds(x0 - __x, y0 - y))
-					_level->set_cell_light(x0 - __x, y0 - y, 5.0f);
-
-				if(_level->is_in_bounds(x0 + y, x0 - __x))
-					_level->set_cell_light(x0 + y, x0 - __x, 5.0f);
-
-				if(_level->is_in_bounds(x0 - y, x0 - __x))
-					_level->set_cell_light(x0 - y, x0 - __x, 5.0f);
-			}
+			_x = x0 + y;
+			for(int _y = y0; _y <= y0 + x; _y++)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			for(int _y = y0; _y >= y0 - x; _y--)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			
+			_x = x0 - y;
+			for(int _y = y0; _y <= y0 + x; _y++)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+			for(int _y = y0; _y >= y0 - x; _y--)
+				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
 
 			// Math
 			y   += 1;

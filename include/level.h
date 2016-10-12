@@ -19,6 +19,7 @@ public:
 	Level(void);
 	~Level(void);	
 	
+	void base_draw(void);
 	void draw(void);
 	void load(std::string level_name);
 
@@ -33,9 +34,9 @@ public:
 	bool is_in_bounds(int, int) const;
 	
 	void set_explored(int, int, bool);
-	void set_light_intensity(int, int, float);
+	//void set_light_intensity(int, int, float);
 
-	void set_cell_light(int x, int y, float value);
+	void set_cell_light(int x, int y, float value, float saturation);
 
 private:
 	static int _NEXT;

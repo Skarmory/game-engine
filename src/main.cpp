@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	//shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
-	//em.create_entity_at_loc("fire", 5, 5);
+	em.create_entity_at_loc("fire", 5, 5);
 	em.create_entity_at_loc("aoe_dmg", 10, 30);
 	em.create_entity_at_loc("aoe_dmg", 10, 31);
 	em.create_entity_at_loc("aoe_dmg", 9, 30);
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 
 		// Drawing
 		TCODConsole::root->clear();
-		l.draw();
+		l.base_draw();
 		sm.update<LightSystem>();
 		l.draw();
 		sm.update<RenderSystem>();
