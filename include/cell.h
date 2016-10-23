@@ -5,7 +5,7 @@
 
 class Cell {
 public:
-	Cell(char disp, TCODColor fg, TCODColor bg, bool walkable);
+	Cell(char disp, TCODColor fg, TCODColor bg, bool walkable, bool los_blocker);
 	~Cell(void);
 
 	char get_display(void) const;
@@ -24,8 +24,9 @@ public:
 
 	bool is_walkable(void);
 	bool is_walkable(void) const;
-	
-	bool 	  explored;
+
+	bool los_blocker;
+	bool explored;
 private:
 	char 	  _display;
 	TCODColor _foreground_colour;

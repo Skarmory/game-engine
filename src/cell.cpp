@@ -1,6 +1,7 @@
 #include "cell.h"
 
-Cell::Cell(char display, TCODColor fg, TCODColor bg, bool walkable) : explored(false), _display(display), _foreground_colour(fg), _background_colour(bg), _walkable(walkable), _light_value(1.0f) 
+Cell::Cell(char display, TCODColor fg, TCODColor bg, bool walkable, bool los_blocker) : 
+	explored(false), _display(display), _foreground_colour(fg), _background_colour(bg), _walkable(walkable), _light_value(1.0f), los_blocker(los_blocker)
 {
 }
 

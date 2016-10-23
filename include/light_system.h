@@ -2,6 +2,7 @@
 #define light_system_h
 
 #include <cstdlib>
+#include <algorithm>
 
 #include "system.h"
 #include "components.h"
@@ -19,6 +20,14 @@ class LightSystem : public System, public Observer<EntityCreated>
 
 	private:
 		Level* _level;
+		const int multipliers[4][8] = {
+			{ 1, 0, 0, -1, -1, 0, 0, 1 },
+			{ 0, 1, -1, 0, 0, -1, 1, 0 },
+			{ 0, 1, 1, 0, 0, -1, -1, 0 },
+			{ 1, 0, 0, 1, -1, 0, 0, -1 }
+		};
+
+		void cast_light(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy, float dropoff);
 };
 
 #endif

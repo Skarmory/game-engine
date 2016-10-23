@@ -31,12 +31,13 @@ public:
 	bool is_explored(int, int) const;
 	bool is_explored(int, int);
 
-	bool is_in_bounds(int, int) const;
-	
 	void set_explored(int, int, bool);
-	//void set_light_intensity(int, int, float);
 
-	void set_cell_light(int x, int y, float value, float saturation);
+	bool is_in_bounds(int, int) const;
+
+	bool blocks_los(int, int) const;
+	
+	void set_cell_light(int x, int y, float value, float saturation, bool force=false);
 
 private:
 	static int _NEXT;

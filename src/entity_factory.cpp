@@ -23,7 +23,7 @@ unique_ptr<Entity> EntityFactory::create_player(int id)
 	e->add_component(make_shared<Graphic>('@', TCODColor::white, TCODColor::black, DrawLayer::CREATURE));
 	e->add_component(make_shared<Collision>());
 	e->add_component(make_shared<Health>(1));
-	e->add_component(make_shared<LightSource>(3, 3));
+	e->add_component(make_shared<LightSource>(10));
 	return e;
 }
 
@@ -34,7 +34,7 @@ unique_ptr<Entity> EntityFactory::create_fire(int id)
 	e->add_component(make_shared<Graphic>('F', TCODColor::orange, TCODColor::darkOrange, DrawLayer::EFFECT));
 	e->add_component(make_shared<Collision>());
 	e->add_component(make_shared<Damage>(1));
-	e->add_component(make_shared<LightSource>(5, 5));
+	e->add_component(make_shared<LightSource>(20));
 	return e;
 }
 

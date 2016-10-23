@@ -56,20 +56,20 @@ void Level::load(std::string level_name)
 				{
 					char ch = line[x];
 					bool b = true;
+					bool blocks_los = false;
+
 					TCODColor fg = fg_colour_map[default_gen->getInt(0, 8, 6)];
 					TCODColor bg = bg_colour_map[default_gen->getInt(0, 8, 6)];
 
 					if(ch != '.')
 					{
 						b = false;
+						blocks_los = true;
 						fg = TCODColor::darkGrey;
 						bg = TCODColor(10,10,10);
 					}
 
-					fg.setSaturation(0.2);
-					bg.setSaturation(0.2);
-
-					_map.set(x, y, new Cell(ch, fg, bg, b));
+					_map.set(x, y, new Cell(ch, fg, bg, b, blocks_los));
 					assert(_map.get(x, y).get_display() == ch);
 				}	
 
@@ -108,11 +108,16 @@ void Level::load(std::string level_name)
 
 void Level::base_draw(void)
 {
-	for(int y = 0; y < _map.height(); y++)
-	for(int x = 0; x < _map.width(); x++)
-		set_cell_light(x, y, 0.1f, 0.1f);
+	for (int y = 0; y < _map.height(); y++)
+		for (int x = 0; x < _map.width(); x++)
+		{
+			if (_map.get(x, y).explored)
+				set_cell_light(x, y, 0.1f, 0.1f, true);
+			else
+				set_cell_light(x, y, 0.0f, 0.0f, true);
+		}
 
-	draw();
+	//draw();
 }
 
 void Level::draw(void)
@@ -135,12 +140,15 @@ void Level::draw(void)
 	}
 }
 
-void Level::set_cell_light(int x, int y, float value, float saturation)
+void Level::set_cell_light(int x, int y, float value, float saturation, bool force)
 {
 	if(is_in_bounds(x, y))
 	{
-		_map.get(x, y).set_light_value(value);
-		_map.get(x, y).set_light_saturation(saturation);
+		if ((saturation > _map.get(x, y).get_light_saturation() && value > _map.get(x, y).get_light_value()) || force)
+		{
+			_map.get(x, y).set_light_value(value);
+			_map.get(x, y).set_light_saturation(saturation);
+		}
 	}
 }
 
@@ -165,20 +173,18 @@ bool Level::is_explored(int x, int y)
 	return _map.is_explored(x, y);
 }
 
+void Level::set_explored(int x, int y, bool explored)
+{
+	_map.set_explored(x, y, explored);
+}
+
 bool Level::is_in_bounds(int x, int y) const
 {
 	return (x >= 0 && x < _map.width() && y >= 0 && y < _map.height());
 }
 
-
-void Level::set_explored(int x, int y, bool explored) 
+bool Level::blocks_los(int x, int y) const
 {
-	_map.set_explored(x, y, explored);
+	return _map.get(x, y).los_blocker;
 }
 
-/*
-void Level::set_light_intensity(int x, int y, float intensity)
-{
-	_map.set_light_intensity(x, y, intensity);
-}
-*/

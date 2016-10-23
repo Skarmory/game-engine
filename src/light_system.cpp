@@ -18,54 +18,83 @@ void LightSystem::update(EventManager& em)
 
 		shared_ptr<LightSource> light = e->get_component<LightSource>();
 		shared_ptr<Location>    loc   = e->get_component<Location>();
-		int x0 = loc->x;
-		int y0 = loc->y;
+		int x0     = loc->x;
+		int y0     = loc->y;
+		int r      = light->radius;
+		float drop = light->dropoff;
 
-		int x = light->radius;
-		int y = 0;	
-		int err = 0;
-		int _x = 0;
-		int _y = 0;
+		for (int i = 0; i < 8; i++) 
+			cast_light(x0, y0, r, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i], drop);
 
-		while(x >= y)
-		{
-			_y = y0 + y;
-			for(int _x = x0; _x <= x0 + x; _x++)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			for(int _x = x0; _x >= x0 - x; _x--)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			
-			_y = y0 - y;
-			for(int _x = x0; _x <= x0 + x; _x++)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			for(int _x = x0; _x >= x0 - x; _x--)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+		it++;
+	}
+}
 
+void LightSystem::cast_light(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy, float dropoff) {
+	if (start_slope < end_slope) {
+		return;
+	}
 
-			_x = x0 + y;
-			for(int _y = y0; _y <= y0 + x; _y++)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			for(int _y = y0; _y >= y0 - x; _y--)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			
-			_x = x0 - y;
-			for(int _y = y0; _y <= y0 + x; _y++)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
-			for(int _y = y0; _y >= y0 - x; _y--)
-				_level->set_cell_light(_x, _y, 1.0f, 1.0f);
+	float next_start_slope = start_slope;
 
-			// Math
-			y   += 1;
-			err += 1 + (2 * y);
+	for (int i = row; i <= radius; i++) {
 
-			if(2 * (err - x) + 1 > 0)
+		bool blocked = false;
+
+		for (int dx = -i, dy = -i; dx <= 0; dx++) {
+
+			float l_slope = (dx - 0.5) / (dy + 0.5);
+			float r_slope = (dx + 0.5) / (dy - 0.5);
+
+			if (start_slope < r_slope)
+				continue;
+			else if (end_slope > l_slope)
+				break;
+
+			int sax = dx * xx + dy * xy;
+			int say = dx * yx + dy * yy;
+
+			if ((sax < 0 && (int)std::abs(sax) > x) || (say < 0 && (int)std::abs(say) > y))
+				continue;
+
+			int ax = x + sax;
+			int ay = y + say;
+			if (!_level->is_in_bounds(ax, 0) || !_level->is_in_bounds(0, ay)) 
+				continue;
+
+			int radius2 = radius * radius;
+			int dx2dy2 = dx * dx + dy * dy;
+
+			if ((int)dx2dy2 < radius2 + (0.25f * radius))
 			{
-				x   -= 1;
-				err += 1 - (2 * x);
+				float light_percent = max(MAX_LIGHT_PERCENT - ((float)sqrt(dx2dy2) * dropoff), MIN_LIGHT_PERCENT);
+
+				_level->set_cell_light(ax, ay, light_percent, light_percent);
+			}
+
+			if (blocked) 
+			{
+				if (_level->blocks_los(ax, ay)) 
+				{
+					next_start_slope = r_slope;
+					continue;
+				}
+				else 
+				{
+					blocked = false;
+					start_slope = next_start_slope;
+				}
+			}
+			else if (_level->blocks_los(ax, ay)) 
+			{
+				blocked = true;
+				next_start_slope = r_slope;
+				cast_light(x, y, radius, i + 1, start_slope, l_slope, xx, xy, yx, yy, dropoff);
 			}
 		}
 
-		it++;
+		if (blocked)
+			break;
 	}
 }
 

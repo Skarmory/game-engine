@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 		sm.update<RenderSystem>();
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::root->print(0, 2, "C: %i, %i", player->get_component<Location>()->x, player->get_component<Location>()->y);
-		//TCODConsole::root->print(30, 0, "HP: %i", enemy->get_component<Health>()->health);
+		TCODConsole::root->print(0, 1, "HP: %i", player->get_component<Health>()->health);
 		TCODConsole::flush();
 		
 		// Cleanup
