@@ -9,6 +9,9 @@ shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 	shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
 	_entities[NEXT_ID] = e;
 
+	if (entity_type == "player")
+		_player_id = NEXT_ID;
+
 	NEXT_ID++;
 
 	_event_manager.broadcast<EntityCreated>(e);
@@ -38,4 +41,9 @@ void EntityManager::update(void)
 
 		it++;
 	}	
+}
+
+const Entity& EntityManager::get_player(void) const
+{
+	return *_entities.at(_player_id);
 }

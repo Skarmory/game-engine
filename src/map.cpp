@@ -44,27 +44,27 @@ int Map::height(void) const
 
 bool Map::is_walkable(int x, int y)
 {
-	return get(x, y).is_walkable();
+	return get(x, y)._is_walkable;
 }
 
 bool Map::is_explored(int x, int y)
 {
-	return get(x, y).explored;
+	return get(x, y)._explored;
 }
 
 bool Map::is_walkable(int x, int y) const
 {
-	return get(x, y).is_walkable();
+	return get(x, y)._is_walkable;
 }
 
 bool Map::is_explored(int x, int y) const
 {
-	return get(x, y).explored;
+	return get(x, y)._explored;
 }
 
 void Map::set_explored(int x, int y, bool explored)
 {
-	get(x, y).explored = explored;
+	get(x, y)._explored = explored;
 }
 
 /*

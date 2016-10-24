@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	EntityManager em(evm);
 	SystemManager sm(evm);
 
-	Level l;
+	Level l(em);
 
 	sm.create<RenderSystem>(l);
 	sm.create<LightSystem>(l);

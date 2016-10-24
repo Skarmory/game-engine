@@ -6,7 +6,6 @@
 class Cell {
 public:
 	Cell(char disp, TCODColor fg, TCODColor bg, bool walkable, bool los_blocker);
-	~Cell(void);
 
 	char get_display(void) const;
 
@@ -15,25 +14,20 @@ public:
 
 	const TCODColor& get_background_colour(void) const;
 	TCODColor&		 get_background_colour(void);
-
-	void set_light_value(float value);
-	float get_light_value(void);
-
-	void set_light_saturation(float saturation);
-	float get_light_saturation(void);
-
-	bool is_walkable(void);
-	bool is_walkable(void) const;
-
-	bool los_blocker;
-	bool explored;
+	
 private:
 	char 	  _display;
 	TCODColor _foreground_colour;
 	TCODColor _background_colour;
-	bool      _walkable;
 	float     _light_value;
 	float	  _light_saturation;
+	bool	  _is_visible;
+	bool      _blocks_los;
+	bool	  _explored;
+	bool      _is_walkable;
+
+	friend class Map;
+	friend class Level;
 };
 
 #endif

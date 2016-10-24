@@ -2,7 +2,7 @@
 
 int Level::_NEXT = 0;
 
-Level::Level(void)
+Level::Level(const EntityManager& em) : em(em)
 {
 	_level = ++Level::_NEXT;
 }
@@ -109,19 +109,21 @@ void Level::load(std::string level_name)
 void Level::base_draw(void)
 {
 	for (int y = 0; y < _map.height(); y++)
-		for (int x = 0; x < _map.width(); x++)
-		{
-			if (_map.get(x, y).explored)
-				set_cell_light(x, y, 0.1f, 0.1f, true);
-			else
-				set_cell_light(x, y, 0.0f, 0.0f, true);
-		}
-
-	//draw();
+	for (int x = 0; x < _map.width(); x++)
+	{
+		set_cell_light(x, y, 0.0f, 0.0f, true);
+		_map.get(x, y)._is_visible = false;
+	}
 }
 
 void Level::draw(void)
 {
+	const shared_ptr<const Sight> sight  = em.get_player().get_component<Sight>();
+	const shared_ptr<const Location> loc = em.get_player().get_component<Location>();
+
+	for (int i = 0; i < 8; i++)
+		fov(loc->x, loc->y, sight->radius, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
+
 	for(int y = 0; y < _map.height(); y++)
 	for(int x = 0; x < _map.width(); x++)
 	{
@@ -130,13 +132,96 @@ void Level::draw(void)
 		TCODColor fg = cell.get_foreground_colour();
 		TCODColor bg = cell.get_background_colour();
 
-		fg.setValue(fg.getValue() * cell.get_light_value());
-		bg.setValue(bg.getValue() * cell.get_light_value());
+		if (cell._is_visible)
+		{
+			fg.setValue(fg.getValue() * cell._light_value);
+			bg.setValue(bg.getValue() * cell._light_value);
 
-		fg.setSaturation(fg.getSaturation() * cell.get_light_saturation());
-		bg.setSaturation(bg.getSaturation() * cell.get_light_saturation());
+			fg.setSaturation(fg.getSaturation() * cell._light_saturation);
+			bg.setSaturation(bg.getSaturation() * cell._light_saturation);
 
-		TCODConsole::root->putCharEx(x, y, cell.get_display(), fg, bg);
+			TCODConsole::root->putCharEx(x, y, cell.get_display(), fg, bg);
+		}
+		else
+		{
+			float mod = cell._explored ? MIN_LIGHT_PERCENT : 0.0f;
+			fg.setValue(fg.getValue() * mod);
+			bg.setValue(bg.getValue() * mod);
+
+			fg.setSaturation(fg.getSaturation() * mod);
+			bg.setSaturation(bg.getSaturation() * mod);
+
+			TCODConsole::root->putCharEx(x, y, cell.get_display(), fg, bg);
+		}
+	}
+}
+
+void Level::fov(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy) {
+	if (start_slope < end_slope) {
+		return;
+	}
+
+	float next_start_slope = start_slope;
+
+	for (int i = row; i <= radius; i++) {
+
+		bool blocked = false;
+
+		for (int dx = -i, dy = -i; dx <= 0; dx++) {
+
+			float l_slope = (dx - 0.5) / (dy + 0.5);
+			float r_slope = (dx + 0.5) / (dy - 0.5);
+
+			if (start_slope < r_slope)
+				continue;
+			else if (end_slope > l_slope)
+				break;
+
+			int sax = dx * xx + dy * xy;
+			int say = dx * yx + dy * yy;
+
+			if ((sax < 0 && (int)std::abs(sax) > x) || (say < 0 && (int)std::abs(say) > y))
+				continue;
+
+			int ax = x + sax;
+			int ay = y + say;
+			if (!is_in_bounds(ax, 0) || !is_in_bounds(0, ay))
+				continue;
+
+			int radius2 = radius * radius;
+			int dx2dy2 = dx * dx + dy * dy;
+
+			if ((int)dx2dy2 < radius2 + (0.25f * radius))
+			{
+				Cell& c = _map.get(ax, ay);
+				c._is_visible = true;
+				if (c._light_saturation > MIN_LIGHT_PERCENT && c._light_value > MIN_LIGHT_PERCENT && !c._explored)
+					c._explored = true;
+			}
+
+			if (blocked)
+			{
+				if(blocks_los(ax, ay))
+				{
+					next_start_slope = r_slope;
+					continue;
+				}
+				else
+				{
+					blocked = false;
+					start_slope = next_start_slope;
+				}
+			}
+			else if (blocks_los(ax, ay))
+			{
+				blocked = true;
+				next_start_slope = r_slope;
+				fov(x, y, radius, i + 1, start_slope, l_slope, xx, xy, yx, yy);
+			}
+		}
+
+		if (blocked)
+			break;
 	}
 }
 
@@ -144,10 +229,10 @@ void Level::set_cell_light(int x, int y, float value, float saturation, bool for
 {
 	if(is_in_bounds(x, y))
 	{
-		if ((saturation > _map.get(x, y).get_light_saturation() && value > _map.get(x, y).get_light_value()) || force)
+		if ((saturation > _map.get(x, y)._light_saturation && value > _map.get(x, y)._light_value) || force)
 		{
-			_map.get(x, y).set_light_value(value);
-			_map.get(x, y).set_light_saturation(saturation);
+			_map.get(x, y)._light_value = value;
+			_map.get(x, y)._light_saturation = saturation;
 		}
 	}
 }
@@ -185,6 +270,6 @@ bool Level::is_in_bounds(int x, int y) const
 
 bool Level::blocks_los(int x, int y) const
 {
-	return _map.get(x, y).los_blocker;
+	return _map.get(x, y)._blocks_los;
 }
 

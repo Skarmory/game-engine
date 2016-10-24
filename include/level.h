@@ -10,13 +10,15 @@
 #include <assert.h>
 
 #include "libtcod.hpp"
+#include "entity_manager.h"
 #include "cell.h"
 #include "map.h"
+#include "light.h"
 
 class Level
 {
 public:
-	Level(void);
+	Level(const EntityManager& em);
 	~Level(void);	
 	
 	void base_draw(void);
@@ -40,9 +42,18 @@ public:
 	void set_cell_light(int x, int y, float value, float saturation, bool force=false);
 
 private:
+	const int multipliers[4][8] = {
+		{ 1, 0, 0, -1, -1, 0, 0, 1 },
+		{ 0, 1, -1, 0, 0, -1, 1, 0 },
+		{ 0, 1, 1, 0, 0, -1, -1, 0 },
+		{ 1, 0, 0, 1, -1, 0, 0, -1 }
+	};
+	void fov(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy);
+
 	static int _NEXT;
 
 	int _level, _x, _y;
+	const EntityManager& em;
 	Map _map;
 };
 

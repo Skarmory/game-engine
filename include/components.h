@@ -8,5 +8,6 @@
 #include "collision.h"
 #include "collided.h"
 #include "light.h"
+#include "sight.h"
 
 #endif
