@@ -25,14 +25,25 @@ void RenderSystem::update(EventManager& evm)
 		loc = e->get_component<Location>();
 		assert(loc != nullptr);
 
-		if(gfx->fg_colour != TCODColor::black)
+		if (_level->is_visible(loc->x, loc->y))
 		{
-			TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
-			TCODConsole::root->setCharForeground(loc->x, loc->y, gfx->fg_colour);
+			// Black is the "null" value, i.e. there should be no colour here, so things can be layered "dynamically"
+			if (gfx->fg_colour != TCODColor::black)
+			{
+				TCODColor fg = gfx->fg_colour;
+				fg.setHSV(fg.getHue(), fg.getSaturation() * _level->get_cell_light(loc->x, loc->y), fg.getValue() * _level->get_cell_light(loc->x, loc->y));
+
+				TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
+				TCODConsole::root->setCharForeground(loc->x, loc->y, fg);	
+			}
+
+			if (gfx->bg_colour != TCODColor::black)
+			{
+				TCODColor bg = gfx->bg_colour;
+				bg.setHSV(bg.getHue(), bg.getSaturation() * _level->get_cell_light(loc->x, loc->y), bg.getValue() * _level->get_cell_light(loc->x, loc->y));
+				TCODConsole::root->setCharBackground(loc->x, loc->y, bg);
+			}
 		}
-		
-		if(gfx->bg_colour != TCODColor::black)
-			TCODConsole::root->setCharBackground(loc->x, loc->y, gfx->bg_colour);
 	}
 }
 

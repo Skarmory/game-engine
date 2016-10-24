@@ -27,7 +27,7 @@ class LightSystem : public System, public Observer<EntityCreated>
 			{ 1, 0, 0, 1, -1, 0, 0, -1 }
 		};
 
-		void cast_light(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy, float dropoff);
+		void cast_light(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy, float dropoff);
 };
 
 #endif

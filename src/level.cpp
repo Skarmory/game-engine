@@ -121,8 +121,13 @@ void Level::draw(void)
 	const shared_ptr<const Sight> sight  = em.get_player().get_component<Sight>();
 	const shared_ptr<const Location> loc = em.get_player().get_component<Location>();
 
-	for (int i = 0; i < 8; i++)
-		fov(loc->x, loc->y, sight->radius, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
+	if (sight->radius > 0)
+	{
+		_map.get(loc->x, loc->y)._is_visible = true;
+
+		for (int i = 0; i < 8; i++)
+			fov(loc->x, loc->y, sight->radius, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
+	}
 
 	for(int y = 0; y < _map.height(); y++)
 	for(int x = 0; x < _map.width(); x++)
@@ -156,12 +161,12 @@ void Level::draw(void)
 	}
 }
 
-void Level::fov(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy) {
+void Level::fov(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy) {
 	if (start_slope < end_slope) {
 		return;
 	}
 
-	float next_start_slope = start_slope;
+	double next_start_slope = start_slope;
 
 	for (int i = row; i <= radius; i++) {
 
@@ -169,8 +174,8 @@ void Level::fov(int x, int y, int radius, int row, float start_slope, float end_
 
 		for (int dx = -i, dy = -i; dx <= 0; dx++) {
 
-			float l_slope = (dx - 0.5) / (dy + 0.5);
-			float r_slope = (dx + 0.5) / (dy - 0.5);
+			double l_slope = (dx - 0.5) / (dy + 0.5);
+			double r_slope = (dx + 0.5) / (dy - 0.5);
 
 			if (start_slope < r_slope)
 				continue;
@@ -237,13 +242,12 @@ void Level::set_cell_light(int x, int y, float value, float saturation, bool for
 	}
 }
 
-
-bool Level::is_walkable(int x, int y) const
+float Level::get_cell_light(int x, int y)
 {
-	return _map.is_walkable(x, y);
+	return _map.get(x, y)._light_value;
 }
 
-bool Level::is_walkable(int x, int y)
+bool Level::is_walkable(int x, int y) const
 {
 	return _map.is_walkable(x, y);
 }
@@ -253,9 +257,9 @@ bool Level::is_explored(int x, int y) const
 	return _map.is_explored(x, y);
 }
 
-bool Level::is_explored(int x, int y)
+bool Level::is_visible(int x, int y) const
 {
-	return _map.is_explored(x, y);
+	return _map.get(x, y)._is_visible;
 }
 
 void Level::set_explored(int x, int y, bool explored)

@@ -25,13 +25,13 @@ void DamageSystem::update(EventManager& evm)
 
 			for(auto& collided : cc->collided_with)
 			{
-				if((hc = collided->get_component<Health>()) != nullptr)
+				if((hc = collided->get_component<Health>()) != nullptr && hc->is_alive)
 				{
 					hc->health -= dmg->damage;
 
 					if(hc->health < 0)
 					{
-						collided->obsolete = true;
+						hc->is_alive = false;
 					}
 				}
 			}

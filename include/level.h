@@ -28,12 +28,12 @@ public:
 	int levelnumber(void) const;
 
 	bool is_walkable(int, int) const;
-	bool is_walkable(int, int);
 
 	bool is_explored(int, int) const;
-	bool is_explored(int, int);
 
-	void set_explored(int, int, bool);
+	bool is_visible(int, int) const;
+
+	float get_cell_light(int, int);
 
 	bool is_in_bounds(int, int) const;
 
@@ -48,7 +48,9 @@ private:
 		{ 0, 1, 1, 0, 0, -1, -1, 0 },
 		{ 1, 0, 0, 1, -1, 0, 0, -1 }
 	};
-	void fov(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy);
+
+	void fov(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy);
+	void set_explored(int, int, bool);
 
 	static int _NEXT;
 
