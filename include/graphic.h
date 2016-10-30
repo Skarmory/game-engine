@@ -13,15 +13,21 @@ enum DrawLayer
 	AREADMG  = 4
 };
 
-struct Graphic : public Component
+struct Glyph
 {
-	Graphic(char graphic, TCODColor fg_colour, TCODColor bg_colour, DrawLayer layer) 
-		: graphic(graphic), fg_colour(fg_colour), bg_colour(bg_colour), layer(layer) 
-	{}
+	Glyph(char glyph, TCODColor fg_colour, TCODColor bg_colour) : glyph(glyph), fg_colour(fg_colour), bg_colour(bg_colour)  {}
 
-	char 	  graphic;
+	char glyph;
 	TCODColor fg_colour;
 	TCODColor bg_colour;
+};
+
+struct Graphic : public Component
+{
+	Graphic(char graphic, TCODColor fg_colour, TCODColor bg_colour, DrawLayer layer) : glyph(graphic, fg_colour, bg_colour), layer(layer) {}
+	Graphic(Glyph glyph, DrawLayer layer) : glyph(glyph), layer(layer) {}
+
+	Glyph     glyph;
 	DrawLayer layer;
 };
 

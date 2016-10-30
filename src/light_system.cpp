@@ -28,7 +28,7 @@ void LightSystem::update(EventManager& em)
 			for (int i = 0; i < 8; i++)
 				cast_light(x0, y0, r, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i], drop);
 
-			_level->set_cell_light(x0, y0, MAX_LIGHT_PERCENT, MAX_LIGHT_PERCENT);
+			_level->set_cell_light(x0, y0, MAX_LIGHT_PERCENT);
 		}
 
 		it++;
@@ -70,11 +70,11 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 			int radius2 = radius * radius;
 			int dx2dy2 = dx * dx + dy * dy;
 
-			if ((int)dx2dy2 < radius2 + (0.25f * radius))
+			if ((int)dx2dy2 < radius2 + (0.25f * radius2))
 			{
 				float light_percent = max(MAX_LIGHT_PERCENT - ((float)sqrt(dx2dy2) * dropoff), MIN_LIGHT_PERCENT);
 
-				_level->set_cell_light(ax, ay, light_percent, light_percent);
+				_level->set_cell_light(ax, ay, light_percent);
 			}
 
 			if (blocked) 

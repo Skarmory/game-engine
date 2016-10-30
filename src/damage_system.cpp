@@ -43,7 +43,7 @@ void DamageSystem::update(EventManager& evm)
 
 void DamageSystem::receive(const CollisionEvent& event)
 {
-	if(event.e1->has_component<Damage>() || event.e2->has_component<PeriodicDamage>())
+	if(event.e1->has_component<Damage>() || event.e1->has_component<PeriodicDamage>())
 		add_entity(event.e1);
 
 	if(event.e2->has_component<Damage>() || event.e2->has_component<PeriodicDamage>())

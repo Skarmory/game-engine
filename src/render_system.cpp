@@ -13,35 +13,38 @@ void RenderSystem::update(EventManager& evm)
 	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
-	shared_ptr<Graphic>  gfx(nullptr);
-	shared_ptr<Location> loc(nullptr);
 	for(entity_iterator it = _entities.begin(); it != _entities.end(); it++)
 	{
 		shared_ptr<Entity> e = it->lock();
 
-		gfx = e->get_component<Graphic>();
-		assert(gfx != nullptr);
-
-		loc = e->get_component<Location>();
-		assert(loc != nullptr);
+		shared_ptr<Graphic>  gfx = e->get_component<Graphic>();
+		shared_ptr<Location> loc = e->get_component<Location>();
 
 		if (_level->is_visible(loc->x, loc->y))
 		{
-			// Black is the "null" value, i.e. there should be no colour here, so things can be layered "dynamically"
-			if (gfx->fg_colour != TCODColor::black)
-			{
-				TCODColor fg = gfx->fg_colour;
-				fg.setHSV(fg.getHue(), fg.getSaturation() * _level->get_cell_light(loc->x, loc->y), fg.getValue() * _level->get_cell_light(loc->x, loc->y));
+			//pair<int, int> sxy = _window.world_to_screen(loc->x, loc->y);
 
-				TCODConsole::root->putChar(loc->x, loc->y, gfx->graphic);
-				TCODConsole::root->setCharForeground(loc->x, loc->y, fg);	
+			Cell& cell = _level->_map.get(loc->x, loc->y);
+
+			// Black is the "null" value, i.e. there should be no colour here, so things can be layered "dynamically"
+			if (gfx->glyph.fg_colour != TCODColor::black)
+			{
+				TCODColor fg = gfx->glyph.fg_colour;
+
+				cell._glyph.fg_colour.setHSV(fg.getHue(), fg.getSaturation() * cell._light_value, fg.getValue() * cell._light_value);
+				cell._glyph.glyph = gfx->glyph.glyph;
+
+				//fg.setHSV(fg.getHue(), fg.getSaturation() * _level.get_cell_light(loc->x, loc->y), fg.getValue() * _level.get_cell_light(loc->x, loc->y));
+
+				//TCODConsole::root->putChar(sxy.first, sxy.second, gfx->glyph.glyph);
+				//TCODConsole::root->setCharForeground(sxy.first, sxy.second, fg);
 			}
 
-			if (gfx->bg_colour != TCODColor::black)
+			if (gfx->glyph.bg_colour != TCODColor::black)
 			{
-				TCODColor bg = gfx->bg_colour;
-				bg.setHSV(bg.getHue(), bg.getSaturation() * _level->get_cell_light(loc->x, loc->y), bg.getValue() * _level->get_cell_light(loc->x, loc->y));
-				TCODConsole::root->setCharBackground(loc->x, loc->y, bg);
+				TCODColor bg = gfx->glyph.bg_colour;
+				cell._glyph.bg_colour.setHSV(bg.getHue(), bg.getSaturation() * cell._light_value, bg.getValue() * cell._light_value);
+				//TCODConsole::root->setCharBackground(sxy.first, sxy.second, bg);
 			}
 		}
 	}

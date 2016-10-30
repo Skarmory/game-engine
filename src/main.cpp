@@ -16,21 +16,23 @@
 #include "systems.h"
 #include "components.h"
 #include "event.h"
+#include "ui.h"
 
 using namespace std;
 using namespace Command;
 
 int main(int argc, char** argv)
 {
-	TCODConsole::initRoot(80, 40, "", false);
+	TCODConsole::initRoot(100, 50, "", false);
 
 	EventManager evm;
 	EntityManager em(evm);
 	SystemManager sm(evm);
 
 	Level l(em);
+	Canvas main_window(0, 0, 80, 40, &l, em);
 
-	sm.create<RenderSystem>(l);
+	sm.create<RenderSystem>(&l);
 	sm.create<LightSystem>(l);
 	sm.create<PeriodicDamageUpdateSystem>();
 	sm.create<CollisionSystem>();
@@ -40,7 +42,7 @@ int main(int argc, char** argv)
 	sm.init();
 
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
-	//shared_ptr<Entity> enemy  = em.create_entity_at_loc("player", 8, 8);
+	
 	em.create_entity_at_loc("fire", 5, 5);
 	em.create_entity_at_loc("aoe_dmg", 10, 30);
 	em.create_entity_at_loc("aoe_dmg", 10, 31);
@@ -51,6 +53,8 @@ int main(int argc, char** argv)
 	em.create_entity_at_loc("aoe_dmg", 10, 33);
 
 	l.load("testing_map");
+
+	
 
 	GameTime game_time;
 	Timer turn_timer(3);
@@ -83,16 +87,21 @@ int main(int argc, char** argv)
 			sm.update<TimedHealthSystem>();
 		}
 
-		// Drawing
-		TCODConsole::root->clear();
-		l.base_draw();
+		// Drawing	
+		
+
+		l.reset();
 		sm.update<LightSystem>();
-		l.draw();
+		l.update();
 		sm.update<RenderSystem>();
+
+		main_window.draw();
+
 		TCODConsole::root->print(0, 0, "T: %i", turn);
 		TCODConsole::root->print(0, 2, "C: %i, %i", player->get_component<Location>()->x, player->get_component<Location>()->y);
 		TCODConsole::root->print(0, 1, "HP: %i", player->get_component<Health>()->health);
-		TCODConsole::flush();
+		
+		
 		
 		// Cleanup
 		em.update();

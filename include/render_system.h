@@ -16,7 +16,7 @@ using namespace std;
 
 class RenderSystem : public System, public Observer<EntityCreated> {
 public:
-	RenderSystem(Level& level) : _level(&level) {}
+	RenderSystem(Level* level) : _level(level) {}
 
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;
@@ -26,7 +26,7 @@ private:
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
 	void clean(void);
 
-	Level* _level;
+	Level*  _level;
 };
 
 #endif

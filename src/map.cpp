@@ -4,7 +4,7 @@ Map::Map(void)
 {
 }
 
-Map::Map(int x, int y) : _x_max(x), _y_max(y)
+Map::Map(int x, int y) : _width(x), _height(y)
 {
 	_cells = std::vector<Cell*>(x * y);
 }
@@ -19,42 +19,22 @@ Map::~Map(void)
 
 Cell& Map::get(int x, int y)
 {
-	return *_cells.at((y * _x_max) + x);
+	return *_cells.at((y * _width) + x);
 }
 
-Cell& Map::get(int x, int y) const 
+const Cell& Map::get(int x, int y) const 
 {
-	return *_cells.at((y * _x_max) + x);
+	return *_cells.at((y * _width) + x);
 }
 
 void Map::set(int x, int y, Cell* c)
 {
-	_cells[(y * _x_max) + x] = c;
-}
-
-int Map::width(void) const
-{
-	return _x_max;
-}
-
-int Map::height(void) const
-{
-	return _y_max;
-}
-
-bool Map::is_walkable(int x, int y)
-{
-	return get(x, y)._is_walkable;
-}
-
-bool Map::is_explored(int x, int y)
-{
-	return get(x, y)._explored;
+	_cells[(y * _width) + x] = c;
 }
 
 bool Map::is_walkable(int x, int y) const
 {
-	return get(x, y)._is_walkable;
+	return get(x, y)._walkable;
 }
 
 bool Map::is_explored(int x, int y) const
@@ -66,11 +46,3 @@ void Map::set_explored(int x, int y, bool explored)
 {
 	get(x, y)._explored = explored;
 }
-
-/*
-void Map::set_light_intensity(int x, int y, float intensity)
-{
-	get(x, y).get_foreground_colour().setSaturation(intensity);
-	get(x, y).get_background_colour().setSaturation(intensity);
-}
-*/
