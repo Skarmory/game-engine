@@ -113,7 +113,7 @@ void Level::reset(void)
 		Cell& c = _map.get(x, y);
 		
 		c._glyph = c._base_glyph;
-		c._light_value = 0.0f;
+		c._light_value = c._explored ? 0.1f : 0.0f;
 		c._visible = false;
 	}
 }
@@ -150,7 +150,6 @@ void Level::fov(int x, int y, int radius, int row, double start_slope, double en
 	if (start_slope < end_slope) 
 		return;
 	
-
 	double next_start_slope = start_slope;
 
 	for (int i = row; i <= radius; i++) 
@@ -178,10 +177,9 @@ void Level::fov(int x, int y, int radius, int row, double start_slope, double en
 			if (!is_in_bounds(ax, 0) || !is_in_bounds(0, ay))
 				continue;
 
-			int radius2 = radius * radius;
 			int dx2dy2 = dx * dx + dy * dy;
 
-			if ((int)dx2dy2 < radius2 + (0.25f * radius2))
+			if (sqrt(dx2dy2) < radius + 0.25f)
 			{
 				Cell& c = _map.get(ax, ay);
 				c._visible = true;

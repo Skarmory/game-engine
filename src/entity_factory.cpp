@@ -24,7 +24,7 @@ unique_ptr<Entity> EntityFactory::create_player(int id)
 	e->add_component(make_shared<Collision>());
 	e->add_component(make_shared<Health>(1));
 	e->add_component(make_shared<LightSource>(10));
-	e->add_component(make_shared<Sight>(30));
+	e->add_component(make_shared<Sight>(20));
 	return e;
 }
 

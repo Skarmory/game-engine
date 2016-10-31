@@ -26,6 +26,9 @@ public:
 private:
 	Level* _level;
 	const EntityManager& _entity_manager;
+
+	int clamp(int low, int high, int value) const;
+	pair<int, int> get_screen_origin(void) const;
 };
 
 class StatusDisplay : public UIElement

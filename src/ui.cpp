@@ -10,15 +10,9 @@ void Canvas::draw(void)
 	mw = _level->get_map_width();
 	mh = _level->get_map_height();
 
-	
-	pair<int, int> map_xy = screen_to_world(0, 0);
+	pair<int, int> map_xy = get_screen_origin();
 	mx = map_xy.first;
 	my = map_xy.second;
-	
-
-	// Clamp the viewable map x and y to: 0 <= x|y <= (mw - _w | mh - _h)
-	//mx = (loc->x - _w / 2 <= 0) ? 0 : (loc->x + _w / 2 >= mw) ? (mw - _w) : (loc->x - _w / 2);
-	//my = (loc->y - _h / 2 <= 0) ? 0 : (loc->y + _h / 2 >= mh) ? (mh - _h) : (loc->y - _h / 2);
 
 	TCODConsole::root->clear();
 
@@ -40,49 +34,45 @@ void Canvas::draw(void)
 
 pair<int, int> Canvas::world_to_screen(int x, int y) const
 {
-	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
+	pair<int, int> s0 = get_screen_origin();
 
-	int sx_orig = loc->x - _w / 2;
-	int sy_orig = loc->y - _h / 2;
-
-	return pair<int, int>(x - sx_orig, y - sx_orig);
+	return pair<int, int>(s0.first - x, s0.second - y);
 }
 
 pair<int, int> Canvas::screen_to_world(int x, int y) const
 {
+	pair<int, int> s0 = get_screen_origin();
+
+	return pair<int, int>(s0.first + x, s0.second + y);
+}
+
+int Canvas::clamp(int low, int high, int value) const
+{
+	if (value < low)
+		return low;
+	else if (value > high)
+		return high;
+	else
+		return value;
+}
+
+pair<int, int> Canvas::get_screen_origin(void) const
+{
 	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
 
-	int sx_orig, sy_orig;
+	int x0 = 0, y0 = 0;
 
 	if (_level->get_map_width() > _w)
 	{
-		if (loc->x - (_w / 2) < 0)
-			sx_orig = 0;
-		else if (loc->x + (_w / 2) > _level->get_map_width())
-			sx_orig = _level->get_map_width() - _w;
-		else
-			sx_orig = loc->x - (_w / 2);
-	}
-	else
-	{
-		sx_orig = 0;
+		x0 = clamp(0, _level->get_map_width() - _w, loc->x - (_w / 2));
 	}
 
 	if (_level->get_map_height() > _h)
 	{
-		if (loc->y - (_h / 2) < 0)
-			sy_orig = 0;
-		else if (loc->y + (_h / 2) > _level->get_map_height())
-			sy_orig = _level->get_map_height() - _h;
-		else
-			sy_orig = loc->y - (_h / 2);
-	}
-	else
-	{
-		sy_orig = 0;
+		y0 = clamp(0, _level->get_map_height() - _h, loc->y - (_h / 2));
 	}
 
-	return pair<int, int>(x + sx_orig, y + sy_orig);
+	return pair<int, int>(x0, y0);
 }
 
 void StatusDisplay::draw(void)

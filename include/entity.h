@@ -14,8 +14,8 @@ using namespace std;
 
 class Entity {
 public:
-	Entity(int id);
-	~Entity(void);
+	Entity(int id) : obsolete(false), _id(id) {}
+	~Entity(void) {};
 
 	// Add component to the entity
 	void add_component(const shared_ptr<Component> c)

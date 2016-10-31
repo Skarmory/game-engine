@@ -67,12 +67,12 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 			if (!_level->is_in_bounds(ax, 0) || !_level->is_in_bounds(0, ay)) 
 				continue;
 
-			int radius2 = radius * radius;
 			int dx2dy2 = dx * dx + dy * dy;
+			float root_dx2dy2 = sqrt(dx2dy2);
 
-			if ((int)dx2dy2 < radius2 + (0.25f * radius2))
+			if (root_dx2dy2 < radius + 0.25f)
 			{
-				float light_percent = max(MAX_LIGHT_PERCENT - ((float)sqrt(dx2dy2) * dropoff), MIN_LIGHT_PERCENT);
+				float light_percent = max(MAX_LIGHT_PERCENT - root_dx2dy2 * dropoff, MIN_LIGHT_PERCENT);
 
 				_level->set_cell_light(ax, ay, light_percent);
 			}
