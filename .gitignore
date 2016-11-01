@@ -6,3 +6,6 @@ incarnate
 *.png
 *libtcod*
 *.supp
+*Debug/*
+incarnate.sln
+incarnate.VC*
