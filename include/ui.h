@@ -2,6 +2,7 @@
 #define ui_h
 
 #include "level.h"
+#include "game_time.h"
 
 class UIElement
 {
@@ -34,11 +35,13 @@ private:
 class StatusDisplay : public UIElement
 {
 public:
-	StatusDisplay(int x, int y, int w, int h, const EntityManager& entity_manager) : UIElement(x, y, w, h), _entity_manager(entity_manager) {};
+	StatusDisplay(int x, int y, int w, int h, const EntityManager& entity_manager, const Timer& turn_timer, const int& turns) : UIElement(x, y, w, h), _entity_manager(entity_manager), _turn_timer(turn_timer), _turns(turns) {};
 	void draw(void) override;
 
 private:
 	const EntityManager& _entity_manager;
+	const Timer& _turn_timer;
+	const int& _turns;
 };
 
 #endif

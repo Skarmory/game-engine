@@ -16,7 +16,7 @@ double GameTime::delta(void) const
 	return _delta.count();
 }
 
-Timer::Timer(double duration) : _count_to(duration), _finished(false) {}	
+Timer::Timer(double duration) : _elapsed(0), _count_to(duration), _finished(false) {}	
 
 void Timer::tick(const GameTime& time)
 {

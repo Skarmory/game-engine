@@ -14,8 +14,6 @@ void Canvas::draw(void)
 	mx = map_xy.first;
 	my = map_xy.second;
 
-	TCODConsole::root->clear();
-
 	for (int x = _x; x < _x + _w; x++)
 	for (int y = _y; y < _y + _h; y++)	
 	{
@@ -28,8 +26,6 @@ void Canvas::draw(void)
 
 		TCODConsole::root->putCharEx(x, y, glyph.glyph, glyph.fg_colour, glyph.bg_colour);
 	}
-
-	TCODConsole::flush();
 }
 
 pair<int, int> Canvas::world_to_screen(int x, int y) const
@@ -77,5 +73,12 @@ pair<int, int> Canvas::get_screen_origin(void) const
 
 void StatusDisplay::draw(void)
 {
+	string name = "Placeholder the Text Placeholder";
+	TCODConsole::root->print(_x, _y, name.c_str());
 
+	string stats = "Stats will go here maybe";
+	TCODConsole::root->print(_x + (name.length() + 1) , _y, stats.c_str());
+
+	TCODConsole::root->print(_x, _y + 1, "Turn timer:%.2f", _turn_timer.time_elapsed());
+	TCODConsole::root->print(_x + 16, _y + 1, "Turn:%i", _turns);
 }

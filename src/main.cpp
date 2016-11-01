@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 	SystemManager sm(evm);
 
 	Level l(em);
-	Canvas main_window(0, 0, 80, 40, &l, em);
+	
 
 	sm.create<RenderSystem>(&l);
 	sm.create<LightSystem>(l);
@@ -59,6 +59,9 @@ int main(int argc, char** argv)
 	GameTime game_time;
 	Timer turn_timer(3);
 	int turn = 1;
+
+	Canvas main_window(0, 0, 80, 40, &l, em);
+	StatusDisplay status(0, 40, 80, 10, em, turn_timer, turn);
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
@@ -95,13 +98,12 @@ int main(int argc, char** argv)
 		l.update();
 		sm.update<RenderSystem>();
 
-		main_window.draw();
+		TCODConsole::root->clear();
 
-		TCODConsole::root->print(0, 0, "T: %i", turn);
-		TCODConsole::root->print(0, 2, "C: %i, %i", player->get_component<Location>()->x, player->get_component<Location>()->y);
-		TCODConsole::root->print(0, 1, "HP: %i", player->get_component<Health>()->health);
+		main_window.draw();
+		status.draw();
 		
-		
+		TCODConsole::root->flush();
 		
 		// Cleanup
 		em.update();
