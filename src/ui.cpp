@@ -82,3 +82,8 @@ void StatusDisplay::draw(void)
 	TCODConsole::root->print(_x, _y + 1, "Turn timer:%.2f", _turn_timer.time_elapsed());
 	TCODConsole::root->print(_x + 16, _y + 1, "Turn:%i", _turns);
 }
+
+void InventoryDisplay::draw(void)
+{
+	TCODConsole::root->print(_x + (_w / 2) - 5, _y, "Inventory");
+}

@@ -62,6 +62,7 @@ int main(int argc, char** argv)
 
 	Canvas main_window(0, 0, 80, 40, &l, em);
 	StatusDisplay status(0, 40, 80, 10, em, turn_timer, turn);
+	InventoryDisplay inventory(80, 0, 20, 50);
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
@@ -102,6 +103,7 @@ int main(int argc, char** argv)
 
 		main_window.draw();
 		status.draw();
+		inventory.draw();
 		
 		TCODConsole::root->flush();
 		

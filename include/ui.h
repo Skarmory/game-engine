@@ -4,6 +4,8 @@
 #include "level.h"
 #include "game_time.h"
 
+
+// Base UI element
 class UIElement
 {
 public:
@@ -16,6 +18,8 @@ protected:
 	int _x, _y, _w, _h;
 };
 
+
+// Game world view
 class Canvas : public UIElement
 {
 public:
@@ -32,6 +36,9 @@ private:
 	pair<int, int> get_screen_origin(void) const;
 };
 
+
+
+// Displays player attributes
 class StatusDisplay : public UIElement
 {
 public:
@@ -42,6 +49,14 @@ private:
 	const EntityManager& _entity_manager;
 	const Timer& _turn_timer;
 	const int& _turns;
+};
+
+// Inventory panel
+class InventoryDisplay : public UIElement
+{
+public:
+	InventoryDisplay(int x, int y, int w, int h) : UIElement(x, y, w, h) {}
+	void draw(void) override;
 };
 
 #endif
