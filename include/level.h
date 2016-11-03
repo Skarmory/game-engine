@@ -21,8 +21,6 @@ public:
 	Level(const EntityManager& em);
 	~Level(void);	
 	
-	void reset(void);
-	void update(void);
 	void load(std::string level_name);
 
 	int levelnumber(void) const;
@@ -37,26 +35,19 @@ public:
 	bool is_in_bounds (int x, int y)  const;
 	bool blocks_los   (int x, int y)  const;
 
-	float get_cell_light(int x, int y) const;
-	void set_cell_light(int x, int y, float value, bool force=false);
-
 private:
-	const int multipliers[4][8] = {
-		{ 1, 0, 0, -1, -1, 0, 0, 1 },
-		{ 0, 1, -1, 0, 0, -1, 1, 0 },
-		{ 0, 1, 1, 0, 0, -1, -1, 0 },
-		{ 1, 0, 0, 1, -1, 0, 0, -1 }
-	};
-
-	void fov(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy);
-
 	static int _NEXT;
 
 	int _level, _x, _y;
 	const EntityManager& em;
-	Map _map;
+
+	TerrainMap _base_map;
+	Map<float> _light_map;
+	Map<short> _vision_map;
 
 	friend class RenderSystem;
+	friend class LightSystem;
+	friend class VisibilitySystem;
 };
 
 #endif

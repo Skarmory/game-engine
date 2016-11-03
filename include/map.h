@@ -1,33 +1,51 @@
 #ifndef map_h
 #define map_h
 
+#include <memory>
 #include <string>
 #include <vector>
 #include "cell.h"
 
-class Map {
+template<class T>
+class Map 
+{
+/* Class which "wraps" a 1D vector which masquerades as a 2D vector */
 public:
-	Map(void);
-	Map(int x, int y);
+	Map(void) : _width(0), _height(0), _items(0) {}
+	Map(int width, int height) : _width(width), _height(height), _items(width * height) {}
 
-	~Map(void);
+	virtual ~Map(void) {}
+
+	int size(void)   const { return _items.size(); }
+	int width(void)  const { return _width; }
+	int height(void) const { return _height; }
 	
-	Cell& get(int x, int y);
-	const Cell& get(int x, int y) const;
+	const T& get(int x, int y) const { return _items.at((y * _width) + x); }
+	T&       get(int x, int y)       { return _items.at((y * _width) + x); }
 
-	void set(int x, int y, Cell* c);
-	
-	bool is_walkable(int x, int y) const;
-	bool is_explored(int x, int y) const;
+	void set(int x, int y, const T& value) { _items[(y * _width) + x] = value; }
 
-	void set_explored(int x, int y, bool explored);
-
-private:
-	friend class Level;
-
-	std::vector<Cell*> _cells;
+protected:
 	int _width;
 	int _height;
+
+	vector<T> _items;
+};
+
+class TerrainMap : public Map<Cell*>
+{
+public:
+	TerrainMap(void) : Map<Cell*>() {}
+	TerrainMap(int width, int height) : Map<Cell*>(width, height) {}
+
+	~TerrainMap(void)
+	{
+		for (auto item : _items)
+			delete item;
+	}
+
+	bool is_walkable(int x, int y) const;
+	bool is_explored(int x, int y) const;
 };
 
 #endif

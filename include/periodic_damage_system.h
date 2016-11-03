@@ -7,10 +7,12 @@
 
 class PeriodicDamageUpdateSystem : public System, public Observer<EntityCreated>
 {
-	public:
-		virtual void init(EventManager& evm) override;
-		virtual void update(EventManager& evm) override;
-		virtual void receive(const EntityCreated& entity) override;
+public:
+	PeriodicDamageUpdateSystem(const SystemManager& sm) : System(sm) {}
+
+	virtual void init(EventManager& evm) override;
+	virtual void update(EventManager& evm) override;
+	virtual void receive(const EntityCreated& entity) override;
 };
 
 #endif

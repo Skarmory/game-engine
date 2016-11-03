@@ -7,6 +7,12 @@ void LightSystem::init(EventManager& em)
 
 void LightSystem::update(EventManager& em)
 {
+	for (int i = 0; i < _level->get_map_width(); i++)
+	for (int j = 0; j < _level->get_map_height(); j++)
+	{
+		_level->_light_map.set(i, j, 0.0f);
+	}
+
 	for (entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
 		shared_ptr<Entity> e;
@@ -28,7 +34,7 @@ void LightSystem::update(EventManager& em)
 			for (int i = 0; i < 8; i++)
 				cast_light(x0, y0, r, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i], drop);
 
-			_level->set_cell_light(x0, y0, MAX_LIGHT_PERCENT);
+			_level->_light_map.set(x0, y0, MAX_LIGHT_PERCENT);
 		}
 
 		it++;
@@ -36,17 +42,18 @@ void LightSystem::update(EventManager& em)
 }
 
 void LightSystem::cast_light(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy, float dropoff) {
-	if (start_slope < end_slope) {
+	if (start_slope < end_slope) 
 		return;
-	}
 
 	double next_start_slope = start_slope;
 
-	for (int i = row; i <= radius; i++) {
+	for (int i = row; i <= radius; i++) 
+	{
 
 		bool blocked = false;
 
-		for (int dx = -i, dy = -i; dx <= 0; dx++) {
+		for (int dx = -i, dy = -i; dx <= 0; dx++) 
+		{
 
 			double l_slope = (dx - 0.5) / (dy + 0.5);
 			double r_slope = (dx + 0.5) / (dy - 0.5);
@@ -74,7 +81,8 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 			{
 				float light_percent = max(MAX_LIGHT_PERCENT - root_dx2dy2 * dropoff, MIN_LIGHT_PERCENT);
 
-				_level->set_cell_light(ax, ay, light_percent);
+				if (_level->_light_map.get(ax, ay) < light_percent)
+					_level->_light_map.set(ax, ay, light_percent);
 			}
 
 			if (blocked) 

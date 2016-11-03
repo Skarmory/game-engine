@@ -2,7 +2,8 @@
 
 void Canvas::draw(void)
 {
-	const Entity& player = _entity_manager.get_player();
+	const Entity& player   = _entity_manager.get_player();
+	const Map<Glyph>& _map = _system_manager.get<RenderSystem>().get_composed_map();
 
 	const shared_ptr<const Location> loc = player.get_component<Location>();
 	int mx, my, mw, mh;
@@ -20,9 +21,9 @@ void Canvas::draw(void)
 		if (!_level->is_in_bounds(mx + x, my + y))
 			continue;
 
-		const Cell& cell = _level->get_cell(mx + x, my + y);
+		//const Cell& cell = _level->get_cell(mx + x, my + y);
 
-		const Glyph& glyph = cell.get_glyph();
+		const Glyph& glyph = _map.get((mx + x), (my + y));
 
 		TCODConsole::root->putCharEx(x, y, glyph.glyph, glyph.fg_colour, glyph.bg_colour);
 	}

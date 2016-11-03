@@ -7,14 +7,13 @@
 
 class DamageSystem : public System, public Observer<CollisionEvent>
 {
-	public:
-		DamageSystem(void) {}
-		~DamageSystem(void) {}
+public:
+	DamageSystem(const SystemManager& sm) : System(sm) {}
+	~DamageSystem(void) {}
 		
-		virtual void init(EventManager& evm) override;
-		virtual void update(EventManager& evm) override;
-		virtual void receive(const CollisionEvent& event) override;
-
+	virtual void init(EventManager& evm) override;
+	virtual void update(EventManager& evm) override;
+	virtual void receive(const CollisionEvent& event) override;
 };
 
 #endif

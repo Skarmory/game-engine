@@ -13,10 +13,12 @@ using namespace std;
 
 typedef vector<weak_ptr<Entity>>::iterator entity_iterator;
 
+class SystemManager;
+
 class System 
 {
 public:
-	System(void) {};
+	System(const SystemManager& system_manager) : _system_manager(system_manager) {};
 	virtual ~System(void) {};
 
 	virtual void init(EventManager& evm) = 0;
@@ -29,6 +31,7 @@ public:
 
 protected:
 	vector<weak_ptr<Entity>> _entities;
+	const SystemManager& _system_manager;
 };
 
 class SystemManager
@@ -66,6 +69,12 @@ public:
 	{
 		for(auto& system : _systems)
 			system.second->update(_event_manager);
+	}
+
+	template<class S>
+	const S& get(void) const
+	{
+		return *static_pointer_cast<const S>(_systems.at(typeid(S)));
 	}
 
 private:

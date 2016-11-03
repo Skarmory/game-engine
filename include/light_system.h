@@ -12,7 +12,7 @@
 class LightSystem : public System, public Observer<EntityCreated>
 {
 	public:
-		LightSystem(Level& level) : _level(&level) {}
+		LightSystem(const SystemManager& sm, Level* level) : System(sm), _level(level) {}
 
 		virtual void init(EventManager& em) override;
 		virtual void update(EventManager& em) override;
@@ -20,6 +20,7 @@ class LightSystem : public System, public Observer<EntityCreated>
 
 	private:
 		Level* _level;
+
 		const int multipliers[4][8] = {
 			{ 1, 0, 0, -1, -1, 0, 0, 1 },
 			{ 0, 1, -1, 0, 0, -1, 1, 0 },

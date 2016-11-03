@@ -16,6 +16,7 @@ enum DrawLayer
 struct Glyph
 {
 	Glyph(char glyph, TCODColor fg_colour, TCODColor bg_colour) : glyph(glyph), fg_colour(fg_colour), bg_colour(bg_colour)  {}
+	Glyph(void) : glyph(' '), fg_colour(TCODColor::black), bg_colour(TCODColor::black) {}
 
 	char glyph;
 	TCODColor fg_colour;

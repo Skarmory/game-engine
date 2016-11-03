@@ -7,16 +7,16 @@
 
 class CollisionSystem : public System, public Observer<EntityCreated>
 {
-	public:
-		CollisionSystem(void)  {};
-		~CollisionSystem(void) {};
+public:
+	CollisionSystem(const SystemManager& sm) : System(sm)  {};
+	~CollisionSystem(void) {};
 
-		virtual void init(EventManager& evm)   override;
-		virtual void update(EventManager& evm) override;
-		virtual void receive(const EntityCreated& e) override;
+	virtual void init(EventManager& evm)   override;
+	virtual void update(EventManager& evm) override;
+	virtual void receive(const EntityCreated& e) override;
 
-	private:
-		void clean(void);
+private:
+	void clean(void);
 };
 
 #endif

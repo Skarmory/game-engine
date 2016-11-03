@@ -30,14 +30,15 @@ int main(int argc, char** argv)
 	SystemManager sm(evm);
 
 	Level l(em);
-	
+	l.load("testing_map");
 
-	sm.create<RenderSystem>(&l);
-	sm.create<LightSystem>(l);
-	sm.create<PeriodicDamageUpdateSystem>();
-	sm.create<CollisionSystem>();
-	sm.create<DamageSystem>();
-	sm.create<TimedHealthSystem>();
+	sm.create<VisibilitySystem>(sm, em, &l);
+	sm.create<RenderSystem>(sm, &l);
+	sm.create<LightSystem>(sm, &l);
+	sm.create<PeriodicDamageUpdateSystem>(sm);
+	sm.create<CollisionSystem>(sm);
+	sm.create<DamageSystem>(sm);
+	sm.create<TimedHealthSystem>(sm);
 	
 	sm.init();
 
@@ -52,15 +53,11 @@ int main(int argc, char** argv)
 	em.create_entity_at_loc("aoe_dmg", 9, 29);
 	em.create_entity_at_loc("aoe_dmg", 10, 33);
 
-	l.load("testing_map");
-
-	
-
 	GameTime game_time;
 	Timer turn_timer(3);
 	int turn = 1;
 
-	Canvas main_window(0, 0, 80, 40, &l, em);
+	Canvas main_window(0, 0, 80, 40, &l, em, sm);
 	StatusDisplay status(0, 40, 80, 10, em, turn_timer, turn);
 	InventoryDisplay inventory(80, 0, 20, 50);
 
@@ -94,9 +91,10 @@ int main(int argc, char** argv)
 		// Drawing	
 		
 
-		l.reset();
+		//l.reset();
 		sm.update<LightSystem>();
-		l.update();
+		sm.update<VisibilitySystem>();
+		//l.update();
 		sm.update<RenderSystem>();
 
 		TCODConsole::root->clear();

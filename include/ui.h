@@ -3,6 +3,7 @@
 
 #include "level.h"
 #include "game_time.h"
+#include "systems.h"
 
 
 // Base UI element
@@ -23,7 +24,9 @@ protected:
 class Canvas : public UIElement
 {
 public:
-	Canvas(int x, int y, int w, int h, Level* level, const EntityManager& entity_manager) : UIElement(x, y, w, h), _level(level), _entity_manager(entity_manager) {};
+	Canvas(int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager) : 
+		UIElement(x, y, w, h), _level(level), _entity_manager(entity_manager), _system_manager(system_manager) {};
+
 	void draw(void) override;
 	pair<int, int> world_to_screen(int x, int y) const;
 	pair<int, int> screen_to_world(int x, int y) const;
@@ -31,9 +34,10 @@ public:
 private:
 	Level* _level;
 	const EntityManager& _entity_manager;
+	const SystemManager& _system_manager;
 
 	int clamp(int low, int high, int value) const;
-	pair<int, int> get_screen_origin(void) const;
+	pair<int, int> get_screen_origin(void)  const;
 };
 
 
@@ -42,7 +46,9 @@ private:
 class StatusDisplay : public UIElement
 {
 public:
-	StatusDisplay(int x, int y, int w, int h, const EntityManager& entity_manager, const Timer& turn_timer, const int& turns) : UIElement(x, y, w, h), _entity_manager(entity_manager), _turn_timer(turn_timer), _turns(turns) {};
+	StatusDisplay(int x, int y, int w, int h, const EntityManager& entity_manager, const Timer& turn_timer, const int& turns) : 
+		UIElement(x, y, w, h), _entity_manager(entity_manager), _turn_timer(turn_timer), _turns(turns) {};
+
 	void draw(void) override;
 
 private:

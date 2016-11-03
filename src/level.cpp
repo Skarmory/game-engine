@@ -52,7 +52,7 @@ void Level::load(std::string level_name)
 				if(line == "END MAP DATA")
 					break;
 				
-				for(int x = 0; x < _map._width; x++)
+				for(int x = 0; x < _base_map.width(); x++)
 				{
 					char ch = line[x];
 					bool walkable = true;
@@ -69,7 +69,7 @@ void Level::load(std::string level_name)
 						bg = TCODColor(10,10,10);
 					}
 
-					_map.set(x, y, new Cell(ch, fg, bg, walkable, blocks_los));
+					_base_map.set(x, y, new Cell(ch, fg, bg, walkable, blocks_los));
 				}	
 
 				y++;
@@ -89,183 +89,56 @@ void Level::load(std::string level_name)
 				value   = line.substr(pos+1, line.length());
 
 				if(option == "x")
-				{
 					x = atoi(value.c_str());
-				}
-				else if(option == "y")
-				{
+				if(option == "y")
 					y = atoi(value.c_str());
-				}
 			}
 
-			_map = Map(x, y);
+			_base_map   = TerrainMap(x, y);
+			_vision_map = Map<short>(x, y);
+			_light_map  = Map<float>(x, y);
 		}
 	}
 
 	file.close();	
 }
 
-void Level::reset(void)
-{
-	for (int y = 0; y < _map._height; y++)
-	for (int x = 0; x < _map._width; x++)
-	{
-		Cell& c = _map.get(x, y);
-		
-		c._glyph = c._base_glyph;
-		c._light_value = c._explored ? 0.1f : 0.0f;
-		c._visible = false;
-	}
-}
-
-void Level::update(void)
-{
-	const shared_ptr<const Sight> sight  = em.get_player().get_component<Sight>();
-	const shared_ptr<const Location> loc = em.get_player().get_component<Location>();
-
-	if (sight->radius > 0)
-	{
-		_map.get(loc->x, loc->y)._visible = true;
-
-		for (int i = 0; i < 8; i++)
-			fov(loc->x, loc->y, sight->radius, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
-	}
-
-	for (int y = 0; y < _map._height; y++)
-	for (int x = 0; x < _map._width; x++)
-	{
-		Cell& c = _map.get(x, y);
-
-		Glyph& base = c._base_glyph;
-
-		float mod = c._visible ? c._light_value : c._explored ? MIN_LIGHT_PERCENT : 0.0f;
-
-		c._glyph.fg_colour.setHSV(base.fg_colour.getHue(), base.fg_colour.getSaturation() * mod, base.fg_colour.getValue() * mod);
-		c._glyph.bg_colour.setHSV(base.bg_colour.getHue(), base.bg_colour.getSaturation() * mod, base.bg_colour.getValue() * mod);
-	}
-}
-
-void Level::fov(int x, int y, int radius, int row, double start_slope, double end_slope, int xx, int xy, int yx, int yy) 
-{
-	if (start_slope < end_slope) 
-		return;
-	
-	double next_start_slope = start_slope;
-
-	for (int i = row; i <= radius; i++) 
-	{
-		bool blocked = false;
-
-		for (int dx = -i, dy = -i; dx <= 0; dx++) 
-		{
-			double l_slope = (dx - 0.5) / (dy + 0.5);
-			double r_slope = (dx + 0.5) / (dy - 0.5);
-
-			if (start_slope < r_slope)
-				continue;
-			else if (end_slope > l_slope)
-				break;
-
-			int sax = dx * xx + dy * xy;
-			int say = dx * yx + dy * yy;
-
-			if ((sax < 0 && (int)std::abs(sax) > x) || (say < 0 && (int)std::abs(say) > y))
-				continue;
-
-			int ax = x + sax;
-			int ay = y + say;
-			if (!is_in_bounds(ax, 0) || !is_in_bounds(0, ay))
-				continue;
-
-			int dx2dy2 = dx * dx + dy * dy;
-
-			if (sqrt(dx2dy2) < radius + 0.25f)
-			{
-				Cell& c = _map.get(ax, ay);
-				c._visible = true;
-
-				if (c._light_value > MIN_LIGHT_PERCENT && !c._explored)
-					c._explored = true;
-			}
-
-			if (blocked)
-			{
-				if(blocks_los(ax, ay))
-				{
-					next_start_slope = r_slope;
-					continue;
-				}
-				else
-				{
-					blocked = false;
-					start_slope = next_start_slope;
-				}
-			}
-			else if (blocks_los(ax, ay))
-			{
-				blocked = true;
-				next_start_slope = r_slope;
-				fov(x, y, radius, i + 1, start_slope, l_slope, xx, xy, yx, yy);
-			}
-		}
-
-		if (blocked)
-			break;
-	}
-}
-
-void Level::set_cell_light(int x, int y, float value, bool force)
-{
-	if(is_in_bounds(x, y))
-	{
-		if (value > _map.get(x, y)._light_value || force)
-		{
-			_map.get(x, y)._light_value = value;
-		}
-	}
-}
-
-float Level::get_cell_light(int x, int y) const
-{
-	return _map.get(x, y)._light_value;
-}
-
 bool Level::is_walkable(int x, int y) const
 {
-	return _map.is_walkable(x, y);
+	return _base_map.is_walkable(x, y);
 }
 
 bool Level::is_explored(int x, int y) const
 {
-	return _map.is_explored(x, y);
+	return _base_map.is_explored(x, y);
 }
 
 bool Level::is_visible(int x, int y) const
 {
-	return _map.get(x, y)._visible;
+	return _base_map.get(x, y)->is_visible();
 }
 
 bool Level::is_in_bounds(int x, int y) const
 {
-	return (x >= 0 && x < _map._width && y >= 0 && y < _map._height);
+	return (x >= 0 && x < _base_map.width() && y >= 0 && y < _base_map.height());
 }
 
 bool Level::blocks_los(int x, int y) const
 {
-	return _map.get(x, y)._blocks_los;
+	return _base_map.get(x, y)->_blocks_los;
 }
 
 int Level::get_map_width(void) const
 {
-	return _map._width;
+	return _base_map.width();
 }
 
 int Level::get_map_height(void) const
 {
-	return _map._height;
+	return _base_map.height();
 }
 
 const Cell& Level::get_cell(int x, int y) const
 {
-	return _map.get(x, y);
+	return *_base_map.get(x, y);
 }
