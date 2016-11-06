@@ -11,7 +11,7 @@ class UIElement
 {
 public:
 	UIElement(int x, int y, int w, int h) : _x(x), _y(y), _w(w), _h(h) {};
-	virtual ~UIElement(void) {};
+	virtual ~UIElement(void) = default;
 
 	virtual void draw(void) = 0;
 

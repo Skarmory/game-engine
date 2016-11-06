@@ -9,12 +9,12 @@
 template<class T>
 class Map 
 {
-/* Class which "wraps" a 1D vector which masquerades as a 2D vector */
+/* Class which "wraps" a 1D vector and masquerades as a 2D vector */
 public:
 	Map(void) : _width(0), _height(0), _items(0) {}
 	Map(int width, int height) : _width(width), _height(height), _items(width * height) {}
 
-	virtual ~Map(void) {}
+	virtual ~Map(void) = default;
 
 	int size(void)   const { return _items.size(); }
 	int width(void)  const { return _width; }

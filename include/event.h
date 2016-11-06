@@ -12,69 +12,67 @@ using namespace std;
 
 class Event
 {
-	public:
-		virtual ~Event(void) {}
+public:
+	virtual ~Event(void) = default;
 };
 
 class BaseObserver
 {
-	public:
-		virtual ~BaseObserver(void) {}
+public:
+	virtual ~BaseObserver(void) = default;
 };
 
 template<typename E>
 class Observer : public BaseObserver
 {
-	public:
-		virtual ~Observer() {};
-		virtual void receive(const E& e) = 0;
+public:
+	virtual ~Observer(void) = default;
+	virtual void receive(const E& e) = 0;
 
 };
 
 class EventManager
 {
-	struct BaseCallback;
+struct BaseCallback;
 
-	public:
-		EventManager(void)  = default;
-		~EventManager(void) = default;
+public:
 
-		template<typename E, typename Observer>
-		void subscribe(Observer& o)
+	template<typename E, typename Observer>
+	void subscribe(Observer& o)
+	{
+		_observers[typeid(E)].push_back(new Callback<E>(bind(&Observer::receive, &o, placeholders::_1)));
+	}
+
+	template<typename E>
+	void broadcast(const E& event) const
+	{
+		for(auto& callback : _observers.at(typeid(E)))
 		{
-			_observers[typeid(E)].push_back(new Callback<E>(std::bind(&Observer::receive, &o, std::placeholders::_1)));
+			(*dynamic_cast<Callback<E>*>(callback))(event);
 		}
+	}
 
-		template<typename E>
-		void broadcast(const E& event)
-		{
-			for(auto& callback : _observers[typeid(E)])
-			{
-				(*dynamic_cast<Callback<E>*>(callback))(event);
-			}
-		}
+	template<typename E, typename ... Args>
+	void broadcast(Args && ... args) const
+	{
+		E event(forward<Args>(args) ...);
+		broadcast(event);
+	}
 
-		template<typename E, typename ... Args>
-		void broadcast(Args && ... args)
-		{
-			E event(forward<Args>(args) ...);
-			broadcast(event);
-		}
-
-	private:
-		map<type_index, vector<BaseCallback*>> _observers;
+private:
+	map<type_index, vector<BaseCallback*>> _observers;
 		
-		struct BaseCallback {
-			virtual ~BaseCallback() {}
-		};
+	struct BaseCallback {
+		virtual ~BaseCallback(void) = default;
+	};
 
-		template<typename E>
-		struct Callback : public BaseCallback 
-		{ 
-			Callback(function<void(const E&)> callback) : callback(callback) {}
-			void operator()(const E& event) { callback(event); }
-			function<void(const E&)> callback;
-		};
+	template<typename E>
+	struct Callback : public BaseCallback 
+	{ 
+		Callback(function<void(const E&)> callback) : callback(callback) {}
+		void operator()(const E& event) { callback(event); }
+		function<void(const E&)> callback;
+	};
 };
 
 #endif

@@ -19,7 +19,7 @@ class System
 {
 public:
 	System(const SystemManager& system_manager) : _system_manager(system_manager) {};
-	virtual ~System(void) {};
+	virtual ~System(void) = default;
 
 	virtual void init(EventManager& evm) = 0;
 	virtual void update(EventManager& evm) = 0;

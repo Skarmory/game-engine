@@ -19,7 +19,7 @@
 #include "ui.h"
 
 using namespace std;
-using namespace Command;
+//using namespace Command;
 
 int main(int argc, char** argv)
 {
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 		game_time.tick();
 		turn_timer.tick(game_time);
 
-		unique_ptr<ICommand> input_command = input.handle_input();
+		unique_ptr<Command> input_command = input.handle_input();
 
 		// Input
 		if(input_command != nullptr || turn_timer.finished())

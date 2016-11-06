@@ -1,6 +1,6 @@
 #include "command.h"
 using namespace std;
-using namespace Command;
+//using namespace Command;
 
 MoveCommand::MoveCommand(weak_ptr<Entity> e, const Level& l, int x, int y) :
    	_entity(e), _level(l), _x(x), _y(y) {}

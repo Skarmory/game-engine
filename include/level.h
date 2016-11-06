@@ -18,8 +18,7 @@
 class Level
 {
 public:
-	Level(const EntityManager& em);
-	~Level(void);	
+	Level(const EntityManager& em);	
 	
 	void load(std::string level_name);
 
@@ -31,7 +30,6 @@ public:
 
 	bool is_walkable  (int x, int y)  const;
 	bool is_explored  (int x, int y)  const;
-	bool is_visible   (int x, int y)  const;
 	bool is_in_bounds (int x, int y)  const;
 	bool blocks_los   (int x, int y)  const;
 

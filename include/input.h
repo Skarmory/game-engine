@@ -10,7 +10,7 @@
 #include "entity_manager.h"
 
 using namespace std;
-using namespace Command;
+//using namespace Command;
 
 class InputManager {
 public:
@@ -20,7 +20,7 @@ public:
 		bool& is_running, 
 		EntityManager& entity_manager
 	);
-	unique_ptr<ICommand> handle_input(void);
+	unique_ptr<Command> handle_input(void);
 private:
 	const shared_ptr<Entity>& _player;
 	const Level& _level;

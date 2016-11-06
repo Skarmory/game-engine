@@ -5,7 +5,7 @@
 
 struct Location : public Component
 {
-	Location() : x(0), y(0) {}
+	Location(void) : x(0), y(0) {}
 	Location(int x, int y) : x(x), y(y) {}
 
 	int x, y;

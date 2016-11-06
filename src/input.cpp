@@ -1,7 +1,7 @@
 #include "input.h"
-using namespace Command;
+//using namespace Command;
 
-typedef std::unique_ptr<ICommand> c_uptr;
+typedef std::unique_ptr<Command> c_uptr;
 
 InputManager::InputManager(
 		const std::shared_ptr<Entity>& player, 

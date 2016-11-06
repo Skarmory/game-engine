@@ -21,8 +21,6 @@ void Canvas::draw(void)
 		if (!_level->is_in_bounds(mx + x, my + y))
 			continue;
 
-		//const Cell& cell = _level->get_cell(mx + x, my + y);
-
 		const Glyph& glyph = _map.get((mx + x), (my + y));
 
 		TCODConsole::root->putCharEx(x, y, glyph.glyph, glyph.fg_colour, glyph.bg_colour);

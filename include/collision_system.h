@@ -9,7 +9,6 @@ class CollisionSystem : public System, public Observer<EntityCreated>
 {
 public:
 	CollisionSystem(const SystemManager& sm) : System(sm)  {};
-	~CollisionSystem(void) {};
 
 	virtual void init(EventManager& evm)   override;
 	virtual void update(EventManager& evm) override;

@@ -7,10 +7,6 @@ Level::Level(const EntityManager& em) : em(em)
 	_level = ++Level::_NEXT;
 }
 
-Level::~Level(void)
-{
-}
-
 int Level::levelnumber(void) const
 {
 	return _level;
@@ -113,11 +109,6 @@ bool Level::is_explored(int x, int y) const
 	return _base_map.is_explored(x, y);
 }
 
-bool Level::is_visible(int x, int y) const
-{
-	return _base_map.get(x, y)->is_visible();
-}
-
 bool Level::is_in_bounds(int x, int y) const
 {
 	return (x >= 0 && x < _base_map.width() && y >= 0 && y < _base_map.height());
@@ -125,7 +116,7 @@ bool Level::is_in_bounds(int x, int y) const
 
 bool Level::blocks_los(int x, int y) const
 {
-	return _base_map.get(x, y)->_blocks_los;
+	return _base_map.get(x, y)->is_los_blocker();
 }
 
 int Level::get_map_width(void) const

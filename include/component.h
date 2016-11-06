@@ -7,8 +7,8 @@ using namespace std;
 
 class Component {
 public:
-	 Component() : enabled(true) {}
-	 virtual ~Component(void) {}
+	 Component(void) : enabled(true) {}
+	 virtual ~Component(void) = default;
 
 	 bool enabled;
 };

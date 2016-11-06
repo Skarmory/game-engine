@@ -1,7 +1,5 @@
 #include "game_time.h"
 
-GameTime::GameTime(void) : _current(high_resolution_clock::now()), _previous(high_resolution_clock::now()) {}
-
 void GameTime::tick(void)
 {
 	_current = high_resolution_clock::now();
@@ -15,8 +13,6 @@ double GameTime::delta(void) const
 {
 	return _delta.count();
 }
-
-Timer::Timer(double duration) : _elapsed(0), _count_to(duration), _finished(false) {}	
 
 void Timer::tick(const GameTime& time)
 {
@@ -39,7 +35,7 @@ double Timer::time_elapsed(void) const
 void Timer::reset(void)
 {
 	_finished = false;
-	_elapsed = duration<double>(0);
+	_elapsed = move(duration<double>(0));
 }
 
 bool Timer::finished(void) const

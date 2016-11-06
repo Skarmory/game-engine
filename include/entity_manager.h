@@ -16,7 +16,7 @@ class EntityManager
 {
 public:
 	
-	explicit EntityManager(EventManager& evm) : _event_manager(evm)	{};
+	explicit EntityManager(const EventManager& evm) : _event_manager(evm)	{};
 
 	shared_ptr<Entity> create_entity(string entity_type);
 	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);
@@ -27,7 +27,7 @@ public:
 
 private:
 	map<int, shared_ptr<Entity>> _entities;
-	EventManager& _event_manager;
+	const EventManager& _event_manager;
 	EntityFactory _factory;
 	int _player_id;
 

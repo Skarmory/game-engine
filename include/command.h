@@ -7,17 +7,15 @@
 #include "level.h"
 #include "components.h"
 
-namespace Command 
-{
 
-class ICommand
+class Command
 {
 public:
-	virtual ~ICommand() {}
+	virtual ~Command() = default;
 	virtual void execute(void) = 0;
 };
 
-class MoveCommand : public ICommand
+class MoveCommand : public Command
 {
 public:
 	MoveCommand(std::weak_ptr<Entity>, const Level&, int, int);
@@ -29,25 +27,26 @@ private:
 	int _x, _y;
 };
 
-class QuitCommand : public ICommand
+class QuitCommand : public Command
 {
 public:
 	QuitCommand(bool&);
 	virtual void execute(void) override;
+
 private:
 	bool& _state;
 };
 
-class AttackCommand : public ICommand
+class AttackCommand : public Command
 {
 public:
 	AttackCommand(EntityManager& entity_manager, std::weak_ptr<Entity>, int x, int y);
 	virtual void execute(void) override;
+
 private:
 	EntityManager& _entity_manager;
 	std::weak_ptr<Entity> _attacker;
 	int _x, _y;
 };
 
-}
 #endif
