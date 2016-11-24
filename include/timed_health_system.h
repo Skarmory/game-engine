@@ -5,6 +5,8 @@
 #include "events.h"
 #include "components.h"
 
+using namespace sov;
+
 class TimedHealthSystem : public System, public Observer<EntityCreated>
 {
 public:

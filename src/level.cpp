@@ -14,7 +14,11 @@ int Level::levelnumber(void) const
 
 void Level::load(std::string level_name)
 {
-	TCODRandom* default_gen = TCODRandom::getInstance();
+	//TCODRandom* default_gen = TCODRandom::getInstance();
+
+	mt19937 rng;
+	rng.seed(random_device()());
+	poisson_distribution<int> dist(6.75);
 
 	std::stringstream sstream;
 	std::string path;
@@ -34,13 +38,11 @@ void Level::load(std::string level_name)
 	{		
 		if(line == "MAP DATA") 
 		{
-			TCODColor fg_colour_map[9];
-			TCODColor bg_colour_map[9];
-			TCODColor fg_interpolate[] = { TCODColor::green, TCODColor::darkestGreen };
-			TCODColor bg_interpolate[] = { TCODColor(0,50,0), TCODColor(0,10,0) };
-			int keys[] = {0, 8};
-			TCODColor::genMap(fg_colour_map, 2, fg_interpolate, keys);
-			TCODColor::genMap(bg_colour_map, 2, bg_interpolate, keys);
+			Color fg_colour_map[9];
+			Color bg_colour_map[9];
+
+			lerp_colour_map(fg_colour_map, Color(0, 60, 0), Color(0, 200, 0), 9);
+			lerp_colour_map(bg_colour_map, Color(0, 10, 0), Color(0, 50, 0), 9);
 
 			int y = 0;
 			while(getline(file, line))
@@ -54,15 +56,18 @@ void Level::load(std::string level_name)
 					bool walkable = true;
 					bool blocks_los = false;
 
-					TCODColor fg = fg_colour_map[default_gen->getInt(0, 8, 6)];
-					TCODColor bg = bg_colour_map[default_gen->getInt(0, 8, 6)];
+					Color fg = fg_colour_map[clamp(0, 8, dist(rng))];
+					Color bg = bg_colour_map[clamp(0, 8, dist(rng))];
+
+					/*Color fg(0, 100, 0);
+					Color bg(25, 120, 10);*/
 
 					if(ch != '.')
 					{
 						walkable = false;
 						blocks_los = true;
-						fg = TCODColor::darkGrey;
-						bg = TCODColor(10,10,10);
+						fg = Color(75, 75, 75);
+						bg = Color(10, 10, 10);
 					}
 
 					_base_map.set(x, y, new Cell(ch, fg, bg, walkable, blocks_los));

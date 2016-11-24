@@ -41,14 +41,13 @@ void RenderSystem::map_drawable_entities(void)
 	
 		Glyph& glyph = _composed_map.get(loc->x, loc->y);
 
-		// Black is the "null" value, i.e. there should be no colour here, so things can be layered "dynamically"
-		if (gfx->glyph.fg_colour != TCODColor::black)
+		if (gfx->glyph.fg_colour != sf::Color::Transparent)
 		{
 			glyph.fg_colour = gfx->glyph.fg_colour;
 			glyph.glyph = gfx->glyph.glyph;
 		}
 
-		if (gfx->glyph.bg_colour != TCODColor::black)
+		if (gfx->glyph.bg_colour != sf::Color::Transparent)
 		{			
 			glyph.bg_colour = gfx->glyph.bg_colour;
 		}		
@@ -74,20 +73,20 @@ void RenderSystem::map_lighting(void)
 		// Do the correct lighting depending on if the cell is lit, shrouded, or in FoW
 		if (lit && visible)
 		{
-			glyph.fg_colour.setHSV(glyph.fg_colour.getHue(), glyph.fg_colour.getSaturation() * light_value, glyph.fg_colour.getValue() * light_value);
-			glyph.bg_colour.setHSV(glyph.bg_colour.getHue(), glyph.bg_colour.getSaturation() * light_value, glyph.bg_colour.getValue() * light_value);
+			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), get_saturation(glyph.fg_colour) * light_value, get_value(glyph.fg_colour) * light_value);
+			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), get_saturation(glyph.bg_colour) * light_value, get_value(glyph.bg_colour) * light_value);
 
 			_level->_base_map.get(x, y)->_explored = true;
 		}
 		else if (explored)
 		{
-			glyph.fg_colour.setHSV(glyph.fg_colour.getHue(), glyph.fg_colour.getSaturation() * 0.1f, glyph.fg_colour.getValue() * 0.1f);
-			glyph.bg_colour.setHSV(glyph.bg_colour.getHue(), glyph.bg_colour.getSaturation() * 0.1f, glyph.bg_colour.getValue() * 0.1f);
+			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), get_saturation(glyph.fg_colour) * MIN_LIGHT_PERCENT, get_value(glyph.fg_colour) * MIN_LIGHT_PERCENT);
+			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), get_saturation(glyph.bg_colour) * MIN_LIGHT_PERCENT, get_value(glyph.bg_colour) * MIN_LIGHT_PERCENT);
 		}
 		else
 		{
-			glyph.fg_colour.setHSV(glyph.fg_colour.getHue(), glyph.fg_colour.getSaturation() * 0.0f, glyph.fg_colour.getValue() * 0.0f);
-			glyph.bg_colour.setHSV(glyph.bg_colour.getHue(), glyph.bg_colour.getSaturation() * 0.0f, glyph.bg_colour.getValue() * 0.0f);
+			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), 0.0f, 0.0f);
+			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), 0.0f, 0.0f);
 		}
 	}
 }

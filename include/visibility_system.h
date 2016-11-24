@@ -12,8 +12,8 @@ class VisibilitySystem : public System
 public:
 	VisibilitySystem(const SystemManager& sm, const EntityManager& em, Level* level) : System(sm), _entity_manager(em), _level(level) {}
 
-	virtual void init(EventManager& em) override;
-	virtual void update(EventManager& em) override;
+	virtual void init(sov::EventManager& em) override;
+	virtual void update(sov::EventManager& em) override;
 
 	//const vector<bool>& get_visibility_map(void) const;
 	

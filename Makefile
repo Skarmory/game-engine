@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-Wall -std=c++11 -pthread -Iinclude -Ilibtcod-1.5.1/include
-override LIBS=-Llibtcod-1.5.1 -ltcod -ltcodxx -Wl,-rpath=libtcod-1.5.1
+CFLAGS=-Wall -std=c++11 -pthread -Iinclude -ISFML/include
+override LIBS=-LSFML/lib -libsfml-graphics -libsfml-system -libsfml-window -Wl,-rpath=SFML/lib
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)
@@ -14,14 +14,6 @@ all: setup $(GAME)
 
 setup:	
 	mkdir -p build;\
-	cd libtcod-1.5.1/;\
-	if [ $(BITS) -eq 64 ]; then\
-		make -f makefiles/makefile-linux64 clean all;\
-	else\
-		make -f makefiles/makefile-linux clean all;\
-	fi;\
-	cd ..;
-	if [ ! -f terminal.png ]; then cp libtcod-1.5.1/terminal.png terminal.png; fi;\
 
 build/%.o: src/%.cpp $(INCL)
 	$(CC) $(CFLAGS) -c $< -o $@ 

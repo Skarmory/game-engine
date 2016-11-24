@@ -1,6 +1,6 @@
 #include "cell.h"
 
-const Glyph& Cell::get_glyph(void) const
+const sov::Glyph& Cell::get_glyph(void) const
 {
 	return _glyph;
 }

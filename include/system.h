@@ -21,8 +21,8 @@ public:
 	System(const SystemManager& system_manager) : _system_manager(system_manager) {};
 	virtual ~System(void) = default;
 
-	virtual void init(EventManager& evm) = 0;
-	virtual void update(EventManager& evm) = 0;
+	virtual void init(sov::EventManager& evm) = 0;
+	virtual void update(sov::EventManager& evm) = 0;
 	
 	virtual void add_entity(const shared_ptr<Entity>& entity)
 	{
@@ -37,7 +37,7 @@ protected:
 class SystemManager
 {
 public:
-	explicit SystemManager(EventManager& evm) : _event_manager(evm) {}
+	explicit SystemManager(sov::EventManager& evm) : _event_manager(evm) {}
 
 	typedef map<type_index, shared_ptr<System>>::iterator system_iterator;
 
@@ -78,7 +78,7 @@ public:
 	}
 
 private:
-	EventManager& _event_manager;
+	sov::EventManager& _event_manager;
 	map<type_index, shared_ptr<System>> _systems;
 };
 

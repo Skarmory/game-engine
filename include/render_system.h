@@ -5,16 +5,16 @@
 #include <memory>
 #include <algorithm>
 
-#include "libtcod.hpp"
-
 #include "system.h"
 #include "components.h"
 #include "events.h"
 #include "level.h"
 #include "light_system.h"
 #include "visibility_system.h"
+#include "colour.h"
 
 using namespace std;
+using namespace sov;
 
 class RenderSystem : public System, public Observer<EntityCreated> {
 public:
@@ -24,7 +24,7 @@ public:
 	virtual void update(EventManager& evm) override;
 	virtual void receive(const EntityCreated& e) override;
 
-	const Map<Glyph>& get_composed_map(void) const;
+	const Map<sov::Glyph>& get_composed_map(void) const;
 
 private:
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
@@ -35,7 +35,7 @@ private:
 	void map_lighting(void);
 
 	Level*  _level;
-	Map<Glyph> _composed_map;
+	Map<sov::Glyph> _composed_map;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "components.h"
 #include "events.h"
 
+using namespace sov;
+
 class DamageSystem : public System, public Observer<CollisionEvent>
 {
 public:

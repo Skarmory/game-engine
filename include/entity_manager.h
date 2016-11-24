@@ -11,6 +11,7 @@
 #include "events.h"
 
 using namespace std;
+using namespace sov;
 
 class EntityManager
 {

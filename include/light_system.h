@@ -9,6 +9,8 @@
 #include "events.h"
 #include "level.h"
 
+using namespace sov;
+
 class LightSystem : public System, public Observer<EntityCreated>
 {
 public:

@@ -1,10 +1,10 @@
 #include "visibility_system.h"
 
-void VisibilitySystem::init(EventManager& em)
+void VisibilitySystem::init(sov::EventManager& em)
 {
 }
 
-void VisibilitySystem::update(EventManager& em)
+void VisibilitySystem::update(sov::EventManager& em)
 {
 	for (int i = 0; i < _level->get_map_width(); i++)
 	for (int j = 0; j < _level->get_map_height(); j++)

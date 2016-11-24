@@ -4,10 +4,10 @@
 #include <string>
 #include <map>
 
-#include "libtcod.hpp"
 #include "components.h"
 
 using namespace std;
+using namespace sov;
 
 class EntityFactory 
 {

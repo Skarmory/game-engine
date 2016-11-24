@@ -1,13 +1,12 @@
 #ifndef main_h
 #define main_h
 
-#include "libtcod.hpp"
+#include <SFML/Graphics.hpp>
 
 #include <vector>
 #include <time.h>
 #include <chrono>
 
-#include "level.h"
 #include "entity.h"
 #include "input.h"
 #include "command.h"
@@ -19,11 +18,24 @@
 #include "ui.h"
 
 using namespace std;
-//using namespace Command;
 
 int main(int argc, char** argv)
 {
-	TCODConsole::initRoot(100, 50, "", false);
+	RenderWindow window(VideoMode(800, 400), "Sovereign Incarnate");
+
+	Image img;
+	if (!img.loadFromFile("terminal.png"))
+		return -1;
+
+	img.createMaskFromColor(Color::Black);
+
+	Texture tex;
+	if (!tex.loadFromImage(img))
+		return -1;
+
+	Font font;
+	if (!font.loadFromFile("arial.ttf"))
+		return -1;
 
 	EventManager evm;
 	EntityManager em(evm);
@@ -57,15 +69,15 @@ int main(int argc, char** argv)
 	Timer turn_timer(3);
 	int turn = 1;
 
-	Canvas main_window(0, 0, 80, 40, &l, em, sm);
-	StatusDisplay status(0, 40, 80, 10, em, turn_timer, turn);
-	InventoryDisplay inventory(80, 0, 20, 50);
+	Canvas world(window, 0, 0, 80, 40, &l, em, sm, tex);
+	StatusDisplay status(window, 0, 40, 80, 10, em, turn_timer, turn, font);
+	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(player, l, running, em);
+	InputManager input(window, player, l, running, em);
 	
-	while(running && !TCODConsole::isWindowClosed())
+	while(running && window.isOpen())
 	{
 		game_time.tick();
 		turn_timer.tick(game_time);
@@ -89,21 +101,17 @@ int main(int argc, char** argv)
 		}
 
 		// Drawing	
-		
-
-		//l.reset();
 		sm.update<LightSystem>();
 		sm.update<VisibilitySystem>();
-		//l.update();
 		sm.update<RenderSystem>();
 
-		TCODConsole::root->clear();
+		window.clear();
 
-		main_window.draw();
+		world.draw();
 		status.draw();
 		inventory.draw();
 		
-		TCODConsole::root->flush();
+		window.display();
 		
 		// Cleanup
 		em.update();

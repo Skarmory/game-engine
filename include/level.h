@@ -9,7 +9,6 @@
 #include <fstream>
 #include <assert.h>
 
-#include "libtcod.hpp"
 #include "entity_manager.h"
 #include "cell.h"
 #include "map.h"

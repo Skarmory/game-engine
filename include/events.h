@@ -6,13 +6,13 @@
 
 using namespace std;
 
-struct EntityCreated : Event
+struct EntityCreated : sov::Event
 {
 	EntityCreated(const shared_ptr<Entity>& entity) : entity(entity) {}
 	shared_ptr<Entity> entity;
 };
 
-struct CollisionEvent : Event
+struct CollisionEvent : sov::Event
 {
 	CollisionEvent(const shared_ptr<Entity>& e1, const shared_ptr<Entity>& e2) : e1(e1), e2(e2) {}
 	shared_ptr<Entity> e1;
