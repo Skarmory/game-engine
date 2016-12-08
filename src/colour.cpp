@@ -170,6 +170,3 @@ void lerp_colour_map(Color* map, const Color& from, const Color& to, int steps)
 		map[i] = c;
 	}
 }
-
-// Colours
-

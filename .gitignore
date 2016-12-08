@@ -11,3 +11,5 @@ incarnate
 incarnate.sln
 incarnate.VC*
 *SFML*
+*.psess
+*.vsp

@@ -9,7 +9,7 @@ void VisibilitySystem::update(sov::EventManager& em)
 	for (int i = 0; i < _level->get_map_width(); i++)
 	for (int j = 0; j < _level->get_map_height(); j++)
 	{
-		_level->_vision_map.set(i, j, false);
+		_level->_base_map.get(i, j)->_visible = false;
 	}
 
 	const shared_ptr<const Sight> sight  = _entity_manager.get_player().get_component<Sight>();
@@ -17,7 +17,7 @@ void VisibilitySystem::update(sov::EventManager& em)
 
 	if (sight->radius > 0)
 	{
-		_level->_vision_map.set(loc->x, loc->y, true);
+		_level->_base_map.get(loc->x, loc->y)->_visible = true;
 
 		for (int i = 0; i < 8; i++)
 			calculate_fov(loc->x, loc->y, sight->radius, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i]);
@@ -60,7 +60,7 @@ void VisibilitySystem::calculate_fov(int x, int y, int radius, int row, double s
 
 			if (sqrt(dx2dy2) < radius + 0.25f)
 			{
-				_level->_vision_map.set(ax, ay, true);
+				_level->_base_map.get(ax, ay)->_visible = true;
 			}
 
 			if (blocked)

@@ -85,7 +85,7 @@ void Level::load(std::string level_name)
 				if(line == "END MAP INFO")
 					break;
 				
-				int pos = line.find(delimiter);
+				size_t pos = line.find(delimiter);
 				option  = line.substr(0, pos);
 				value   = line.substr(pos+1, line.length());
 
@@ -96,8 +96,6 @@ void Level::load(std::string level_name)
 			}
 
 			_base_map   = TerrainMap(x, y);
-			_vision_map = Map<short>(x, y);
-			_light_map  = Map<float>(x, y);
 		}
 	}
 

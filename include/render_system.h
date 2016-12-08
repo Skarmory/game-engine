@@ -12,13 +12,16 @@
 #include "light_system.h"
 #include "visibility_system.h"
 #include "colour.h"
+#include "ui.h"
 
 using namespace std;
 using namespace sov;
 
+class Camera;
+
 class RenderSystem : public System, public Observer<EntityCreated> {
 public:
-	RenderSystem(const SystemManager& sm, Level* level) : System(sm), _level(level) {}
+	RenderSystem(const SystemManager& sm, Level* level, const Camera& camera) : System(sm), _level(level), _camera(camera) {}
 
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;
@@ -30,10 +33,10 @@ private:
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
 	void clean(void);
 
-	void map_terrain(void);
 	void map_drawable_entities(void);
-	void map_lighting(void);
+	void map_base_terrain(void);
 
+	const Camera& _camera;
 	Level*  _level;
 	Map<sov::Glyph> _composed_map;
 };

@@ -8,7 +8,6 @@
 #include "systems.h"
 #include "sprite.h"
 
-
 // Base UI element
 class UIElement
 {
@@ -18,6 +17,10 @@ public:
 
 	virtual void draw(void) = 0;
 
+	int get_width(void) const;
+	int get_height(void) const;
+	bool is_in_bounds(int x, int y) const;
+
 protected:
 	int _x, _y, _w, _h;
 	RenderWindow& _window;
@@ -25,26 +28,26 @@ protected:
 
 
 // Game world view
-class Canvas : public UIElement
+class Camera : public UIElement
 {
 public:
-	Canvas(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture);
+	Camera(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture);
 
+	void update(void);
 	void draw(void) override;
 	pair<int, int> world_to_screen(int x, int y) const;
 	pair<int, int> screen_to_world(int x, int y) const;
 
 private:
+	int _world_x, _world_y;
 	Level* _level;
 	const EntityManager& _entity_manager;
 	const SystemManager& _system_manager;
 	const Texture& _texture;
 	RenderTexture _rtexture;
 
-	//int clamp(int low, int high, int value) const;
 	pair<int, int> get_screen_origin(void)  const;
 };
-
 
 
 // Displays player attributes

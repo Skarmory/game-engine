@@ -39,8 +39,6 @@ private:
 	const EntityManager& em;
 
 	TerrainMap _base_map;
-	Map<float> _light_map;
-	Map<short> _vision_map;
 
 	friend class RenderSystem;
 	friend class LightSystem;

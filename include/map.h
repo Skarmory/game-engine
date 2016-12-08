@@ -16,7 +16,7 @@ public:
 
 	virtual ~Map(void) = default;
 
-	int size(void)   const { return _items.size(); }
+	size_t size(void)   const { return _items.size(); }
 	int width(void)  const { return _width; }
 	int height(void) const { return _height; }
 	

@@ -13,21 +13,8 @@ void RenderSystem::update(EventManager& evm)
 	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
-	map_terrain();
+	map_base_terrain();
 	map_drawable_entities();
-	map_lighting();
-}
-
-void RenderSystem::map_terrain(void)
-{
-	int mw = _level->get_map_width();
-	int mh = _level->get_map_height();
-
-	for (int x = 0; x < mw; x++)
-	for (int y = 0; y < mh; y++)
-	{
-		_composed_map.set(x, y, _level->get_cell(x, y).get_glyph());
-	}
 }
 
 void RenderSystem::map_drawable_entities(void)
@@ -39,54 +26,78 @@ void RenderSystem::map_drawable_entities(void)
 		shared_ptr<Graphic>  gfx = e->get_component<Graphic>();
 		shared_ptr<Location> loc = e->get_component<Location>();
 	
-		Glyph& glyph = _composed_map.get(loc->x, loc->y);
+		pair<int, int> p = _camera.world_to_screen(loc->x, loc->y);
+		if (!_camera.is_in_bounds(p.first, p.second))
+			continue;
 
-		if (gfx->glyph.fg_colour != sf::Color::Transparent)
+		sov::Glyph& glyph = _composed_map.get(p.first, p.second);
+
+		Cell*& cell = _level->_base_map.get(loc->x, loc->y);
+
+		bool lit     = cell->_light_value > 0.0f;
+		bool visible = cell->_visible;
+
+		if (lit && visible)
 		{
-			glyph.fg_colour = gfx->glyph.fg_colour;
-			glyph.glyph = gfx->glyph.glyph;
-		}
+			if (gfx->glyph.fg_colour != sf::Color::Transparent)
+			{
+				HSV hsv = get_hsv(gfx->glyph.fg_colour);
+				hsv.hue *= cell->_light_value;
+				hsv.saturation *= cell->_light_value;
+				hsv.value *= cell->_light_value;
 
-		if (gfx->glyph.bg_colour != sf::Color::Transparent)
-		{			
-			glyph.bg_colour = gfx->glyph.bg_colour;
-		}		
+				set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
+				glyph.glyph = gfx->glyph.glyph;
+			}
+
+			if (gfx->glyph.bg_colour != sf::Color::Transparent)
+			{
+				HSV hsv = get_hsv(gfx->glyph.bg_colour);
+				hsv.saturation *= cell->_light_value;
+				hsv.value *= cell->_light_value;
+
+				set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
+			}
+		}
 	}
 }
 
-void RenderSystem::map_lighting(void)
+void RenderSystem::map_base_terrain(void)
 {
-	int mw = _level->get_map_width();
-	int mh = _level->get_map_height();
-
-	for (int x = 0; x < mw; x++)
-	for (int y = 0; y < mh; y++)
+	for (int x = 0; x < _camera.get_width(); x++)
+	for (int y = 0; y < _camera.get_height(); y++)
 	{
-		Glyph& glyph = _composed_map.get(x, y);
+		sov::Glyph& glyph = _composed_map.get(x, y);
 		
-		float light_value = _level->_light_map.get(x, y);
+		pair<int, int> p = _camera.screen_to_world(x, y);
+		if (!_level->is_in_bounds(p.first, p.second))
+			continue;
+
+		const sov::Glyph& base = _level->_base_map.get(p.first, p.second)->get_glyph();
+		float light_value = _level->_base_map.get(p.first, p.second)->get_light_value();
 		bool lit = light_value > 0.0f;
 
-		bool visible = _level->_vision_map.get(x, y);
-		bool explored = _level->get_cell(x, y).is_explored();
+		glyph.glyph = base.glyph;
+		bool visible = _level->_base_map.get(p.first, p.second)->is_visible();
+		bool explored = _level->get_cell(p.first, p.second).is_explored();
 		
 		// Do the correct lighting depending on if the cell is lit, shrouded, or in FoW
 		if (lit && visible)
 		{
-			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), get_saturation(glyph.fg_colour) * light_value, get_value(glyph.fg_colour) * light_value);
-			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), get_saturation(glyph.bg_colour) * light_value, get_value(glyph.bg_colour) * light_value);
+			set_hsv(glyph.fg_colour, get_hue(base.fg_colour), get_saturation(base.fg_colour) * light_value, get_value(base.fg_colour) * light_value);
+			set_hsv(glyph.bg_colour, get_hue(base.bg_colour), get_saturation(base.bg_colour) * light_value, get_value(base.bg_colour) * light_value);
 
-			_level->_base_map.get(x, y)->_explored = true;
+			_level->_base_map.get(p.first, p.second)->_explored = true;
 		}
 		else if (explored)
 		{
-			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), get_saturation(glyph.fg_colour) * MIN_LIGHT_PERCENT, get_value(glyph.fg_colour) * MIN_LIGHT_PERCENT);
-			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), get_saturation(glyph.bg_colour) * MIN_LIGHT_PERCENT, get_value(glyph.bg_colour) * MIN_LIGHT_PERCENT);
+			set_hsv(glyph.fg_colour, get_hue(base.fg_colour), get_saturation(base.fg_colour) * MIN_LIGHT_PERCENT, get_value(base.fg_colour) * MIN_LIGHT_PERCENT);
+			set_hsv(glyph.bg_colour, get_hue(base.bg_colour), get_saturation(base.bg_colour) * MIN_LIGHT_PERCENT, get_value(base.bg_colour) * MIN_LIGHT_PERCENT);
 		}
 		else
 		{
-			set_hsv(glyph.fg_colour, get_hue(glyph.fg_colour), 0.0f, 0.0f);
-			set_hsv(glyph.bg_colour, get_hue(glyph.bg_colour), 0.0f, 0.0f);
+			set_hsv(glyph.fg_colour, get_hue(base.fg_colour), 0.0f, 0.0f);
+			set_hsv(glyph.bg_colour, get_hue(base.bg_colour), 0.0f, 0.0f);
 		}
 	}
 }
@@ -94,7 +105,7 @@ void RenderSystem::map_lighting(void)
 void RenderSystem::clean(void)
 {
 	if (_composed_map.size() == 0)
-		_composed_map = Map<Glyph>(_level->get_map_width(), _level->get_map_height());
+		_composed_map = Map<sov::Glyph>(_level->get_map_width(), _level->get_map_height());
 	
 	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
@@ -124,7 +135,7 @@ void RenderSystem::receive(const EntityCreated& event)
 		add_entity(event.entity);
 }
 
-const Map<Glyph>& RenderSystem::get_composed_map(void) const
+const Map<sov::Glyph>& RenderSystem::get_composed_map(void) const
 {
 	return _composed_map;
 }

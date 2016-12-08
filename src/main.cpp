@@ -17,6 +17,8 @@
 #include "event.h"
 #include "ui.h"
 
+#include <iostream>
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -37,6 +39,11 @@ int main(int argc, char** argv)
 	if (!font.loadFromFile("arial.ttf"))
 		return -1;
 
+	GameTime game_time;
+	Timer turn_timer(3);
+	Timer draw_timer(0.03);
+	int turn = 1;
+
 	EventManager evm;
 	EntityManager em(evm);
 	SystemManager sm(evm);
@@ -44,8 +51,12 @@ int main(int argc, char** argv)
 	Level l(em);
 	l.load("testing_map");
 
+	Camera camera(window, 0, 0, 80, 40, &l, em, sm, tex);
+	StatusDisplay status(window, 0, 40, 80, 10, em, turn_timer, turn, font);
+	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
+
 	sm.create<VisibilitySystem>(sm, em, &l);
-	sm.create<RenderSystem>(sm, &l);
+	sm.create<RenderSystem>(sm, &l, camera);
 	sm.create<LightSystem>(sm, &l);
 	sm.create<PeriodicDamageUpdateSystem>(sm);
 	sm.create<CollisionSystem>(sm);
@@ -65,22 +76,15 @@ int main(int argc, char** argv)
 	em.create_entity_at_loc("aoe_dmg", 9, 29);
 	em.create_entity_at_loc("aoe_dmg", 10, 33);
 
-	GameTime game_time;
-	Timer turn_timer(3);
-	int turn = 1;
-
-	Canvas world(window, 0, 0, 80, 40, &l, em, sm, tex);
-	StatusDisplay status(window, 0, 40, 80, 10, em, turn_timer, turn, font);
-	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
-
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
 	InputManager input(window, player, l, running, em);
-	
+
 	while(running && window.isOpen())
 	{
 		game_time.tick();
 		turn_timer.tick(game_time);
+		draw_timer.tick(game_time);
 
 		unique_ptr<Command> input_command = input.handle_input();
 
@@ -99,19 +103,25 @@ int main(int argc, char** argv)
 			sm.update<DamageSystem>();
 			sm.update<TimedHealthSystem>();
 		}
-
-		// Drawing	
-		sm.update<LightSystem>();
-		sm.update<VisibilitySystem>();
-		sm.update<RenderSystem>();
-
-		window.clear();
-
-		world.draw();
-		status.draw();
-		inventory.draw();
 		
-		window.display();
+		if (draw_timer.finished())
+		{
+			// Drawing	
+			sm.update<LightSystem>();
+			sm.update<VisibilitySystem>();
+
+			camera.update();
+
+			sm.update<RenderSystem>();
+
+			window.clear();
+
+			camera.draw();
+			status.draw();
+			inventory.draw();
+
+			window.display();
+		}
 		
 		// Cleanup
 		em.update();

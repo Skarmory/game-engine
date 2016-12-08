@@ -1,48 +1,58 @@
 #include "ui.h"
 
-Canvas::Canvas(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
+int UIElement::get_width(void) const
+{
+	return _w;
+}
+
+int UIElement::get_height(void) const
+{
+	return _h;
+}
+
+bool UIElement::is_in_bounds(int x, int y) const
+{
+	return (0 <= x && x <= _w) && (0 <= y && y <= _h);
+}
+
+Camera::Camera(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
 	UIElement(window, x, y, w, h), _level(level), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
 {
 	_rtexture.create(_w * 8, _h * 8);
 }
 
-void Canvas::draw(void)
+void Camera::update(void)
 {
-	const Entity& player   = _entity_manager.get_player();
+	pair<int, int> world_coords = get_screen_origin();
+	_world_x = world_coords.first;
+	_world_y = world_coords.second;
+}
+
+void Camera::draw(void)
+{
 	const Map<sov::Glyph>& _map = _system_manager.get<RenderSystem>().get_composed_map();
-
-	const shared_ptr<const Location> loc = player.get_component<Location>();
-	int mx, my, mw, mh;
-
-	mw = _level->get_map_width();
-	mh = _level->get_map_height();
-
-	pair<int, int> map_xy = get_screen_origin();
-	mx = map_xy.first;
-	my = map_xy.second;
 
 	_rtexture.clear();
 
 	Sprite s;
 	RectangleShape rect(Vector2f(8, 8));
 
-	for (int x = _x; x < _x + _w; x++)
-	for (int y = _y; y < _y + _h; y++)	
-	{
-		if (!_level->is_in_bounds(mx + x, my + y))
-			continue;
+	s.setTexture(_texture);
 
-		const sov::Glyph& glyph = _map.get((mx + x), (my + y));
+	for (int x = 0; x < _w; x++)
+	for (int y = 0; y < _h; y++)
+	{
+		const sov::Glyph& glyph = _map.get(x, y);
 
 		int position = spritemap.at(glyph.glyph);
 		int i = (position % 16) * 8;
 		int j = (position / 16) * 8;
 
-		s.setTexture(_texture);
+		
 		s.setTextureRect(IntRect(i, j, 8, 8));
 
-		s.setPosition(x * 8, y * 8);
-		rect.setPosition(x * 8, y * 8);
+		s.setPosition((_x + x) * 8.0f, (_y + y) * 8.0f);
+		rect.setPosition((_x + x) * 8.0f, (_y + y) * 8.0f);
 
 		rect.setFillColor(glyph.bg_colour);
 		s.setColor(glyph.fg_colour);
@@ -55,21 +65,17 @@ void Canvas::draw(void)
 	_window.draw(Sprite(_rtexture.getTexture()));
 }
 
-pair<int, int> Canvas::world_to_screen(int x, int y) const
+pair<int, int> Camera::world_to_screen(int x, int y) const
 {
-	pair<int, int> s0 = get_screen_origin();
-
-	return pair<int, int>(s0.first - x, s0.second - y);
+	return pair<int, int>(x - _world_x, y - _world_y);
 }
 
-pair<int, int> Canvas::screen_to_world(int x, int y) const
+pair<int, int> Camera::screen_to_world(int x, int y) const
 {
-	pair<int, int> s0 = get_screen_origin();
-
-	return pair<int, int>(s0.first + x, s0.second + y);
+	return pair<int, int>(_world_x + x, _world_y + y);
 }
 
-pair<int, int> Canvas::get_screen_origin(void) const
+pair<int, int> Camera::get_screen_origin(void) const
 {
 	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
 
@@ -95,7 +101,7 @@ void StatusDisplay::draw(void)
 	text.setFont(_font);
 	text.setString("Placeholder the Text Placeholder");
 	text.setCharacterSize(char_width);
-	text.setPosition(_x * 8, _y * 8);
+	text.setPosition(_x * 8.0f, _y * 8.0f);
 	text.setFillColor(sf::Color::White);
 	
 	_window.draw(text);

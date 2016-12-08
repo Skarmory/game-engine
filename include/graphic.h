@@ -20,11 +20,19 @@ namespace sov
 	{
 		Glyph(char glyph, Color fg_colour, Color bg_colour) : glyph(glyph), fg_colour(fg_colour), bg_colour(bg_colour) {}
 		Glyph(void) : glyph(' '), fg_colour(Color::Black), bg_colour(Color::Black) {}
+		Glyph(const Glyph& rhs)
+		{
+			glyph = rhs.glyph;
+			fg_colour = rhs.fg_colour;
+			bg_colour = rhs.bg_colour;
+		}
 
 		char glyph;
 		Color fg_colour;
 		Color bg_colour;
 	};
+
+	static const Glyph NULL_GLYPH;
 
 	struct Graphic : public Component
 	{

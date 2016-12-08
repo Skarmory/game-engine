@@ -10,7 +10,7 @@ void LightSystem::update(EventManager& em)
 	for (int i = 0; i < _level->get_map_width(); i++)
 	for (int j = 0; j < _level->get_map_height(); j++)
 	{
-		_level->_light_map.set(i, j, 0.0f);
+		_level->_base_map.get(i, j)->_light_value = 0.0f;
 	}
 
 	for (entity_iterator it = _entities.begin(); it != _entities.end();)
@@ -34,7 +34,7 @@ void LightSystem::update(EventManager& em)
 			for (int i = 0; i < 8; i++)
 				cast_light(x0, y0, r, 1, 1.0, 0.0, multipliers[0][i], multipliers[1][i], multipliers[2][i], multipliers[3][i], drop);
 
-			_level->_light_map.set(x0, y0, MAX_LIGHT_PERCENT);
+			_level->_base_map.get(x0, y0)->_light_value = MAX_LIGHT_PERCENT;
 		}
 
 		it++;
@@ -75,14 +75,14 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 				continue;
 
 			int dx2dy2 = dx * dx + dy * dy;
-			float root_dx2dy2 = sqrt(dx2dy2);
+			float root_dx2dy2 = (float)sqrt(dx2dy2);
 
 			if (root_dx2dy2 < radius + 0.25f)
 			{
 				float light_percent = max(MAX_LIGHT_PERCENT - root_dx2dy2 * dropoff, MIN_LIGHT_PERCENT);
 
-				if (_level->_light_map.get(ax, ay) < light_percent)
-					_level->_light_map.set(ax, ay, light_percent);
+				if (_level->_base_map.get(ax, ay)->_light_value < light_percent)
+					_level->_base_map.get(ax, ay)->_light_value = light_percent;
 			}
 
 			if (blocked) 
