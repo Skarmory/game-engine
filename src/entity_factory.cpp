@@ -43,7 +43,7 @@ unique_ptr<Entity> EntityFactory::create_damage(int id)
 {
 	unique_ptr<Entity> e(new Entity(id));
 	e->add_component(make_shared<Location>());
-	e->add_component(make_shared<Graphic>('.', Color::Transparent, Color::Yellow, DrawLayer::AREADMG));
+	e->add_component(make_shared<Graphic>('.', Color::Transparent, Color::Yellow, DrawLayer::DAMAGE_EFFECT));
 	e->add_component(make_shared<Collision>());
 	e->add_component(make_shared<PeriodicDamage>(1, 2));
 	e->add_component(make_shared<TimedHealth>(2));
@@ -55,7 +55,7 @@ unique_ptr<Entity> EntityFactory::create_aoe_dmg(int id)
 	unique_ptr<Entity> e(new Entity(id));
 	
 	e->add_component(make_shared<Location>());
-	e->add_component(make_shared<Graphic>('.', Color::Transparent, Color::Cyan, DrawLayer::AREADMG));
+	e->add_component(make_shared<Graphic>('.', Color::Transparent, Color::Cyan, DrawLayer::DAMAGE_EFFECT));
 	e->add_component(make_shared<Collision>());
 	e->add_component(make_shared<PeriodicDamage>(2, 3));
 

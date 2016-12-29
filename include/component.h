@@ -1,16 +1,26 @@
 #ifndef component_h
 #define component_h
 
-#include <string>
-
 using namespace std;
 
-class Component {
+class BaseComponent 
+{
 public:
-	 Component(void) : enabled(true) {}
-	 virtual ~Component(void) = default;
+	BaseComponent(void) : enabled(true) {}
+	virtual ~BaseComponent(void) = default;
+	virtual BaseComponent* clone(void) const = 0;
 
-	 bool enabled;
+	bool enabled;
+};
+
+template<class DerivedComponent>
+class Component : public BaseComponent
+{
+public:
+	virtual BaseComponent* clone(void) const override
+	{
+		return new DerivedComponent(static_cast<const DerivedComponent&>(*this));
+	}
 };
 
 #endif

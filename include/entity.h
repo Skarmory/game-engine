@@ -15,9 +15,23 @@ using namespace std;
 class Entity {
 public:
 	Entity(int id) : obsolete(false), _id(id) {}
+	Entity(const Entity& entity)
+	{
+		_id = -1;
+
+		for (const auto& elem : entity._components)
+		{
+			BaseComponent* b = elem.second->clone();
+			//auto blah = *elem.second->clone();
+			//auto item = make_shared<BaseComponent>(*elem.second->clone());
+			_components.insert(make_pair(elem.first, shared_ptr<BaseComponent>(b)));
+			/*_components[elem.first] = make_shared<Component>(elem.second->clone());*/
+			int i = 0;
+		}
+	}
 
 	// Add component to the entity
-	void add_component(const shared_ptr<Component> c)
+	void add_component(const shared_ptr<BaseComponent> c)
 	{
 		_components[typeid(*c)] = c;
 	}
@@ -68,7 +82,9 @@ public:
 private:
 
 	int _id;
-	map<type_index, shared_ptr<Component>> _components;
+	map<type_index, shared_ptr<BaseComponent>> _components;
+
+	friend class EntityManager;
 };
 
 #endif

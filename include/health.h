@@ -3,16 +3,18 @@
 
 #include "component.h"
 
-struct Health : public Component
+struct Health : public Component<Health>
 {
 	Health(int health) : health(health), is_alive(true) {} 
+
 	int health;
 	bool is_alive;
 };
 
-struct TimedHealth : public Component
+struct TimedHealth : public Component<TimedHealth>
 {
 	TimedHealth(int turns) : turns(turns), remaining(turns) {} 
+
 	const int turns;
 	int remaining;
 };

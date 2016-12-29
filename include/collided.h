@@ -6,7 +6,7 @@
 
 using namespace std;
 
-struct Collided : public Component
+struct Collided : public Component<Collided>
 {
 	Collided(const shared_ptr<Entity>& collided) 
 	{

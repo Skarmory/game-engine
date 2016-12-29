@@ -13,7 +13,7 @@ namespace sov
 		OBJECT = 1,
 		ITEM = 2,
 		CREATURE = 3,
-		AREADMG = 4
+		DAMAGE_EFFECT = 4
 	};
 
 	struct Glyph
@@ -34,7 +34,7 @@ namespace sov
 
 	static const Glyph NULL_GLYPH;
 
-	struct Graphic : public Component
+	struct Graphic : public Component<Graphic>
 	{
 		Graphic(char graphic, Color fg_colour, Color bg_colour, DrawLayer layer) : glyph(graphic, fg_colour, bg_colour), layer(layer) {}
 		Graphic(Glyph glyph, DrawLayer layer) : glyph(glyph), layer(layer) {}
@@ -42,7 +42,6 @@ namespace sov
 		Glyph     glyph;
 		DrawLayer layer;
 	};
-
 };
 
 #endif

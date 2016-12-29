@@ -3,7 +3,7 @@
 
 #include "component.h"
 
-struct Collision : public Component
+struct Collision : public Component<Collision>
 {
 	// Will eventually contain some data to determine which other collidable entities it collides with
 

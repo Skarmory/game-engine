@@ -2,11 +2,66 @@
 
 using namespace std;
 
+unique_ptr<Entity> EntityLoader::load(string entity_id)
+{
+	unique_ptr<Entity> ptr(new Entity(-1));
+
+	auto node = _xml_data.first_node();
+
+	while (node)
+	{
+		if (node->first_attribute()->value() == entity_id)
+			break;
+
+		node = node->next_sibling();
+	}
+
+	auto child_node = node->first_node();
+	while (child_node)
+	{
+		string node_name = child_node->name();
+		if (_component_loaders.find(node_name) != _component_loaders.end())
+			_component_loaders[node_name]->load(child_node, *ptr);
+		
+		child_node = child_node->next_sibling();
+	}
+
+	return ptr;
+}
+
+//void EntityLoader::_subparse(string type, rapidxml::xml_node<char>* node, Entity& prototype)
+//{
+//}
+
+bool EntityCache::_has_entity(string entity_id)
+{
+	if(_entities.find(entity_id) != _entities.end())
+		return true;
+	return false;
+}
+
+unique_ptr<Entity> EntityCache::get_entity(string entity_id)
+{
+	if(!_has_entity(entity_id))
+	{
+		_load_entity(entity_id);
+	}
+
+	return unique_ptr<Entity>(new Entity(*_entities[entity_id]));
+}
+
+void EntityCache::_load_entity(string entity_id)
+{
+	_entities[entity_id] = _loader.load(entity_id);
+}
+
 int EntityManager::NEXT_ID = 0;
 
 shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 {
-	shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
+	//shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
+	shared_ptr<Entity> e(_cache.get_entity(entity_type));
+	e->_id = NEXT_ID;
 	_entities[NEXT_ID] = e;
 
 	if (entity_type == "player")

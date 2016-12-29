@@ -68,13 +68,13 @@ int main(int argc, char** argv)
 	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
 	
 	em.create_entity_at_loc("fire", 5, 5);
-	em.create_entity_at_loc("aoe_dmg", 10, 30);
-	em.create_entity_at_loc("aoe_dmg", 10, 31);
-	em.create_entity_at_loc("aoe_dmg", 9, 30);
-	em.create_entity_at_loc("aoe_dmg", 10, 32);
-	em.create_entity_at_loc("aoe_dmg", 9, 31);
-	em.create_entity_at_loc("aoe_dmg", 9, 29);
-	em.create_entity_at_loc("aoe_dmg", 10, 33);
+	em.create_entity_at_loc("rime", 10, 30);
+	em.create_entity_at_loc("rime", 10, 31);
+	em.create_entity_at_loc("rime", 9, 30);
+	em.create_entity_at_loc("rime", 10, 32);
+	em.create_entity_at_loc("rime", 9, 31);
+	em.create_entity_at_loc("rime", 9, 29);
+	em.create_entity_at_loc("rime", 10, 33);
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;

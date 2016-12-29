@@ -3,7 +3,7 @@
 
 #include "component.h"
 
-struct Sight : public Component
+struct Sight : public Component<Sight>
 {
 	Sight(int radius) : radius(radius) {}
 

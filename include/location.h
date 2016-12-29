@@ -3,7 +3,7 @@
 
 #include "component.h"
 
-struct Location : public Component
+struct Location : public Component<Location>
 {
 	Location(void) : x(0), y(0) {}
 	Location(int x, int y) : x(x), y(y) {}

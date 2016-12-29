@@ -28,7 +28,7 @@ void Level::load(std::string level_name)
 	std::string option;
 	std::string value;
 
-	sstream << "levels" << "/" << level_name << ".dat";
+	sstream << "resources/levels/" << level_name << ".dat";
     path = sstream.str();	
 
 	file.open(path);
