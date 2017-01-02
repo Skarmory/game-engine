@@ -18,7 +18,7 @@ class SystemManager;
 class System 
 {
 public:
-	System(const SystemManager& system_manager) : _system_manager(system_manager) {};
+	explicit System(const SystemManager& system_manager) : _system_manager(system_manager) {};
 	virtual ~System(void) = default;
 
 	virtual void init(sov::EventManager& evm) = 0;

@@ -19,7 +19,7 @@ class Level
 public:
 	Level(const EntityManager& em);	
 	
-	void load(std::string level_name);
+	void load(const std::string& level_name);
 
 	int levelnumber(void) const;
 

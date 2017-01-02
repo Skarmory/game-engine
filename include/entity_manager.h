@@ -23,25 +23,15 @@ using namespace sov;
 class EntityLoader
 {
 public:
-	EntityLoader(void)
-	{
-		_file = new rapidxml::file<>(_file_path);
-		_xml_data.parse<0>(_file->data());
-	}
+	explicit EntityLoader(void);
+	~EntityLoader(void);
 
-	~EntityLoader(void)
-	{
-		//delete _file;
-		/*for (auto& loader : _component_loaders)
-			delete loader.second;*/
-	}
-
-	unique_ptr<Entity> load(string entity_id);
+	unique_ptr<Entity> load(const string& entity_id);
 
 private:
 	const char _file_path[28] = "resources/data/entities.xml";
 	rapidxml::xml_document<> _xml_data;
-	rapidxml::file<>* _file;
+	unique_ptr<rapidxml::file<>> _file;
 
 	map<string, ComponentLoader*>  _component_loaders = {
 		{ "graphic", new GraphicLoader() },
@@ -53,8 +43,6 @@ private:
 		{ "damage", new DamageLoader() },
 		{ "periodicDamage", new PeriodicDamageLoader() },
 	};
-
-	//void _subparse(string type, rapidxml::xml_node<char>* node, Entity& prototype);
 };
 
 //
@@ -68,7 +56,7 @@ private:
 	EntityLoader _loader;
 	map<string, unique_ptr<Entity>> _entities;
 
-	void _load_entity(string entity_id);
+	void _load_entity(const string& entity_id);
 	bool _has_entity(string entity_id);
 };
 
@@ -78,8 +66,8 @@ public:
 	
 	explicit EntityManager(const EventManager& evm) : _event_manager(evm)	{};
 
-	shared_ptr<Entity> create_entity(string entity_type);
-	shared_ptr<Entity> create_entity_at_loc(string entity_type, int x, int y);
+	shared_ptr<Entity> create_entity(const string& entity_type);
+	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y);
 
 	const Entity& get_player(void) const;
 	

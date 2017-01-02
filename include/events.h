@@ -8,7 +8,7 @@ using namespace std;
 
 struct EntityCreated : sov::Event
 {
-	EntityCreated(const shared_ptr<Entity>& entity) : entity(entity) {}
+	explicit EntityCreated(const shared_ptr<Entity>& entity) : entity(entity) {}
 	shared_ptr<Entity> entity;
 };
 

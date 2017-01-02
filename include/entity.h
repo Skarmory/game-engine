@@ -14,7 +14,7 @@ using namespace std;
 
 class Entity {
 public:
-	Entity(int id) : obsolete(false), _id(id) {}
+	explicit Entity(int id) : obsolete(false), _id(id) {}
 	Entity(const Entity& entity)
 	{
 		_id = -1;
@@ -22,11 +22,7 @@ public:
 		for (const auto& elem : entity._components)
 		{
 			BaseComponent* b = elem.second->clone();
-			//auto blah = *elem.second->clone();
-			//auto item = make_shared<BaseComponent>(*elem.second->clone());
 			_components.insert(make_pair(elem.first, shared_ptr<BaseComponent>(b)));
-			/*_components[elem.first] = make_shared<Component>(elem.second->clone());*/
-			int i = 0;
 		}
 	}
 

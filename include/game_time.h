@@ -23,7 +23,7 @@ private:
 class Timer
 {
 public:
-	Timer(double duration) : _elapsed(0), _count_to(duration), _finished(false) {}
+	explicit Timer(double duration) : _elapsed(0), _count_to(duration), _finished(false) {}
 
 	void tick(const GameTime&);
 	void reset(void);

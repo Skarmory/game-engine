@@ -16,7 +16,7 @@ bool UIElement::is_in_bounds(int x, int y) const
 }
 
 Camera::Camera(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
-	UIElement(window, x, y, w, h), _level(level), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
+	UIElement(window, x, y, w, h), _world_x(0), _world_y(0), _level(level), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
 {
 	_rtexture.create(_w * 8, _h * 8);
 }

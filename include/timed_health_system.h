@@ -10,7 +10,7 @@ using namespace sov;
 class TimedHealthSystem : public System, public Observer<EntityCreated>
 {
 public:
-	TimedHealthSystem(const SystemManager& sm) : System(sm) {}
+	explicit TimedHealthSystem(const SystemManager& sm) : System(sm) {}
 
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;

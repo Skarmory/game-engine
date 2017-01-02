@@ -5,7 +5,7 @@
 
 struct Sight : public Component<Sight>
 {
-	Sight(int radius) : radius(radius) {}
+	explicit Sight(int radius) : radius(radius) {}
 
 	int radius;
 };

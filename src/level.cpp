@@ -2,7 +2,7 @@
 
 int Level::_NEXT = 0;
 
-Level::Level(const EntityManager& em) : em(em)
+Level::Level(const EntityManager& em) : em(em), _x(-1), _y(-1)
 {
 	_level = ++Level::_NEXT;
 }
@@ -12,7 +12,7 @@ int Level::levelnumber(void) const
 	return _level;
 }
 
-void Level::load(std::string level_name)
+void Level::load(const std::string& level_name)
 {
 	//TCODRandom* default_gen = TCODRandom::getInstance();
 

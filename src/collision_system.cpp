@@ -26,7 +26,7 @@ void CollisionSystem::update(EventManager& evm)
 		
 		if(!cc->enabled)
 		{
-			it++;
+			++it;
 			continue;
 		}
 
@@ -46,7 +46,7 @@ void CollisionSystem::update(EventManager& evm)
 
 			if(!check_cc->enabled)
 			{
-				check_it++;
+				++check_it;
 				continue;
 			}
 
@@ -65,10 +65,10 @@ void CollisionSystem::update(EventManager& evm)
 				evm.broadcast<CollisionEvent>(e, check_e);
 			}
 
-			check_it++;
+			++check_it;
 		}
 
-		it++;
+		++it;
 	}
 }
 
@@ -86,7 +86,7 @@ void CollisionSystem::clean(void)
 		if(e->has_component<Collided>())
 			e->remove_component<Collided>();
 
-		it++;
+		++it;
 	}
 }
 

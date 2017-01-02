@@ -32,7 +32,7 @@ void PeriodicDamageUpdateSystem::update(EventManager& evm)
 			collision->enabled = false;
 		}
 
-		it++;
+		++it;
 	}
 }
 

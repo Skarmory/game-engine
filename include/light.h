@@ -8,7 +8,7 @@ const float MAX_LIGHT_PERCENT = 1.0f;
 
 struct LightSource : public Component<LightSource>
 {
-	LightSource(int radius) : radius(radius), dropoff(1.0f/radius) {}
+	explicit LightSource(int radius) : radius(radius), dropoff(1.0f/radius) {}
 
 	int radius;
 	float dropoff;

@@ -10,7 +10,7 @@ using namespace sov;
 class DamageSystem : public System, public Observer<CollisionEvent>
 {
 public:
-	DamageSystem(const SystemManager& sm) : System(sm) {}
+	explicit DamageSystem(const SystemManager& sm) : System(sm) {}
 		
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;

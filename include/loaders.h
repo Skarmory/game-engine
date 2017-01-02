@@ -17,144 +17,42 @@ public:
 
 class LocationLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		prototype.add_component(make_shared<Location>());
-	}
-
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class CollisionLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		prototype.add_component(make_shared<Collision>());
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class DamageLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		stringstream ss;
-		int damage;
-		ss << node->value();
-		ss >> damage;
-		prototype.add_component(make_shared<Damage>(damage));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class PeriodicDamageLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		stringstream ss;
-		int damage, period;
-		
-		auto n = node->first_node();
-
-		do
-		{
-			if (n->name() == "damage")
-			{
-				ss << n->value();
-				ss >> damage;
-			}
-			else if (n->name() == "period")
-			{
-				ss << n->value();
-				ss >> period;
-			}
-		}
-		while ((n = n->next_sibling()) != 0);
-
-		prototype.add_component(make_shared<PeriodicDamage>(damage, period));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class GraphicLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& entity) override
-	{
-		stringstream ss;
-		auto n = node->first_node();
-
-		char c;
-		Color fg, bg;
-		DrawLayer l;
-
-		do
-		{
-			if (strcmp(n->name(), "character") == 0)
-			{
-				c = n->value()[0] != '\0' ? n->value()[0] : ' ';
-			}
-			else if (strcmp(n->name(), "foregroundColour") == 0)
-			{
-				string colour_name = n->value();
-				fg = colours_map.at(colour_name);
-			}
-			else if (strcmp(n->name(), "backgroundColour") == 0)
-			{
-				string colour_name = n->value();
-				bg = colours_map.at(colour_name);
-			}
-			else if (strcmp(n->name(), "layer") == 0)
-			{
-				ss << n->value();
-				int i;
-				ss >> i;
-				l = static_cast<DrawLayer>(i);
-			}
-		} 
-		while ((n = n->next_sibling()) != 0);
-
-		entity.add_component(make_shared<Graphic>(c, fg, bg, l));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& entity) override;
 };
 
 class HealthLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		stringstream ss;
-		int health;
-		ss << node->value();
-		ss >> health;
-		prototype.add_component(make_shared<Health>(health));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class SightLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		stringstream ss;
-		int radius;
-		ss << node->value();
-		ss >> radius;
-		prototype.add_component(make_shared<Sight>(radius));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 class LightSourceLoader : public ComponentLoader
 {
-public:
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override
-	{
-		stringstream ss;
-		int radius;
-		ss << node->value();
-		ss >> radius;
-		prototype.add_component(make_shared<LightSource>(radius));
-	}
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
 #endif

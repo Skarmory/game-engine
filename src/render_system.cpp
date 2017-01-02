@@ -19,7 +19,7 @@ void RenderSystem::update(EventManager& evm)
 
 void RenderSystem::map_drawable_entities(void)
 {
-	for (entity_iterator it = _entities.begin(); it != _entities.end(); it++)
+	for (entity_iterator it = _entities.begin(); it != _entities.end(); ++it)
 	{
 		shared_ptr<Entity> e = it->lock();
 
@@ -117,7 +117,7 @@ void RenderSystem::clean(void)
 			continue;
 		}
 
-		it++;
+		++it;
 	}
 }
 

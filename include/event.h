@@ -72,7 +72,7 @@ namespace sov
 		template<typename E>
 		struct Callback : public BaseCallback
 		{
-			Callback(function<void(const E&)> callback) : callback(callback) {}
+			explicit Callback(const function<void(const E&)>& callback) : callback(callback) {}
 			void operator()(const E& event) { callback(event); }
 			function<void(const E&)> callback;
 		};

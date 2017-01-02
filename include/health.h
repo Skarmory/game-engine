@@ -5,7 +5,7 @@
 
 struct Health : public Component<Health>
 {
-	Health(int health) : health(health), is_alive(true) {} 
+	explicit Health(int health) : health(health), is_alive(true) {} 
 
 	int health;
 	bool is_alive;
@@ -13,7 +13,7 @@ struct Health : public Component<Health>
 
 struct TimedHealth : public Component<TimedHealth>
 {
-	TimedHealth(int turns) : turns(turns), remaining(turns) {} 
+	explicit TimedHealth(int turns) : turns(turns), remaining(turns) {} 
 
 	const int turns;
 	int remaining;

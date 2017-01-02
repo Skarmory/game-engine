@@ -8,7 +8,7 @@ using namespace std;
 
 struct Collided : public Component<Collided>
 {
-	Collided(const shared_ptr<Entity>& collided) 
+	explicit Collided(const shared_ptr<Entity>& collided) 
 	{
 		collided_with.push_back(collided);
 	}

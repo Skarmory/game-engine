@@ -2,7 +2,19 @@
 
 using namespace std;
 
-unique_ptr<Entity> EntityLoader::load(string entity_id)
+EntityLoader::EntityLoader(void)
+{
+	_file = unique_ptr<rapidxml::file<>>(new rapidxml::file<>(_file_path));
+	_xml_data.parse<0>(_file->data());
+}
+
+EntityLoader::~EntityLoader(void)
+{
+	for (auto& loader : _component_loaders)
+		delete loader.second;
+}
+
+unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 {
 	unique_ptr<Entity> ptr(new Entity(-1));
 
@@ -29,10 +41,6 @@ unique_ptr<Entity> EntityLoader::load(string entity_id)
 	return ptr;
 }
 
-//void EntityLoader::_subparse(string type, rapidxml::xml_node<char>* node, Entity& prototype)
-//{
-//}
-
 bool EntityCache::_has_entity(string entity_id)
 {
 	if(_entities.find(entity_id) != _entities.end())
@@ -50,14 +58,14 @@ unique_ptr<Entity> EntityCache::get_entity(string entity_id)
 	return unique_ptr<Entity>(new Entity(*_entities[entity_id]));
 }
 
-void EntityCache::_load_entity(string entity_id)
+void EntityCache::_load_entity(const string& entity_id)
 {
 	_entities[entity_id] = _loader.load(entity_id);
 }
 
 int EntityManager::NEXT_ID = 0;
 
-shared_ptr<Entity> EntityManager::create_entity(string entity_type)
+shared_ptr<Entity> EntityManager::create_entity(const string& entity_type)
 {
 	//shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
 	shared_ptr<Entity> e(_cache.get_entity(entity_type));
@@ -74,7 +82,7 @@ shared_ptr<Entity> EntityManager::create_entity(string entity_type)
 	return e;
 }
 
-shared_ptr<Entity> EntityManager::create_entity_at_loc(string entity_type, int x, int y)
+shared_ptr<Entity> EntityManager::create_entity_at_loc(const string& entity_type, int x, int y)
 {
 	shared_ptr<Entity> e = create_entity(entity_type);
 	shared_ptr<Location> loc = e->get_component<Location>();

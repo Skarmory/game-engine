@@ -22,7 +22,7 @@ void TimedHealthSystem::update(EventManager& evm)
 		if(timed_health->remaining == 0)
 			entity->obsolete = true;
 
-		it++;
+		++it;
 	}
 }
 

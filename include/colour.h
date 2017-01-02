@@ -128,7 +128,8 @@ static const std::map<const std::string, const Color&> colours_map = {
 	{ "brown", Brown },
 	{ "silver", Silver },
 	{ "gold", Gold },
-	{ "white", Color::White}
+	{ "white", Color::White },
+	{ "black", Color::Black }
 };
 
 #endif

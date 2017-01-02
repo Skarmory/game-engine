@@ -7,7 +7,7 @@ class Cell
 {
 public:
 	Cell(char display, Color fg, Color bg, bool walkable, bool los_blocker) :
-		_glyph(display, fg, bg),
+		_glyph(display, fg, bg), _light_value(0.0f),
 		_walkable(walkable), _los_blocker(los_blocker),
 		_explored(false), _visible(false) {}
 

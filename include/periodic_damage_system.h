@@ -10,7 +10,7 @@ using namespace sov;
 class PeriodicDamageUpdateSystem : public System, public Observer<EntityCreated>
 {
 public:
-	PeriodicDamageUpdateSystem(const SystemManager& sm) : System(sm) {}
+	explicit PeriodicDamageUpdateSystem(const SystemManager& sm) : System(sm) {}
 
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;
