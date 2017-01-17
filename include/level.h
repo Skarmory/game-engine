@@ -1,15 +1,6 @@
 #ifndef level_h
 #define level_h
 
-#include <stdlib.h>
-#include <vector>
-#include <random>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <assert.h>
-
-#include "entity_manager.h"
 #include "cell.h"
 #include "map.h"
 #include "light.h"
@@ -17,11 +8,8 @@
 class Level
 {
 public:
-	Level(const EntityManager& em);	
-	
-	void load(const std::string& level_name);
-
-	int levelnumber(void) const;
+	explicit Level(void);
+	explicit Level(int depth);
 
 	int get_map_width(void) const;
 	int get_map_height(void) const;
@@ -33,16 +21,14 @@ public:
 	bool blocks_los   (int x, int y)  const;
 
 private:
-	static int _NEXT;
-
-	int _level, _x, _y;
-	const EntityManager& em;
+	int _depth;
 
 	TerrainMap _base_map;
 
 	friend class RenderSystem;
 	friend class LightSystem;
 	friend class VisibilitySystem;
+	friend class LevelManager;
 };
 
 #endif

@@ -1,6 +1,10 @@
 #ifndef util_h
 #define util_h
 
+//#include <random>
+
+//extern mt19937 rng;
+
 template <typename T>
 T clamp(T low, T high, T value)
 {

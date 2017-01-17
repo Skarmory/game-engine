@@ -48,3 +48,14 @@ layers:
 		<period>3</period>
 	</periodicDamage>
 </entity>
+
+<entity name="level_transition">
+	<graphic>
+		<character>></character>
+		<foregroundColour>white</foregroundColour>
+		<backgroundColour>transparent</backgroundColour>
+		<layer>1</layer>
+	</graphic>
+	<location />
+	<levelTransition/>
+</entity>

@@ -55,4 +55,9 @@ class LightSourceLoader : public ComponentLoader
 	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
 };
 
+class LevelTransitionLoader : public ComponentLoader
+{
+	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+};
+
 #endif

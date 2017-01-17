@@ -4,7 +4,7 @@
 #include <memory>
 #include "entity.h"
 #include "entity_manager.h"
-#include "level.h"
+#include "level_manager.h"
 #include "components.h"
 
 
@@ -18,19 +18,19 @@ public:
 class MoveCommand : public Command
 {
 public:
-	MoveCommand(std::weak_ptr<Entity>, const Level&, int, int);
+	explicit MoveCommand(EntityManager& entity_manager, LevelManager& level_manager, int x, int y);
 	virtual void execute(void) override;
 
 private:
-	std::weak_ptr<Entity> _entity;
-	const Level& _level;
+	EntityManager& _entity_manager;
+	LevelManager& _level_manager;
 	int _x, _y;
 };
 
 class QuitCommand : public Command
 {
 public:
-	QuitCommand(bool&);
+	explicit QuitCommand(bool& running);
 	virtual void execute(void) override;
 
 private:
@@ -40,13 +40,22 @@ private:
 class AttackCommand : public Command
 {
 public:
-	AttackCommand(EntityManager& entity_manager, std::weak_ptr<Entity>, int x, int y);
+	explicit AttackCommand(EntityManager& entity_manager, int x, int y);
 	virtual void execute(void) override;
 
 private:
 	EntityManager& _entity_manager;
-	std::weak_ptr<Entity> _attacker;
 	int _x, _y;
+};
+
+class LevelTransitionCommand : public Command
+{
+public:
+	explicit LevelTransitionCommand(EntityManager& entity_manager);
+	virtual void execute(void) override;
+
+private:
+	EntityManager& _entity_manager;
 };
 
 #endif

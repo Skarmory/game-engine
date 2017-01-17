@@ -16,8 +16,7 @@ class InputManager
 public:
 	InputManager(
 		sf::Window& handle,
-		const shared_ptr<Entity>& player, 
-		const Level& level, 
+		LevelManager& level_manager, 
 		bool& is_running, 
 		EntityManager& entity_manager
 	);
@@ -25,8 +24,7 @@ public:
 
 private:
 	sf::Window& _handle;
-	const shared_ptr<Entity>& _player;
-	const Level& _level;
+	LevelManager& _level_manager;
 	bool& _is_running;
 	EntityManager& _entity_manager;
 };

@@ -99,7 +99,9 @@ static const Color DarkPink(191, 0, 95);
 static const Color Pink(255, 0, 127);
 static const Color LightPink(255, 115, 185);
 
+static const Color DarkBrown(100, 50, 0);
 static const Color Brown(150, 75, 0);
+static const Color LightBrown(200, 100, 0);
 
 static const Color Silver(192, 192, 192);
 static const Color Gold(255, 215, 0);
@@ -125,7 +127,7 @@ static const std::map<const std::string, const Color&> colours_map = {
 	{ "dark_fuchsia", DarkFuchsia },{ "fuchsia", Fuchsia },{ "light_fuchsia", LightFuchsia },
 	{ "dark_magenta", DarkMagenta },{ "magenta", Color::Magenta },{ "light_magenta", LightMagenta },
 	{ "dark_pink", DarkPink },{ "pink", Pink },{ "light_pink", LightPink },
-	{ "brown", Brown },
+	{ "dark_brown", DarkBrown }, {"brown", Brown }, { "light_brown", LightBrown },
 	{ "silver", Silver },
 	{ "gold", Gold },
 	{ "white", Color::White },

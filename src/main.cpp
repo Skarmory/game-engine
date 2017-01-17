@@ -6,23 +6,28 @@
 #include <vector>
 #include <time.h>
 #include <chrono>
+#include <iostream>
 
 #include "entity.h"
 #include "input.h"
 #include "command.h"
 #include "entity_manager.h"
+
 #include "game_time.h"
 #include "systems.h"
 #include "components.h"
 #include "event.h"
 #include "ui.h"
 
-#include <iostream>
+
+
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
+	//rng.seed(random_device()());
+
 	RenderWindow window(VideoMode(800, 400), "Sovereign Incarnate");
 
 	Image img;
@@ -47,17 +52,17 @@ int main(int argc, char** argv)
 	EventManager evm;
 	EntityManager em(evm);
 	SystemManager sm(evm);
+	LevelManager lm(evm);
+	
+	lm.load("testing_map");
 
-	Level l(em);
-	l.load("testing_map");
-
-	Camera camera(window, 0, 0, 80, 40, &l, em, sm, tex);
+	Camera camera(window, 0, 0, 80, 40, lm, em, sm, tex);
 	StatusDisplay status(window, 0, 40, 80, 10, em, turn_timer, turn, font);
 	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
-	sm.create<VisibilitySystem>(sm, em, &l);
-	sm.create<RenderSystem>(sm, &l, camera);
-	sm.create<LightSystem>(sm, &l);
+	sm.create<VisibilitySystem>(sm, em, lm);
+	sm.create<RenderSystem>(sm, lm, camera);
+	sm.create<LightSystem>(sm, lm);
 	sm.create<PeriodicDamageUpdateSystem>(sm);
 	sm.create<CollisionSystem>(sm);
 	sm.create<DamageSystem>(sm);
@@ -65,20 +70,19 @@ int main(int argc, char** argv)
 	
 	sm.init();
 
-	shared_ptr<Entity> player = em.create_entity_at_loc("player", 10, 10);
-	
-	em.create_entity_at_loc("fire", 5, 5);
-	em.create_entity_at_loc("rime", 10, 30);
-	em.create_entity_at_loc("rime", 10, 31);
-	em.create_entity_at_loc("rime", 9, 30);
-	em.create_entity_at_loc("rime", 10, 32);
-	em.create_entity_at_loc("rime", 9, 31);
-	em.create_entity_at_loc("rime", 9, 29);
-	em.create_entity_at_loc("rime", 10, 33);
+	em.create_entity_at_loc("player", 10, 10, 0);
+	em.create_entity_at_loc("fire", 5, 5, 0);
+	em.create_entity_at_loc("rime", 10, 30, 0);
+	em.create_entity_at_loc("rime", 10, 31, 0);
+	em.create_entity_at_loc("rime", 9, 30, 0);
+	em.create_entity_at_loc("rime", 10, 32, 0);
+	em.create_entity_at_loc("rime", 9, 31, 0);
+	em.create_entity_at_loc("rime", 9, 29, 0);
+	em.create_entity_at_loc("rime", 10, 33, 0);
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(window, player, l, running, em);
+	InputManager input(window, lm, running, em);
 
 	while(running && window.isOpen())
 	{

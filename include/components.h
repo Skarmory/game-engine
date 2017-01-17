@@ -9,5 +9,6 @@
 #include "collided.h"
 #include "light.h"
 #include "sight.h"
+#include "level_transition.h"
 
 #endif

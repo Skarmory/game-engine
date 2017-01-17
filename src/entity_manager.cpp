@@ -41,14 +41,14 @@ unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 	return ptr;
 }
 
-bool EntityCache::_has_entity(string entity_id)
+bool EntityCache::_has_entity(const string& entity_id)
 {
 	if(_entities.find(entity_id) != _entities.end())
 		return true;
 	return false;
 }
 
-unique_ptr<Entity> EntityCache::get_entity(string entity_id)
+unique_ptr<Entity> EntityCache::get_entity(const string& entity_id)
 {
 	if(!_has_entity(entity_id))
 	{
@@ -82,12 +82,13 @@ shared_ptr<Entity> EntityManager::create_entity(const string& entity_type)
 	return e;
 }
 
-shared_ptr<Entity> EntityManager::create_entity_at_loc(const string& entity_type, int x, int y)
+shared_ptr<Entity> EntityManager::create_entity_at_loc(const string& entity_type, int x, int y, int z)
 {
 	shared_ptr<Entity> e = create_entity(entity_type);
 	shared_ptr<Location> loc = e->get_component<Location>();
 	loc->x = x;
 	loc->y = y;
+	loc->z = z;
 
 	return e;
 }
@@ -102,11 +103,32 @@ void EntityManager::update(void)
 			continue;
 		}
 
-		it++;
+		++it;
 	}	
 }
 
 const Entity& EntityManager::get_player(void) const
 {
 	return *_entities.at(_player_id);
+}
+
+Entity& EntityManager::get_player(void)
+{
+	return *_entities.at(_player_id);
+}
+
+// TODO: Spatial partitioning of some kind
+vector<shared_ptr<Entity>> EntityManager::get_entities_at_loc(int x, int y, int z) const
+{
+	vector<shared_ptr<Entity>> ret;
+
+	for (auto& entity : _entities)
+	{
+		shared_ptr<Location> lc = entity.second->get_component<Location>();
+
+		if (lc->x == x && lc->y == y && lc->z == z)
+			ret.push_back(entity.second);
+	}
+
+	return ret;
 }

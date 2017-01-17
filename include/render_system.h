@@ -21,7 +21,7 @@ class Camera;
 
 class RenderSystem : public System, public Observer<EntityCreated> {
 public:
-	RenderSystem(const SystemManager& sm, Level* level, const Camera& camera) : System(sm), _level(level), _camera(camera) {}
+	RenderSystem(const SystemManager& sm, LevelManager& level_manager, const Camera& camera) : System(sm), _level_manager(level_manager), _camera(camera) {}
 
 	virtual void init(EventManager& evm) override;
 	virtual void update(EventManager& evm) override;
@@ -37,7 +37,7 @@ private:
 	void map_base_terrain(void);
 
 	const Camera& _camera;
-	Level*  _level;
+	LevelManager&  _level_manager;
 	Map<sov::Glyph> _composed_map;
 };
 

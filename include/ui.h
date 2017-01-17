@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "level.h"
+//#include "level_manager.h"
 #include "game_time.h"
 #include "systems.h"
 #include "sprite.h"
@@ -31,7 +31,7 @@ protected:
 class Camera : public UIElement
 {
 public:
-	Camera(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture);
+	Camera(RenderWindow& window, int x, int y, int w, int h, const LevelManager& level_manager, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture);
 
 	void update(void);
 	void draw(void) override;
@@ -40,7 +40,7 @@ public:
 
 private:
 	int _world_x, _world_y;
-	Level* _level;
+	const LevelManager& _level_manager;
 	const EntityManager& _entity_manager;
 	const SystemManager& _system_manager;
 	const Texture& _texture;

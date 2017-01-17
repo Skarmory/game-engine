@@ -108,3 +108,8 @@ void LightSourceLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 	ss >> radius;
 	prototype.add_component(make_shared<LightSource>(radius));
 }
+
+void LevelTransitionLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+{
+	prototype.add_component(make_shared<LevelTransition>());
+}

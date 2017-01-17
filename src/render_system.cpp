@@ -19,6 +19,8 @@ void RenderSystem::update(EventManager& evm)
 
 void RenderSystem::map_drawable_entities(void)
 {
+	Level& _level = _level_manager.get_current();
+
 	for (entity_iterator it = _entities.begin(); it != _entities.end(); ++it)
 	{
 		shared_ptr<Entity> e = it->lock();
@@ -32,7 +34,7 @@ void RenderSystem::map_drawable_entities(void)
 
 		sov::Glyph& glyph = _composed_map.get(p.first, p.second);
 
-		Cell*& cell = _level->_base_map.get(loc->x, loc->y);
+		Cell*& cell = _level._base_map.get(loc->x, loc->y);
 
 		bool lit     = cell->_light_value > 0.0f;
 		bool visible = cell->_visible;
@@ -64,22 +66,24 @@ void RenderSystem::map_drawable_entities(void)
 
 void RenderSystem::map_base_terrain(void)
 {
+	Level& _level = _level_manager.get_current();
+
 	for (int x = 0; x < _camera.get_width(); x++)
 	for (int y = 0; y < _camera.get_height(); y++)
 	{
 		sov::Glyph& glyph = _composed_map.get(x, y);
 		
 		pair<int, int> p = _camera.screen_to_world(x, y);
-		if (!_level->is_in_bounds(p.first, p.second))
+		if (!_level.is_in_bounds(p.first, p.second))
 			continue;
 
-		const sov::Glyph& base = _level->_base_map.get(p.first, p.second)->get_glyph();
-		float light_value = _level->_base_map.get(p.first, p.second)->get_light_value();
+		const sov::Glyph& base = _level._base_map.get(p.first, p.second)->get_glyph();
+		float light_value = _level._base_map.get(p.first, p.second)->get_light_value();
 		bool lit = light_value > 0.0f;
 
 		glyph.glyph = base.glyph;
-		bool visible = _level->_base_map.get(p.first, p.second)->is_visible();
-		bool explored = _level->get_cell(p.first, p.second).is_explored();
+		bool visible = _level._base_map.get(p.first, p.second)->is_visible();
+		bool explored = _level.get_cell(p.first, p.second).is_explored();
 		
 		// Do the correct lighting depending on if the cell is lit, shrouded, or in FoW
 		if (lit && visible)
@@ -87,7 +91,7 @@ void RenderSystem::map_base_terrain(void)
 			set_hsv(glyph.fg_colour, get_hue(base.fg_colour), get_saturation(base.fg_colour) * light_value, get_value(base.fg_colour) * light_value);
 			set_hsv(glyph.bg_colour, get_hue(base.bg_colour), get_saturation(base.bg_colour) * light_value, get_value(base.bg_colour) * light_value);
 
-			_level->_base_map.get(p.first, p.second)->_explored = true;
+			_level._base_map.get(p.first, p.second)->_explored = true;
 		}
 		else if (explored)
 		{
@@ -104,8 +108,10 @@ void RenderSystem::map_base_terrain(void)
 
 void RenderSystem::clean(void)
 {
+	Level& _level = _level_manager.get_current();
+
 	if (_composed_map.size() == 0)
-		_composed_map = Map<sov::Glyph>(_level->get_map_width(), _level->get_map_height());
+		_composed_map = Map<sov::Glyph>(_level.get_map_width(), _level.get_map_height());
 	
 	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{

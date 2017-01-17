@@ -15,8 +15,8 @@ bool UIElement::is_in_bounds(int x, int y) const
 	return (0 <= x && x <= _w) && (0 <= y && y <= _h);
 }
 
-Camera::Camera(RenderWindow& window, int x, int y, int w, int h, Level* level, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
-	UIElement(window, x, y, w, h), _world_x(0), _world_y(0), _level(level), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
+Camera::Camera(RenderWindow& window, int x, int y, int w, int h, const LevelManager& level_manager, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
+	UIElement(window, x, y, w, h), _world_x(0), _world_y(0), _level_manager(level_manager), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
 {
 	_rtexture.create(_w * 8, _h * 8);
 }
@@ -78,17 +78,18 @@ pair<int, int> Camera::screen_to_world(int x, int y) const
 pair<int, int> Camera::get_screen_origin(void) const
 {
 	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
+	const Level& level = _level_manager.get_current();
 
 	int x0 = 0, y0 = 0;
 
-	if (_level->get_map_width() > _w)
+	if (level.get_map_width() > _w)
 	{
-		x0 = clamp(0, _level->get_map_width() - _w, loc->x - (_w / 2));
+		x0 = clamp(0, level.get_map_width() - _w, loc->x - (_w / 2));
 	}
 
-	if (_level->get_map_height() > _h)
+	if (level.get_map_height() > _h)
 	{
-		y0 = clamp(0, _level->get_map_height() - _h, loc->y - (_h / 2));
+		y0 = clamp(0, level.get_map_height() - _h, loc->y - (_h / 2));
 	}
 
 	return pair<int, int>(x0, y0);

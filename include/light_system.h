@@ -7,21 +7,21 @@
 #include "system.h"
 #include "components.h"
 #include "events.h"
-#include "level.h"
+#include "level_manager.h"
 
 using namespace sov;
 
 class LightSystem : public System, public Observer<EntityCreated>
 {
 public:
-	LightSystem(const SystemManager& sm, Level* level) : System(sm), _level(level) {}
+	LightSystem(const SystemManager& sm, LevelManager& level_manager) : System(sm), _level_manager(level_manager) {}
 
 	virtual void init(EventManager& em) override;
 	virtual void update(EventManager& em) override;
 	virtual void receive(const EntityCreated& event) override;
 
 private:
-	Level* _level;
+	LevelManager& _level_manager;
 
 	const int multipliers[4][8] = {
 		{ 1, 0, 0, -1, -1, 0, 0, 1 },

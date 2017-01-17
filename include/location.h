@@ -5,10 +5,10 @@
 
 struct Location : public Component<Location>
 {
-	Location(void) : x(0), y(0) {}
-	Location(int x, int y) : x(x), y(y) {}
+	explicit Location(void) : x(0), y(0), z(0) {}
+	explicit Location(int x, int y, int z) : x(x), y(y), z(z) {}
 
-	int x, y;
+	int x, y, z;
 };
 
 #endif

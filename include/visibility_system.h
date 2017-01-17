@@ -3,22 +3,20 @@
 
 #include "system.h"
 #include "events.h"
-#include "level.h"
-
-#include "sight.h"
+#include "components.h"
+#include "level_manager.h"
+#include "entity_manager.h"
 
 class VisibilitySystem : public System
 {
 public:
-	VisibilitySystem(const SystemManager& sm, const EntityManager& em, Level* level) : System(sm), _entity_manager(em), _level(level) {}
+	VisibilitySystem(const SystemManager& sm, const EntityManager& em, LevelManager& level_manager) : System(sm), _entity_manager(em), _level_manager(level_manager) {}
 
 	virtual void init(sov::EventManager& em) override;
 	virtual void update(sov::EventManager& em) override;
-
-	//const vector<bool>& get_visibility_map(void) const;
 	
 private:
-	Level* _level;
+	LevelManager& _level_manager;
 	const EntityManager& _entity_manager;
 
 	const int multipliers[4][8] = {

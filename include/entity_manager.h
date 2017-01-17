@@ -50,26 +50,28 @@ private:
 class EntityCache
 {
 public:
-	unique_ptr<Entity> get_entity(string entity_id);
+	unique_ptr<Entity> get_entity(const string& entity_id);
 
 private:
 	EntityLoader _loader;
 	map<string, unique_ptr<Entity>> _entities;
 
 	void _load_entity(const string& entity_id);
-	bool _has_entity(string entity_id);
+	bool _has_entity(const string& entity_id);
 };
 
 class EntityManager
 {
 public:
 	
-	explicit EntityManager(const EventManager& evm) : _event_manager(evm)	{};
+	explicit EntityManager(const EventManager& evm) : _event_manager(evm), _player_id(-1) {};
 
 	shared_ptr<Entity> create_entity(const string& entity_type);
-	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y);
+	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y, int z);
 
 	const Entity& get_player(void) const;
+	Entity& get_player(void);
+	vector<shared_ptr<Entity>> get_entities_at_loc(int x, int y, int z) const;
 	
 	void update(void);
 
