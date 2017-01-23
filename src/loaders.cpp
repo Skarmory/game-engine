@@ -13,7 +13,7 @@ void CollisionLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 void DamageLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	stringstream ss;
-	int damage;
+	int damage = 0;
 	ss << node->value();
 	ss >> damage;
 	prototype.add_component(make_shared<Damage>(damage));
@@ -22,22 +22,21 @@ void DamageLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 void PeriodicDamageLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	stringstream ss;
-	int damage, period;
+	int damage = 0;
+	int period = 0;
 
 	auto n = node->first_node();
 
 	do
 	{
+		ss.clear();
+		ss << n->value();
+
 		if (n->name() == string("damage"))
-		{
-			ss << n->value();
 			ss >> damage;
-		}
 		else if (n->name() == string("period"))
-		{
-			ss << n->value();
 			ss >> period;
-		}
+
 	} while ((n = n->next_sibling()) != 0);
 
 	prototype.add_component(make_shared<PeriodicDamage>(damage, period));
@@ -85,7 +84,7 @@ void GraphicLoader::load(rapidxml::xml_node<char>* node, Entity& entity)
 void HealthLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	stringstream ss;
-	int health;
+	int health = 0;
 	ss << node->value();
 	ss >> health;
 	prototype.add_component(make_shared<Health>(health));
@@ -94,7 +93,7 @@ void HealthLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 void SightLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	stringstream ss;
-	int radius;
+	int radius = 0;
 	ss << node->value();
 	ss >> radius;
 	prototype.add_component(make_shared<Sight>(radius));
@@ -103,7 +102,7 @@ void SightLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 void LightSourceLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	stringstream ss;
-	int radius;
+	int radius = 0;
 	ss << node->value();
 	ss >> radius;
 	prototype.add_component(make_shared<LightSource>(radius));

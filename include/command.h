@@ -51,11 +51,12 @@ private:
 class LevelTransitionCommand : public Command
 {
 public:
-	explicit LevelTransitionCommand(EntityManager& entity_manager);
+	explicit LevelTransitionCommand(EntityManager& entity_manager, EventManager& event_manager);
 	virtual void execute(void) override;
 
 private:
 	EntityManager& _entity_manager;
+	EventManager& _event_manager;
 };
 
 #endif

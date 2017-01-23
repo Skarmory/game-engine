@@ -6,8 +6,9 @@ InputManager::InputManager(
 		sf::Window& handle,
 		LevelManager& level_manager, 
 		bool& is_running, 
-		EntityManager& entity_manager) 
-	: _handle(handle), _level_manager(level_manager), _is_running(is_running), _entity_manager(entity_manager) 
+		EntityManager& entity_manager,
+		EventManager& event_manager) 
+	: _handle(handle), _level_manager(level_manager), _is_running(is_running), _entity_manager(entity_manager), _event_manager(event_manager)
 {}
 
 c_uptr InputManager::handle_input(void)
@@ -56,7 +57,7 @@ c_uptr InputManager::handle_input(void)
 				return c_uptr(new QuitCommand(_is_running));
 			case '>':
 			case '<':
-				return c_uptr(new LevelTransitionCommand(_entity_manager));
+				return c_uptr(new LevelTransitionCommand(_entity_manager, _event_manager));
 			default:
 				return nullptr;
 		}

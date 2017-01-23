@@ -41,9 +41,27 @@ void QuitCommand::execute(void)
 	_state = false;
 }
 
-LevelTransitionCommand::LevelTransitionCommand(EntityManager& entity_manager) : _entity_manager(entity_manager) {}
+LevelTransitionCommand::LevelTransitionCommand(EntityManager& entity_manager, EventManager& event_manager) : _entity_manager(entity_manager), _event_manager(event_manager) {}
 
 void LevelTransitionCommand::execute(void)
 {
+	auto& player = _entity_manager.get_player();
+	shared_ptr<Location> loc = player.get_component<Location>();
 
+	auto location_entities = _entity_manager.get_entities_at_loc(loc->x, loc->y, loc->z);
+
+	for (auto& entity : location_entities)
+	{
+		if (entity->has_component<LevelTransition>())
+		{
+			shared_ptr<LevelTransition> transition = entity->get_component<LevelTransition>();
+			_event_manager.broadcast<LevelTransitionEvent>(transition);
+
+			loc->x = transition->next_level_x;
+			loc->y = transition->next_level_y;
+			loc->z = transition->next_level_z;
+
+			break;
+		}
+	}
 }

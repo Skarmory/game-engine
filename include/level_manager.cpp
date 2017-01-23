@@ -37,7 +37,7 @@ void LevelManager::_load(const string& name)
 	file.open(path);
 	assert(file.is_open());
 
-	Level* l;
+	Level* l = new Level();
 
 	while (getline(file, line))
 	{
@@ -63,7 +63,7 @@ void LevelManager::_load(const string& name)
 					z = atoi(value.c_str());
 			}
 
-			l = new Level(z);
+			l->_depth = z;
 			l->_base_map = TerrainMap(x, y);
 		}
 

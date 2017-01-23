@@ -16,18 +16,23 @@ void DamageSystem::update(EventManager& evm)
 		{
 			shared_ptr<Collided> cc = e->get_component<Collided>();
 			shared_ptr<Health>   hc;
-			shared_ptr<Damage>   dmg;
-
-			if(e->has_component<PeriodicDamage>())
-				dmg = e->get_component<PeriodicDamage>();
-			else	
-				dmg = e->get_component<Damage>();
-
+			
 			for(auto& collided : cc->collided_with)
 			{
 				if((hc = collided->get_component<Health>()) != nullptr && hc->is_alive)
 				{
-					hc->health -= dmg->damage;
+					int dmg = 0;
+
+					if (e->has_component<PeriodicDamage>())
+					{
+						dmg = e->get_component<PeriodicDamage>()->damage;
+					}
+					else
+					{
+						dmg = e->get_component<Damage>()->damage;
+					}
+
+					hc->health -= dmg;
 
 					if(hc->health < 0)
 					{

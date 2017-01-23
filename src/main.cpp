@@ -19,15 +19,10 @@
 #include "event.h"
 #include "ui.h"
 
-
-
-
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	//rng.seed(random_device()());
-
 	RenderWindow window(VideoMode(800, 400), "Sovereign Incarnate");
 
 	Image img;
@@ -80,9 +75,16 @@ int main(int argc, char** argv)
 	em.create_entity_at_loc("rime", 9, 29, 0);
 	em.create_entity_at_loc("rime", 10, 33, 0);
 
+	shared_ptr<Entity> transition = em.create_entity_at_loc("level_transition", 10, 15, 0);
+	shared_ptr<LevelTransition> lt = transition->get_component<LevelTransition>();
+	lt->next_level_name = "testing_map2";
+	lt->next_level_x = 70;
+	lt->next_level_y = 30;
+	lt->next_level_z = 1;
+
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(window, lm, running, em);
+	InputManager input(window, lm, running, em, evm);
 
 	while(running && window.isOpen())
 	{

@@ -42,6 +42,7 @@ private:
 		{ "sight", new SightLoader() },
 		{ "damage", new DamageLoader() },
 		{ "periodicDamage", new PeriodicDamageLoader() },
+		{ "levelTransition", new LevelTransitionLoader() }
 	};
 };
 

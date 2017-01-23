@@ -18,7 +18,8 @@ public:
 		sf::Window& handle,
 		LevelManager& level_manager, 
 		bool& is_running, 
-		EntityManager& entity_manager
+		EntityManager& entity_manager,
+		EventManager& event_manager
 	);
 	unique_ptr<Command> handle_input(void);
 
@@ -27,6 +28,7 @@ private:
 	LevelManager& _level_manager;
 	bool& _is_running;
 	EntityManager& _entity_manager;
+	EventManager& _event_manager;
 };
 
 #endif
