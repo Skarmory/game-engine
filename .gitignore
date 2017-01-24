@@ -4,7 +4,6 @@ incarnate
 *~
 *.sw*
 *.png
-*libtcod*
 *.supp
 *Debug/*
 *x64/*
@@ -13,3 +12,4 @@ incarnate.VC*
 *SFML*
 *.psess
 *.vsp
+*luabind*
