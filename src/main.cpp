@@ -33,7 +33,6 @@
 
 #include "lua_vm.h"
 
-
 using namespace std;
 
 int main(int argc, char** argv)
@@ -70,12 +69,6 @@ int main(int argc, char** argv)
 	env.set_level_manager(&lm);
 	LuaVM lua;
 	
-	lm.load("testing_map");
-
-	lua.load_script("test.lua");
-	lua.call("helloWorld");
-	lua.call("goodbyeWorld");
-
 	Camera camera(window, 0, 0, 80, 40, tex);
 	StatusDisplay status(window, 0, 40, 80, 10, turn_timer, turn, font);
 	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
@@ -90,7 +83,11 @@ int main(int argc, char** argv)
 	
 	sm.init();
 
-	em.create_entity_at_loc("player", 10, 10, 0);
+	lm.load("testing_map");
+	lua.load_script("test.lua");
+	lua.call("onLoad");
+
+	/*em.create_entity_at_loc("player", 10, 10, 0);
 	em.create_entity_at_loc("fire", 5, 5, 0);
 	em.create_entity_at_loc("rime", 10, 30, 0);
 	em.create_entity_at_loc("rime", 10, 31, 0);
@@ -105,7 +102,7 @@ int main(int argc, char** argv)
 	lt->next_level_name = "testing_map2";
 	lt->next_level_x = 70;
 	lt->next_level_y = 30;
-	lt->next_level_z = 1;
+	lt->next_level_z = 1;*/
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;

@@ -15,6 +15,7 @@ LuaVM::LuaVM(void)
 
 	// Bind functions to lua
 	lua_register(_vm, "trace", lua_print_message);
+	lua_register(_vm, "create_entity", lua_create_entity_at_location);
 
 	// Construct path to scripts
 	char buf[256];
