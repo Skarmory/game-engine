@@ -1,13 +1,19 @@
 #include "collision_system.h"
 
-using namespace std;
+#include "environment.h"
+#include "collided.h"
+#include "location.h"
+#include "collision.h"
 
-void CollisionSystem::init(EventManager& evm)
+using namespace std;
+using namespace sov;
+
+void CollisionSystem::init(void)
 {
-	evm.subscribe<EntityCreated>(*this);	
+	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);	
 }
 
-void CollisionSystem::update(EventManager& evm)
+void CollisionSystem::update(void)
 {
 	clean();
 
@@ -62,7 +68,7 @@ void CollisionSystem::update(EventManager& evm)
 				else
 					check_e->add_component(make_shared<Collided>(e));
 
-				evm.broadcast<CollisionEvent>(e, check_e);
+				Environment::get().get_event_manager()->broadcast<CollisionEvent>(e, check_e);
 			}
 
 			++check_it;

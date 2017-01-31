@@ -1,12 +1,9 @@
 #ifndef loaders_h
 #define loaders_h
 
-#include <string>
 #include <rapidxml-1.13\rapidxml.hpp>
-#include <sstream>
 
 #include "entity.h"
-#include "components.h"
 
 class ComponentLoader
 {

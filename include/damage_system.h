@@ -2,18 +2,15 @@
 #define damage_system_h
 
 #include "system.h"
-#include "components.h"
 #include "events.h"
 
-using namespace sov;
-
-class DamageSystem : public System, public Observer<CollisionEvent>
+class DamageSystem : public System, public sov::Observer<CollisionEvent>
 {
 public:
-	explicit DamageSystem(const SystemManager& sm) : System(sm) {}
+	explicit DamageSystem(void) {}
 		
-	virtual void init(EventManager& evm) override;
-	virtual void update(EventManager& evm) override;
+	virtual void init(void) override;
+	virtual void update(void) override;
 	virtual void receive(const CollisionEvent& event) override;
 };
 

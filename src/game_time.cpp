@@ -1,5 +1,7 @@
 #include "game_time.h"
 
+using namespace std::chrono;
+
 void GameTime::tick(void)
 {
 	_current = high_resolution_clock::now();

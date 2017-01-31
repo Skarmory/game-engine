@@ -1,18 +1,20 @@
 #ifndef ui_h
 #define ui_h
 
-#include <SFML/Graphics.hpp>
-
-//#include "level_manager.h"
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include "game_time.h"
-#include "systems.h"
-#include "sprite.h"
+
+class sf::Font;
+class sf::Texture;
 
 // Base UI element
 class UIElement
 {
 public:
-	UIElement(RenderWindow& window, int x, int y, int w, int h) : _x(x), _y(y), _w(w), _h(h),  _window(window) {};
+	UIElement(sf::RenderWindow& window, int x, int y, int w, int h) : _x(x), _y(y), _w(w), _h(h),  _window(window) {};
 	virtual ~UIElement(void) = default;
 
 	virtual void draw(void) = 0;
@@ -23,7 +25,7 @@ public:
 
 protected:
 	int _x, _y, _w, _h;
-	RenderWindow& _window;
+	sf::RenderWindow& _window;
 };
 
 
@@ -31,22 +33,19 @@ protected:
 class Camera : public UIElement
 {
 public:
-	Camera(RenderWindow& window, int x, int y, int w, int h, const LevelManager& level_manager, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture);
+	Camera(sf::RenderWindow& window, int x, int y, int w, int h, const sf::Texture& texture);
 
 	void update(void);
 	void draw(void) override;
-	pair<int, int> world_to_screen(int x, int y) const;
-	pair<int, int> screen_to_world(int x, int y) const;
+	std::pair<int, int> world_to_screen(int x, int y) const;
+	std::pair<int, int> screen_to_world(int x, int y) const;
 
 private:
 	int _world_x, _world_y;
-	const LevelManager& _level_manager;
-	const EntityManager& _entity_manager;
-	const SystemManager& _system_manager;
-	const Texture& _texture;
-	RenderTexture _rtexture;
+	const sf::Texture& _texture;
+	sf::RenderTexture _rtexture;
 
-	pair<int, int> get_screen_origin(void)  const;
+	std::pair<int, int> get_screen_origin(void)  const;
 };
 
 
@@ -54,27 +53,26 @@ private:
 class StatusDisplay : public UIElement
 {
 public:
-	StatusDisplay(RenderWindow& window, int x, int y, int w, int h, const EntityManager& entity_manager, const Timer& turn_timer, const int& turns, const Font& font) :
-		UIElement(window, x, y, w, h), _entity_manager(entity_manager), _turn_timer(turn_timer), _turns(turns), _font(font) {};
+	StatusDisplay(sf::RenderWindow& window, int x, int y, int w, int h, const Timer& turn_timer, const int& turns, const sf::Font& font) :
+		UIElement(window, x, y, w, h), _turn_timer(turn_timer), _turns(turns), _font(font) {};
 
 	void draw(void) override;
 
 private:
-	const EntityManager& _entity_manager;
 	const Timer& _turn_timer;
 	const int& _turns;
-	const Font& _font;
+	const sf::Font& _font;
 };
 
 // Inventory panel
 class InventoryDisplay : public UIElement
 {
 public:
-	InventoryDisplay(RenderWindow& window, int x, int y, int w, int h, const Font& font) : UIElement(window, x, y, w, h), _font(font) {}
+	InventoryDisplay(sf::RenderWindow& window, int x, int y, int w, int h, const sf::Font& font) : UIElement(window, x, y, w, h), _font(font) {}
 	void draw(void) override;
 
 private:
-	const Font& _font;
+	const sf::Font& _font;
 };
 
 #endif

@@ -1,13 +1,24 @@
 #include "render_system.h"
 
-using namespace std;
+#include <algorithm>
+#include <vector>
 
-void RenderSystem::init(EventManager& evm)
+#include "environment.h"
+#include "level.h"
+#include "colour.h"
+#include "location.h"
+#include "graphic.h"
+#include "light.h"
+
+using namespace std;
+using namespace sov;
+
+void RenderSystem::init(void)
 {
-	evm.subscribe<EntityCreated>(*this);
+	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
 }
 
-void RenderSystem::update(EventManager& evm)
+void RenderSystem::update(void)
 {
 	clean();	
 	
@@ -19,7 +30,7 @@ void RenderSystem::update(EventManager& evm)
 
 void RenderSystem::map_drawable_entities(void)
 {
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (entity_iterator it = _entities.begin(); it != _entities.end(); ++it)
 	{
@@ -28,6 +39,9 @@ void RenderSystem::map_drawable_entities(void)
 		shared_ptr<Graphic>  gfx = e->get_component<Graphic>();
 		shared_ptr<Location> loc = e->get_component<Location>();
 	
+		if (loc->z != _level._depth)
+			continue;
+
 		pair<int, int> p = _camera.world_to_screen(loc->x, loc->y);
 		if (!_camera.is_in_bounds(p.first, p.second))
 			continue;
@@ -66,7 +80,7 @@ void RenderSystem::map_drawable_entities(void)
 
 void RenderSystem::map_base_terrain(void)
 {
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (int x = 0; x < _camera.get_width(); x++)
 	for (int y = 0; y < _camera.get_height(); y++)
@@ -108,7 +122,7 @@ void RenderSystem::map_base_terrain(void)
 
 void RenderSystem::clean(void)
 {
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	if (_composed_map.size() == 0)
 		_composed_map = Map<sov::Glyph>(_level.get_map_width(), _level.get_map_height());

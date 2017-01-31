@@ -1,8 +1,14 @@
 #include "level_manager.h"
 
-LevelManager::LevelManager(EventManager& evm) : _event_manager(evm)
+#include <random>
+#include <sstream>
+#include <fstream>
+
+#include "environment.h"
+
+LevelManager::LevelManager(void)
 {
-	evm.subscribe<LevelTransitionEvent>(*this);
+	Environment::get().get_event_manager()->subscribe<LevelTransitionEvent>(*this);
 }
 
 LevelManager::~LevelManager(void)
@@ -35,7 +41,7 @@ void LevelManager::_load(const string& name)
 	path = sstream.str();
 
 	file.open(path);
-	assert(file.is_open());
+	//assert(file.is_open());
 
 	Level* l = new Level();
 
@@ -44,7 +50,7 @@ void LevelManager::_load(const string& name)
 		// TODO: Figure out a decent file format
 		if (line == "MAP INFO")
 		{
-			int x, y, z;
+			int x = 0, y = 0, z = 0;
 
 			while (getline(file, line))
 			{

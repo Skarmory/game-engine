@@ -7,44 +7,38 @@
 #include <typeindex>
 
 #include "entity.h"
-#include "event.h"
 
-using namespace std;
-
-typedef vector<weak_ptr<Entity>>::iterator entity_iterator;
-
-class SystemManager;
+typedef std::vector<std::weak_ptr<Entity>>::iterator entity_iterator;
 
 class System 
 {
 public:
-	explicit System(const SystemManager& system_manager) : _system_manager(system_manager) {};
+	explicit System(void) {};
 	virtual ~System(void) = default;
 
-	virtual void init(sov::EventManager& evm) = 0;
-	virtual void update(sov::EventManager& evm) = 0;
+	virtual void init(void) = 0;
+	virtual void update(void) = 0;
 	
-	virtual void add_entity(const shared_ptr<Entity>& entity)
+	virtual void add_entity(const std::shared_ptr<Entity>& entity)
 	{
 		_entities.push_back(entity);
 	}
 
 protected:
-	vector<weak_ptr<Entity>> _entities;
-	const SystemManager& _system_manager;
+	std::vector<std::weak_ptr<Entity>> _entities;
 };
 
 class SystemManager
 {
 public:
-	explicit SystemManager(sov::EventManager& evm) : _event_manager(evm) {}
+	explicit SystemManager(void) {}
 
-	typedef map<type_index, shared_ptr<System>>::iterator system_iterator;
+	typedef std::map<std::type_index, std::shared_ptr<System>>::iterator system_iterator;
 
 	void init(void)
 	{
 		for(auto& system : _systems)
-			system.second->init(_event_manager);
+			system.second->init();
 	}
 
 	template<class S>
@@ -60,15 +54,21 @@ public:
 	}
 
 	template<class S>
+	void create(void)
+	{
+		_systems[typeid(S)] = make_shared<S>();
+	}
+
+	template<class S>
 	void update(void)
 	{
-		_systems[typeid(S)]->update(_event_manager);
+		_systems[typeid(S)]->update();
 	}
 
 	void update(void)
 	{
 		for(auto& system : _systems)
-			system.second->update(_event_manager);
+			system.second->update();
 	}
 
 	template<class S>
@@ -78,8 +78,7 @@ public:
 	}
 
 private:
-	sov::EventManager& _event_manager;
-	map<type_index, shared_ptr<System>> _systems;
+	std::map<std::type_index, std::shared_ptr<System>> _systems;
 };
 
 #endif

@@ -1,5 +1,23 @@
 #include "ui.h"
 
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
+
+#include "environment.h"
+
+#include "graphic.h"
+#include "render_system.h"
+#include "level.h"
+#include "sprite.h"
+#include "location.h"
+#include "map.h"
+#include "util.h"
+
+
+using namespace sf;
+using namespace std;
+
 int UIElement::get_width(void) const
 {
 	return _w;
@@ -15,23 +33,22 @@ bool UIElement::is_in_bounds(int x, int y) const
 	return (0 <= x && x <= _w) && (0 <= y && y <= _h);
 }
 
-Camera::Camera(RenderWindow& window, int x, int y, int w, int h, const LevelManager& level_manager, const EntityManager& entity_manager, const SystemManager& system_manager, const Texture& texture) :
-	UIElement(window, x, y, w, h), _world_x(0), _world_y(0), _level_manager(level_manager), _entity_manager(entity_manager), _system_manager(system_manager), _texture(texture)
+Camera::Camera(sf::RenderWindow& window, int x, int y, int w, int h, const sf::Texture& texture) :
+	UIElement(window, x, y, w, h), _world_x(0), _world_y(0), _texture(texture)
 {
 	_rtexture.create(_w * 8, _h * 8);
 }
 
 void Camera::update(void)
 {
-	pair<int, int> world_coords = get_screen_origin();
+	std::pair<int, int> world_coords = get_screen_origin();
 	_world_x = world_coords.first;
 	_world_y = world_coords.second;
 }
 
 void Camera::draw(void)
 {
-	const Map<sov::Glyph>& _map = _system_manager.get<RenderSystem>().get_composed_map();
-
+	const Map<sov::Glyph>& _map = Environment::get().get_system_manager()->get<RenderSystem>().get_composed_map();
 	_rtexture.clear();
 
 	Sprite s;
@@ -77,8 +94,8 @@ pair<int, int> Camera::screen_to_world(int x, int y) const
 
 pair<int, int> Camera::get_screen_origin(void) const
 {
-	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
-	const Level& level = _level_manager.get_current();
+	const shared_ptr<const Location> loc = Environment::get().get_entity_manager()->get_player().get_component<Location>();
+	const Level& level = Environment::get().get_level_manager()->get_current();
 
 	int x0 = 0, y0 = 0;
 

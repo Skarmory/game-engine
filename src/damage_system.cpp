@@ -1,13 +1,19 @@
 #include "damage_system.h"
 
-using namespace std;
+#include "environment.h"
+#include "collided.h"
+#include "health.h"
+#include "damage.h"
 
-void DamageSystem::init(EventManager& evm)
+using namespace std;
+using namespace sov;
+
+void DamageSystem::init(void)
 {
-	evm.subscribe<CollisionEvent>(*this);
+	Environment::get().get_event_manager()->subscribe<CollisionEvent>(*this);
 }
 
-void DamageSystem::update(EventManager& evm)
+void DamageSystem::update(void)
 {
 	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{

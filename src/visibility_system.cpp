@@ -1,12 +1,15 @@
 #include "visibility_system.h"
 
-void VisibilitySystem::init(sov::EventManager& em)
-{
-}
+#include "environment.h"
+#include "sight.h"
+#include "location.h"
+#include "level.h"
 
-void VisibilitySystem::update(sov::EventManager& em)
+void VisibilitySystem::init(void) {}
+
+void VisibilitySystem::update(void)
 {
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (int i = 0; i < _level.get_map_width(); i++)
 	for (int j = 0; j < _level.get_map_height(); j++)
@@ -14,8 +17,8 @@ void VisibilitySystem::update(sov::EventManager& em)
 		_level._base_map.get(i, j)->_visible = false;
 	}
 
-	const shared_ptr<const Sight> sight  = _entity_manager.get_player().get_component<Sight>();
-	const shared_ptr<const Location> loc = _entity_manager.get_player().get_component<Location>();
+	const shared_ptr<const Sight> sight  = Environment::get().get_entity_manager()->get_player().get_component<Sight>();
+	const shared_ptr<const Location> loc = Environment::get().get_entity_manager()->get_player().get_component<Location>();
 
 	if (sight->radius > 0)
 	{
@@ -32,7 +35,7 @@ void VisibilitySystem::calculate_fov(int x, int y, int radius, int row, double s
 		return;
 
 	double next_start_slope = start_slope;
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (int i = row; i <= radius; i++)
 	{

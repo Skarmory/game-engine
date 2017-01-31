@@ -1,11 +1,16 @@
 #include "timed_health_system.h"
 
-void TimedHealthSystem::init(EventManager& evm)
+#include "environment.h"
+#include "health.h"
+
+using namespace sov;
+
+void TimedHealthSystem::init(void)
 {
-	evm.subscribe<EntityCreated>(*this);
+	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
 }
 
-void TimedHealthSystem::update(EventManager& evm)
+void TimedHealthSystem::update(void)
 {
 	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{

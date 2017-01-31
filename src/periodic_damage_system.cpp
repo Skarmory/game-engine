@@ -1,11 +1,17 @@
 #include "periodic_damage_system.h"
 
-void PeriodicDamageUpdateSystem::init(EventManager& evm)
+#include "environment.h"
+#include "damage.h"
+#include "collision.h"
+
+using namespace sov;
+
+void PeriodicDamageUpdateSystem::init(void)
 {
-	evm.subscribe<EntityCreated>(*this);
+	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
 }
 
-void PeriodicDamageUpdateSystem::update(EventManager& evm)
+void PeriodicDamageUpdateSystem::update(void)
 {
 	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{

@@ -7,16 +7,10 @@
 
 #include <rapidxml-1.13\rapidxml.hpp>
 #include <rapidxml-1.13\rapidxml_utils.hpp>
-#include <rapidxml-1.13\rapidxml_iterators.hpp>
 
 #include "entity.h"
-#include "components.h"
-#include "entity_factory.h"
 #include "events.h"
 #include "loaders.h"
-
-using namespace std;
-using namespace sov;
 
 // Temporary loading code
 
@@ -51,6 +45,7 @@ private:
 class EntityCache
 {
 public:
+	~EntityCache(void);
 	unique_ptr<Entity> get_entity(const string& entity_id);
 
 private:
@@ -65,7 +60,7 @@ class EntityManager
 {
 public:
 	
-	explicit EntityManager(const EventManager& evm) : _event_manager(evm), _player_id(-1) {};
+	explicit EntityManager(void) : _player_id(-1) {};
 
 	shared_ptr<Entity> create_entity(const string& entity_type);
 	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y, int z);
@@ -78,9 +73,7 @@ public:
 
 private:
 	map<int, shared_ptr<Entity>> _entities;
-	const EventManager& _event_manager;
 	EntityCache _cache;
-	EntityFactory _factory;
 	int _player_id;
 
 	static int NEXT_ID;

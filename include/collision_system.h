@@ -2,18 +2,15 @@
 #define collision_system_h
 
 #include "system.h"
-#include "components.h"
 #include "events.h"
 
-using namespace sov;
-
-class CollisionSystem : public System, public Observer<EntityCreated>
+class CollisionSystem : public System, public sov::Observer<EntityCreated>
 {
 public:
-	explicit CollisionSystem(const SystemManager& sm) : System(sm)  {};
+	explicit CollisionSystem(void) {};
 
-	virtual void init(EventManager& evm)   override;
-	virtual void update(EventManager& evm) override;
+	virtual void init(void)   override;
+	virtual void update(void) override;
 	virtual void receive(const EntityCreated& e) override;
 
 private:

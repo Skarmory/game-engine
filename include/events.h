@@ -1,9 +1,9 @@
 #ifndef events_h
 #define events_h
 
-#include <algorithm>
+#include "entity.h"
 #include "event.h"
-#include "components.h"
+#include "level_transition.h"
 
 using namespace std;
 

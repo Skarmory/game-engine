@@ -3,17 +3,14 @@
 
 #include "system.h"
 #include "events.h"
-#include "components.h"
 
-using namespace sov;
-
-class TimedHealthSystem : public System, public Observer<EntityCreated>
+class TimedHealthSystem : public System, public sov::Observer<EntityCreated>
 {
 public:
-	explicit TimedHealthSystem(const SystemManager& sm) : System(sm) {}
+	explicit TimedHealthSystem(void) {}
 
-	virtual void init(EventManager& evm) override;
-	virtual void update(EventManager& evm) override;
+	virtual void init(void) override;
+	virtual void update(void) override;
 	virtual void receive(const EntityCreated& event) override;
 };
 

@@ -2,8 +2,7 @@
 #define colour_h
 
 #include <SFML/Graphics/Color.hpp>
-#include <cmath>
-#include <algorithm>
+
 #include <map>
 #include <string>
 

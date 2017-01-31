@@ -3,7 +3,7 @@
 
 #include "cell.h"
 #include "map.h"
-#include "light.h"
+
 
 class Level
 {

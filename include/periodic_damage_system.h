@@ -3,17 +3,14 @@
 
 #include "system.h"
 #include "events.h"
-#include "components.h"
 
-using namespace sov;
-
-class PeriodicDamageUpdateSystem : public System, public Observer<EntityCreated>
+class PeriodicDamageUpdateSystem : public System, public sov::Observer<EntityCreated>
 {
 public:
-	explicit PeriodicDamageUpdateSystem(const SystemManager& sm) : System(sm) {}
+	explicit PeriodicDamageUpdateSystem(void) {}
 
-	virtual void init(EventManager& evm) override;
-	virtual void update(EventManager& evm) override;
+	virtual void init(void) override;
+	virtual void update(void) override;
 	virtual void receive(const EntityCreated& entity) override;
 };
 

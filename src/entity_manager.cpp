@@ -1,5 +1,8 @@
 #include "entity_manager.h"
 
+#include "environment.h"
+#include "location.h"
+
 using namespace std;
 
 EntityLoader::EntityLoader(void)
@@ -41,6 +44,11 @@ unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 	return ptr;
 }
 
+EntityCache::~EntityCache(void)
+{
+
+}
+
 bool EntityCache::_has_entity(const string& entity_id)
 {
 	if(_entities.find(entity_id) != _entities.end())
@@ -67,7 +75,6 @@ int EntityManager::NEXT_ID = 0;
 
 shared_ptr<Entity> EntityManager::create_entity(const string& entity_type)
 {
-	//shared_ptr<Entity> e(move(_factory.create(NEXT_ID, entity_type)));
 	shared_ptr<Entity> e(_cache.get_entity(entity_type));
 	e->_id = NEXT_ID;
 	_entities[NEXT_ID] = e;
@@ -77,7 +84,7 @@ shared_ptr<Entity> EntityManager::create_entity(const string& entity_type)
 
 	NEXT_ID++;
 
-	_event_manager.broadcast<EntityCreated>(e);
+	Environment::get().get_event_manager()->broadcast<EntityCreated>(e);
 
 	return e;
 }

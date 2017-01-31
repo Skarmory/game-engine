@@ -12,4 +12,4 @@ incarnate.VC*
 *SFML*
 *.psess
 *.vsp
-*luabind*
+*lua/*

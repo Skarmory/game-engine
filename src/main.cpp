@@ -2,22 +2,37 @@
 #define main_h
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include <vector>
 #include <time.h>
 #include <chrono>
 #include <iostream>
 
-#include "entity.h"
-#include "input.h"
-#include "command.h"
-#include "entity_manager.h"
-
+#include "lua_inc.h"
 #include "game_time.h"
-#include "systems.h"
-#include "components.h"
+
+// Managers
 #include "event.h"
+#include "entity_manager.h"
+#include "system.h"
+#include "level_manager.h"
+#include "input.h"
+#include "environment.h"
+
+// Systems
+#include "render_system.h"
+#include "light_system.h"
+#include "visibility_system.h"
+#include "periodic_damage_system.h"
+#include "collision_system.h"
+#include "timed_health_system.h"
+#include "damage_system.h"
+
 #include "ui.h"
+
+#include "lua_vm.h"
+
 
 using namespace std;
 
@@ -44,24 +59,34 @@ int main(int argc, char** argv)
 	Timer draw_timer(0.03);
 	int turn = 1;
 
-	EventManager evm;
-	EntityManager em(evm);
-	SystemManager sm(evm);
-	LevelManager lm(evm);
+	Environment env;
+	sov::EventManager evm;
+	env.set_event_manager(&evm);
+	EntityManager em;
+	env.set_entity_manager(&em);
+	SystemManager sm;
+	env.set_system_manager(&sm);
+	LevelManager lm;
+	env.set_level_manager(&lm);
+	LuaVM lua;
 	
 	lm.load("testing_map");
 
-	Camera camera(window, 0, 0, 80, 40, lm, em, sm, tex);
-	StatusDisplay status(window, 0, 40, 80, 10, em, turn_timer, turn, font);
+	lua.load_script("test.lua");
+	lua.call("helloWorld");
+	lua.call("goodbyeWorld");
+
+	Camera camera(window, 0, 0, 80, 40, tex);
+	StatusDisplay status(window, 0, 40, 80, 10, turn_timer, turn, font);
 	InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
-	sm.create<VisibilitySystem>(sm, em, lm);
-	sm.create<RenderSystem>(sm, lm, camera);
-	sm.create<LightSystem>(sm, lm);
-	sm.create<PeriodicDamageUpdateSystem>(sm);
-	sm.create<CollisionSystem>(sm);
-	sm.create<DamageSystem>(sm);
-	sm.create<TimedHealthSystem>(sm);
+	sm.create<VisibilitySystem>();
+	sm.create<RenderSystem>(camera);
+	sm.create<LightSystem>();
+	sm.create<PeriodicDamageUpdateSystem>();
+	sm.create<CollisionSystem>();
+	sm.create<DamageSystem>();
+	sm.create<TimedHealthSystem>();
 	
 	sm.init();
 
@@ -84,7 +109,8 @@ int main(int argc, char** argv)
 
 	// Prototype, will be updated to some form of game state at some point
 	bool running = true;
-	InputManager input(window, lm, running, em, evm);
+	InputManager input(window, running);
+	env.set_input_manager(&input);
 
 	while(running && window.isOpen())
 	{

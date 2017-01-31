@@ -1,13 +1,11 @@
 #ifndef entity_h
 #define entity_h
 
-#include <stdlib.h>
 #include <memory>
 #include <map>
-#include <vector>
 #include <string>
-#include <assert.h>
 #include <typeindex>
+
 #include "component.h"
 
 using namespace std;

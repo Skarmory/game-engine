@@ -1,8 +1,6 @@
 #ifndef map_h
 #define map_h
 
-#include <memory>
-#include <string>
 #include <vector>
 #include "cell.h"
 
@@ -29,7 +27,7 @@ protected:
 	int _width;
 	int _height;
 
-	vector<T> _items;
+	std::vector<T> _items;
 };
 
 class TerrainMap : public Map<Cell*>

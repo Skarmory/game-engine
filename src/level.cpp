@@ -1,5 +1,7 @@
 #include "level.h"
 
+#include "light.h"
+
 Level::Level(void) : _depth(-1)
 {}
 

@@ -11,11 +11,20 @@ Environment::Environment(void)
 
 Environment::~Environment(void)
 {
-	delete _entity_manager;
-	delete _system_manager;
-	delete _level_manager;
-	delete _input_manager;
-	delete _event_manager;
+	/*if(_entity_manager != nullptr)
+		delete _entity_manager;
+
+	if (_system_manager != nullptr)
+		delete _system_manager;
+
+	if (_level_manager != nullptr)
+		delete _level_manager;
+
+	if (_input_manager != nullptr)
+		delete _input_manager;
+
+	if (_event_manager != nullptr)
+		delete _event_manager;*/
 
 	env = nullptr;
 }
@@ -30,7 +39,7 @@ void Environment::set_system_manager(SystemManager* system_manager)
 	_system_manager = system_manager;
 }
 
-void Environment::set_event_manager(EventManager* event_manager)
+void Environment::set_event_manager(sov::EventManager* event_manager)
 {
 	_event_manager = event_manager;
 }
@@ -55,7 +64,7 @@ SystemManager* Environment::get_system_manager(void) const
 	return _system_manager;
 }
 
-EventManager* Environment::get_event_manager(void) const
+sov::EventManager* Environment::get_event_manager(void) const
 {
 	return _event_manager;
 }

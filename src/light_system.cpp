@@ -1,13 +1,21 @@
 #include "light_system.h"
 
-void LightSystem::init(EventManager& em)
+#include <cstdlib>
+#include <algorithm>
+
+#include "environment.h"
+#include "light.h"
+#include "location.h"
+#include "level.h"
+
+void LightSystem::init(void)
 {
-	em.subscribe<EntityCreated>(*this);
+	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
 }
 
-void LightSystem::update(EventManager& em)
+void LightSystem::update(void)
 {
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (int i = 0; i < _level.get_map_width(); i++)
 	for (int j = 0; j < _level.get_map_height(); j++)
@@ -26,6 +34,13 @@ void LightSystem::update(EventManager& em)
 
 		shared_ptr<LightSource> light = e->get_component<LightSource>();
 		shared_ptr<Location>    loc = e->get_component<Location>();
+
+		if (loc->z != _level._depth)
+		{
+			++it;
+			continue;
+		}
+
 		int x0 = loc->x;
 		int y0 = loc->y;
 		int r = light->radius;
@@ -48,7 +63,7 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 		return;
 
 	double next_start_slope = start_slope;
-	Level& _level = _level_manager.get_current();
+	Level& _level = Environment::get().get_level_manager()->get_current();
 
 	for (int i = row; i <= radius; i++) 
 	{

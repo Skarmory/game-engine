@@ -8,11 +8,8 @@
 #include <algorithm>
 #include <functional>
 
-using namespace std;
-
 namespace sov
 {
-
 	class Event
 	{
 	public:
@@ -43,7 +40,7 @@ namespace sov
 		template<typename E, typename Observer>
 		void subscribe(Observer& o)
 		{
-			_observers[typeid(E)].push_back(new Callback<E>(bind(&Observer::receive, &o, placeholders::_1)));
+			_observers[typeid(E)].push_back(new Callback<E>(std::bind(&Observer::receive, &o, std::placeholders::_1)));
 		}
 
 		template<typename E>
@@ -63,7 +60,7 @@ namespace sov
 		}
 
 	private:
-		map<type_index, vector<BaseCallback*>> _observers;
+		std::map<std::type_index, std::vector<BaseCallback*>> _observers;
 
 		struct BaseCallback {
 			virtual ~BaseCallback(void) = default;
@@ -72,9 +69,9 @@ namespace sov
 		template<typename E>
 		struct Callback : public BaseCallback
 		{
-			explicit Callback(const function<void(const E&)>& callback) : callback(callback) {}
+			explicit Callback(const std::function<void(const E&)>& callback) : callback(callback) {}
 			void operator()(const E& event) { callback(event); }
-			function<void(const E&)> callback;
+			std::function<void(const E&)> callback;
 		};
 	};
 

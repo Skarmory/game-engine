@@ -1,8 +1,6 @@
 #ifndef component_h
 #define component_h
 
-using namespace std;
-
 class BaseComponent 
 {
 public:

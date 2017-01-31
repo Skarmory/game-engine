@@ -1,28 +1,19 @@
 #ifndef light_system_h
 #define light_system_h
 
-#include <cstdlib>
-#include <algorithm>
-
 #include "system.h"
-#include "components.h"
 #include "events.h"
-#include "level_manager.h"
 
-using namespace sov;
-
-class LightSystem : public System, public Observer<EntityCreated>
+class LightSystem : public System, public sov::Observer<EntityCreated>
 {
 public:
-	LightSystem(const SystemManager& sm, LevelManager& level_manager) : System(sm), _level_manager(level_manager) {}
+	LightSystem(void) {}
 
-	virtual void init(EventManager& em) override;
-	virtual void update(EventManager& em) override;
+	virtual void init(void) override;
+	virtual void update(void) override;
 	virtual void receive(const EntityCreated& event) override;
 
 private:
-	LevelManager& _level_manager;
-
 	const int multipliers[4][8] = {
 		{ 1, 0, 0, -1, -1, 0, 0, 1 },
 		{ 0, 1, -1, 0, 0, -1, 1, 0 },

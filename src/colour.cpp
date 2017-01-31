@@ -1,5 +1,9 @@
 #include "colour.h"
 
+#include <cmath>
+#include <algorithm>
+
+
 // RGB <-> HSV conversions
 
 float get_hue(const Color& colour)

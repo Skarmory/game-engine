@@ -3,21 +3,18 @@
 
 #include <chrono>
 
-using namespace std;
-using namespace std::chrono;
-
 class GameTime 
 {
 public:
-	GameTime(void) : _current(high_resolution_clock::now()), _previous(high_resolution_clock::now()) {}
+	GameTime(void) : _current(std::chrono::high_resolution_clock::now()), _previous(std::chrono::high_resolution_clock::now()) {}
 
 	void tick(void);
 	double delta(void) const;
 
 private:
-	time_point<high_resolution_clock> _current;
-	time_point<high_resolution_clock> _previous;
-	duration<double> _delta;
+	std::chrono::time_point<std::chrono::high_resolution_clock> _current;
+	std::chrono::time_point<std::chrono::high_resolution_clock> _previous;
+	std::chrono::duration<double> _delta;
 };
 
 class Timer
@@ -31,8 +28,8 @@ public:
 	bool finished(void) const;
 
 private:
-	duration<double> _elapsed;
-	duration<double> _count_to;
+	std::chrono::duration<double> _elapsed;
+	std::chrono::duration<double> _count_to;
 	bool _finished;
 };
 

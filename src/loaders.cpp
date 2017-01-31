@@ -1,5 +1,18 @@
 #include "loaders.h"
 
+#include <sstream>
+#include <string>
+#include <memory>
+
+#include "location.h"
+#include "collision.h"
+#include "damage.h"
+#include "graphic.h"
+#include "health.h"
+#include "sight.h"
+#include "light.h"
+#include "level_transition.h"
+
 void LocationLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
 {
 	prototype.add_component(make_shared<Location>());

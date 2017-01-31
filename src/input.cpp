@@ -2,13 +2,7 @@
 
 typedef std::unique_ptr<Command> c_uptr;
 
-InputManager::InputManager(
-		sf::Window& handle,
-		LevelManager& level_manager, 
-		bool& is_running, 
-		EntityManager& entity_manager,
-		EventManager& event_manager) 
-	: _handle(handle), _level_manager(level_manager), _is_running(is_running), _entity_manager(entity_manager), _event_manager(event_manager)
+InputManager::InputManager(sf::Window& handle, bool& is_running) : _handle(handle), _is_running(is_running)
 {}
 
 c_uptr InputManager::handle_input(void)
@@ -22,42 +16,42 @@ c_uptr InputManager::handle_input(void)
 		switch(event.text.unicode)
 		{
 			case 'h':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, -1, 0));
+				return c_uptr(new MoveCommand(-1, 0));
 			case 'j':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager,  0, 1));
+				return c_uptr(new MoveCommand(0, 1));
 			case 'k':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, 0, -1));
+				return c_uptr(new MoveCommand(0, -1));
 			case 'l':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, 1, 0));
+				return c_uptr(new MoveCommand(1, 0));
 			case 'y':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, -1, -1));
+				return c_uptr(new MoveCommand(-1, -1));
 			case 'u':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, 1, -1));
+				return c_uptr(new MoveCommand(1, -1));
 			case 'b':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, -1, 1));
+				return c_uptr(new MoveCommand(-1, 1));
 			case 'n':
-				return c_uptr(new MoveCommand(_entity_manager, _level_manager, 1, 1));
+				return c_uptr(new MoveCommand(1, 1));
 			case 'H':
-				return c_uptr(new AttackCommand(_entity_manager, -1, 0));
+				return c_uptr(new AttackCommand(-1, 0));
 			case 'J':
-				return c_uptr(new AttackCommand(_entity_manager, 0, 1));
+				return c_uptr(new AttackCommand(0, 1));
 			case 'K':
-				return c_uptr(new AttackCommand(_entity_manager, 0, -1));
+				return c_uptr(new AttackCommand(0, -1));
 			case 'L':
-				return c_uptr(new AttackCommand(_entity_manager, 1, 0));
+				return c_uptr(new AttackCommand(1, 0));
 			case 'Y':
-				return c_uptr(new AttackCommand(_entity_manager, -1, -1));
+				return c_uptr(new AttackCommand(-1, -1));
 			case 'U':
-				return c_uptr(new AttackCommand(_entity_manager, 1, -1));
+				return c_uptr(new AttackCommand(1, -1));
 			case 'B':
-				return c_uptr(new AttackCommand(_entity_manager, -1, 1));
+				return c_uptr(new AttackCommand(-1, 1));
 			case 'N':
-				return c_uptr(new AttackCommand(_entity_manager, 1, 1));
+				return c_uptr(new AttackCommand(1, 1));
 			case 'q':
 				return c_uptr(new QuitCommand(_is_running));
 			case '>':
 			case '<':
-				return c_uptr(new LevelTransitionCommand(_entity_manager, _event_manager));
+				return c_uptr(new LevelTransitionCommand());
 			default:
 				return nullptr;
 		}
