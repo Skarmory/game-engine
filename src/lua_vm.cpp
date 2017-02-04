@@ -38,6 +38,7 @@ LuaVM::~LuaVM(void)
 	lua_close(_vm);
 }
 
+#ifndef _WIN32
 std::string LuaVM::get_module_filename_linux(void) {
 	char arg1[20];
         char exepath[256 + 1] = {0};
@@ -46,6 +47,7 @@ std::string LuaVM::get_module_filename_linux(void) {
         readlink( arg1, exepath, 1024 );
         return string( exepath );
 }
+#endif
 
 int LuaVM::call(string name)
 {
