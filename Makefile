@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++1y -pthread -Iinclude -ISFML/include
+CFLAGS=-Wall -std=c++1y -pthread -Iinclude -ISFML/include -g -Og
 override LIBS=-LSFML/lib -lsfml-graphics -lsfml-system -lsfml-window -llua -Wl,-rpath=SFML/lib
 GAME=incarnate
 

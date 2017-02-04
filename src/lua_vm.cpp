@@ -28,7 +28,8 @@ LuaVM::LuaVM(void)
 	GetModuleFileName(NULL, buf, 256);
 	_scripts_path = string(buf).substr(0, string(buf).find_last_of("\\/")) + "\\resources\\levels\\";
 	#else
-	_scripts_path = get_module_filename_linux();
+	string tmp = get_module_filename_linux();
+	_scripts_path = tmp.substr(0, tmp.find_last_of("/")) + "/resources/levels/";
 	#endif
 }
 
