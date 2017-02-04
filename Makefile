@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-Wall -std=c++11 -pthread -Iinclude -ISFML/include
-override LIBS=-LSFML/lib -libsfml-graphics -libsfml-system -libsfml-window -Wl,-rpath=SFML/lib
+CFLAGS=-Wall -std=c++1y -pthread -Iinclude -ISFML/include
+override LIBS=-LSFML/lib -lsfml-graphics -lsfml-system -lsfml-window -llua -Wl,-rpath=SFML/lib
 GAME=incarnate
 
 SRCS=$(wildcard src/*.cpp)

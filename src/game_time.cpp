@@ -37,7 +37,7 @@ double Timer::time_elapsed(void) const
 void Timer::reset(void)
 {
 	_finished = false;
-	_elapsed = move(duration<double>(0));
+	_elapsed = duration<double>(0);
 }
 
 bool Timer::finished(void) const

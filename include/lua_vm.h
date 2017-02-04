@@ -16,6 +16,8 @@ public:
 private:
 	lua_State* _vm;
 	std::string _scripts_path;
+
+	std::string get_module_filename_linux(void);
 };
 
 #endif

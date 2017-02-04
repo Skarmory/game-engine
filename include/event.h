@@ -7,6 +7,7 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 namespace sov
 {
@@ -55,7 +56,7 @@ namespace sov
 		template<typename E, typename ... Args>
 		void broadcast(Args && ... args) const
 		{
-			E event(forward<Args>(args) ...);
+			E event(std::forward<Args>(args) ...);
 			broadcast(event);
 		}
 

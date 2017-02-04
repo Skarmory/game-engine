@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "environment.h"
+#include "util.h"
 
 LevelManager::LevelManager(void)
 {

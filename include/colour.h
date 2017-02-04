@@ -6,8 +6,6 @@
 #include <map>
 #include <string>
 
-#include "util.h"
-
 using namespace sf;
 
 struct HSV {

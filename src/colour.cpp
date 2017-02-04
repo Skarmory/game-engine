@@ -1,5 +1,7 @@
 #include "colour.h"
 
+#include "util.h"
+
 #include <cmath>
 #include <algorithm>
 

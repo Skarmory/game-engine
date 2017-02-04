@@ -1,7 +1,8 @@
 #ifndef loaders_h
 #define loaders_h
 
-#include <rapidxml-1.13\rapidxml.hpp>
+#include <cstring>
+#include <rapidxml-1.13/rapidxml.hpp>
 
 #include "entity.h"
 

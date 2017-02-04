@@ -5,8 +5,8 @@
 #include <memory>
 #include <string>
 
-#include <rapidxml-1.13\rapidxml.hpp>
-#include <rapidxml-1.13\rapidxml_utils.hpp>
+#include <rapidxml-1.13/rapidxml.hpp>
+#include <rapidxml-1.13/rapidxml_utils.hpp>
 
 #include "entity.h"
 #include "events.h"
@@ -23,7 +23,7 @@ public:
 	unique_ptr<Entity> load(const string& entity_id);
 
 private:
-	const char _file_path[28] = "resources/data/entities.xml";
+	const char* _file_path; // = "resources/data/entities.xml";
 	rapidxml::xml_document<> _xml_data;
 	unique_ptr<rapidxml::file<>> _file;
 

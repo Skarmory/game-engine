@@ -16,7 +16,7 @@ public:
 	Entity(const Entity& entity)
 	{
 		_id = -1;
-
+		obsolete = false;
 		for (const auto& elem : entity._components)
 		{
 			BaseComponent* b = elem.second->clone();

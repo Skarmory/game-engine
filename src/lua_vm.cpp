@@ -1,6 +1,11 @@
 #include "lua_vm.h"
 
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <sys/types.h>
+#include <unistd.h>
+#endif
 
 #include "lua_funcs.h"
 
@@ -19,13 +24,26 @@ LuaVM::LuaVM(void)
 
 	// Construct path to scripts
 	char buf[256];
+	#ifdef _WIN32
 	GetModuleFileName(NULL, buf, 256);
 	_scripts_path = string(buf).substr(0, string(buf).find_last_of("\\/")) + "\\resources\\levels\\";
+	#else
+	_scripts_path = get_module_filename_linux();
+	#endif
 }
 
 LuaVM::~LuaVM(void)
 {
 	lua_close(_vm);
+}
+
+std::string LuaVM::get_module_filename_linux(void) {
+	char arg1[20];
+        char exepath[256 + 1] = {0};
+
+        sprintf( arg1, "/proc/%d/exe", getpid() );
+        readlink( arg1, exepath, 1024 );
+        return string( exepath );
 }
 
 int LuaVM::call(string name)

@@ -7,6 +7,7 @@ using namespace std;
 
 EntityLoader::EntityLoader(void)
 {
+	_file_path = "resources/data/entities.xml";
 	_file = unique_ptr<rapidxml::file<>>(new rapidxml::file<>(_file_path));
 	_xml_data.parse<0>(_file->data());
 }
