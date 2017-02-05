@@ -38,6 +38,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	RenderWindow window(VideoMode(800, 400), "Sovereign Incarnate");
+	window.setKeyRepeatEnabled(false);
 
 	Image img;
 	if (!img.loadFromFile("terminal.png"))
