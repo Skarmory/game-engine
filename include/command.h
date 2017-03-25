@@ -11,11 +11,11 @@ public:
 class MoveCommand : public Command
 {
 public:
-	explicit MoveCommand(int x, int y);
+	explicit MoveCommand(float x, float y);
 	virtual void execute(void) override;
 
 private:
-	int _x, _y;
+	float _x, _y;
 };
 
 class QuitCommand : public Command

@@ -11,13 +11,13 @@
 
 using namespace std;
 
-MoveCommand::MoveCommand(int x, int y) : _x(x), _y(y) {}
+MoveCommand::MoveCommand(float x,float y) : _x(x), _y(y) {}
 
 void MoveCommand::execute(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 	Entity& player = Environment::get().get_entity_manager()->get_player();
-	int dx, dy;
+	float dx, dy;
 	shared_ptr<Location> lc = player.get_component<Location>();
 			
 	dx = lc->x + _x;

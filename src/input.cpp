@@ -16,21 +16,21 @@ c_uptr InputManager::handle_input(void)
 		switch(event.text.unicode)
 		{
 			case 'h':
-				return c_uptr(new MoveCommand(-1, 0));
+				return c_uptr(new MoveCommand(-0.5, 0));
 			case 'j':
-				return c_uptr(new MoveCommand(0, 1));
+				return c_uptr(new MoveCommand(0, 0.5));
 			case 'k':
-				return c_uptr(new MoveCommand(0, -1));
+				return c_uptr(new MoveCommand(0, -0.5));
 			case 'l':
-				return c_uptr(new MoveCommand(1, 0));
+				return c_uptr(new MoveCommand(0.5, 0));
 			case 'y':
-				return c_uptr(new MoveCommand(-1, -1));
+				return c_uptr(new MoveCommand(-0.5, -0.5));
 			case 'u':
-				return c_uptr(new MoveCommand(1, -1));
+				return c_uptr(new MoveCommand(0.5, -0.5));
 			case 'b':
-				return c_uptr(new MoveCommand(-1, 1));
+				return c_uptr(new MoveCommand(-0.5, 0.5));
 			case 'n':
-				return c_uptr(new MoveCommand(1, 1));
+				return c_uptr(new MoveCommand(0.5, 0.5));
 			case 'H':
 				return c_uptr(new AttackCommand(-1, 0));
 			case 'J':

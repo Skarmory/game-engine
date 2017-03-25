@@ -9,19 +9,19 @@ class Level
 {
 public:
 	explicit Level(void);
-	explicit Level(int depth);
+	explicit Level(float depth);
 
-	int get_map_width(void) const;
-	int get_map_height(void) const;
-	const Cell& get_cell(int x, int y) const;
+	float get_map_width(void) const;
+	float get_map_height(void) const;
+	const Cell& get_cell(float x, float y) const;
 
-	bool is_walkable  (int x, int y)  const;
-	bool is_explored  (int x, int y)  const;
-	bool is_in_bounds (int x, int y)  const;
-	bool blocks_los   (int x, int y)  const;
+	bool is_walkable  (float x, float y)  const;
+	bool is_explored  (float x, float y)  const;
+	bool is_in_bounds (float x, float y)  const;
+	bool blocks_los   (float x, float y)  const;
 
 private:
-	int _depth;
+	float _depth;
 
 	TerrainMap _base_map;
 

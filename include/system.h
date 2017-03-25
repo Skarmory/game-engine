@@ -24,6 +24,11 @@ public:
 		_entities.push_back(entity);
 	}
 
+	const std::vector<std::weak_ptr<Entity>> & get_entities() const
+  	{
+    	return _entities;
+  	}
+
 protected:
 	std::vector<std::weak_ptr<Entity>> _entities;
 };

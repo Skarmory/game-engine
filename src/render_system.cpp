@@ -10,6 +10,8 @@
 #include "graphic.h"
 #include "light.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace sov;
 
@@ -38,11 +40,16 @@ void RenderSystem::map_drawable_entities(void)
 
 		shared_ptr<Graphic>  gfx = e->get_component<Graphic>();
 		shared_ptr<Location> loc = e->get_component<Location>();
+
+		//int id = e->get_id();
+		//if (id == 0) {
+		//	std::cout << "x=" << loc->x << " y=" << loc->y << std::endl;  
+		//}
 	
 		if (loc->z != _level._depth)
 			continue;
 
-		pair<int, int> p = _camera.world_to_screen(loc->x, loc->y);
+		pair<float, float> p = _camera.world_to_screen(loc->x, loc->y);
 		if (!_camera.is_in_bounds(p.first, p.second))
 			continue;
 

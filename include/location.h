@@ -8,7 +8,7 @@ struct Location : public Component<Location>
 	explicit Location(void) : x(0), y(0), z(0) {}
 	explicit Location(int x, int y, int z) : x(x), y(y), z(z) {}
 
-	int x, y, z;
+	float x, y, z;
 };
 
 #endif

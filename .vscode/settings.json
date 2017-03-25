@@ -1,0 +1,25 @@
+{
+    "files.associations": {
+        "istream": "cpp",
+        "functional": "cpp",
+        "*h*h*htuple": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "*harray": "cpp",
+        "array": "cpp",
+        "*h*h*h*h*h*h*h*h*h*hexception": "cpp",
+        "typeinfo": "cpp",
+        "cstdlib": "cpp",
+        "new": "cpp",
+        "initializer_list": "cpp",
+        "*h*h*h*hcwchar": "cpp",
+        "cwchar": "cpp",
+        "cstdint": "cpp",
+        "cctype": "cpp",
+        "cstdio": "cpp",
+        "clocale": "cpp",
+        "cwctype": "cpp",
+        "cstdarg": "cpp",
+        "ctime": "cpp"
+    }
+}
