@@ -1,7 +1,9 @@
 #include "render_system.h"
 
+#include <stdexcept>
 #include <algorithm>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 #include "environment.h"
 #include "level.h"
@@ -9,6 +11,7 @@
 #include "location.h"
 #include "graphic.h"
 #include "light.h"
+#include "sprite.h"
 
 using namespace std;
 using namespace sov;
@@ -16,19 +19,29 @@ using namespace sov;
 void RenderSystem::init(void)
 {
 	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
+
+	Image img;
+	if (!img.loadFromFile("terminal.png"))
+		throw std::runtime_error("Terminal.png not found!");
+
+	img.createMaskFromColor(Color::Black);
+
+	if (!_spritemap.loadFromImage(img))
+		throw std::runtime_error("Could not load texture from terminal.png image!");
 }
 
 void RenderSystem::update(void)
 {
-	clean();	
+	_clean();	
 	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
-	map_base_terrain();
-	map_drawable_entities();
+	_map_base_terrain();
+	_map_drawable_entities();
+	_draw();
 }
 
-void RenderSystem::map_drawable_entities(void)
+void RenderSystem::_map_drawable_entities(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 
@@ -42,13 +55,13 @@ void RenderSystem::map_drawable_entities(void)
 		if (loc->z != _level._depth)
 			continue;
 
-		pair<int, int> p = _camera.world_to_screen(loc->x, loc->y);
-		if (!_camera.is_in_bounds(p.first, p.second))
+		pair<int, int> p = _viewport.world_to_screen(loc->x, loc->y);
+		if (!_viewport.is_in_bounds(p.first, p.second))
 			continue;
 
 		sov::Glyph& glyph = _composed_map.get(p.first, p.second);
 
-		Cell*& cell = _level._base_map.get(loc->x, loc->y);
+		Cell* cell = _level._base_map.get(loc->x, loc->y);
 
 		bool lit     = cell->_light_value > 0.0f;
 		bool visible = cell->_visible;
@@ -78,16 +91,16 @@ void RenderSystem::map_drawable_entities(void)
 	}
 }
 
-void RenderSystem::map_base_terrain(void)
+void RenderSystem::_map_base_terrain(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 
-	for (int x = 0; x < _camera.get_width(); x++)
-	for (int y = 0; y < _camera.get_height(); y++)
+	for (int x = 0; x < _viewport.get_width(); x++)
+	for (int y = 0; y < _viewport.get_height(); y++)
 	{
 		sov::Glyph& glyph = _composed_map.get(x, y);
 		
-		pair<int, int> p = _camera.screen_to_world(x, y);
+		pair<int, int> p = _viewport.screen_to_world(x, y);
 		if (!_level.is_in_bounds(p.first, p.second))
 			continue;
 
@@ -120,7 +133,7 @@ void RenderSystem::map_base_terrain(void)
 	}
 }
 
-void RenderSystem::clean(void)
+void RenderSystem::_clean(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 
@@ -141,6 +154,43 @@ void RenderSystem::clean(void)
 	}
 }
 
+void RenderSystem::_draw(void)
+{
+	sf::RenderTexture rtex;
+	rtex.create(_viewport.get_width() * SPRITE_WIDTH, _viewport.get_height() * SPRITE_HEIGHT);
+	
+	sf::Sprite s;
+	RectangleShape rect(Vector2f(8, 8));
+
+	s.setTexture(_spritemap);
+
+	for (int x = 0; x < _viewport.get_width(); x++)
+	for (int y = 0; y < _viewport.get_height(); y++)
+	{
+		const sov::Glyph& glyph = _composed_map.get(x, y);
+
+		int position = spritemap.at(glyph.glyph);
+		int i = (position % SPRITE_SHEET_WIDTH) * SPRITE_WIDTH;
+		int j = (position / SPRITE_SHEET_HEIGHT) * SPRITE_HEIGHT;
+
+
+		s.setTextureRect(IntRect(i, j, SPRITE_WIDTH, SPRITE_HEIGHT));
+
+		s.setPosition(x * SPRITE_WIDTH, y * SPRITE_HEIGHT);
+		rect.setPosition(x * SPRITE_WIDTH, y * SPRITE_HEIGHT);
+
+		rect.setFillColor(glyph.bg_colour);
+		s.setColor(glyph.fg_colour);
+
+		rtex.draw(rect);
+		rtex.draw(s);
+	}
+
+	rtex.display();
+
+	_viewport.draw(Sprite(rtex.getTexture()));
+}
+
 bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Entity>& w2)
 {
 	shared_ptr<Entity> s1 = w1.lock();
@@ -155,7 +205,7 @@ void RenderSystem::receive(const EntityCreated& event)
 		add_entity(event.entity);
 }
 
-const Map<sov::Glyph>& RenderSystem::get_composed_map(void) const
-{
-	return _composed_map;
-}
+//const Map<sov::Glyph>& RenderSystem::get_composed_map(void) const
+//{
+//	return _composed_map;
+//}

@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <sstream>
 
 #include <rapidxml-1.13/rapidxml.hpp>
 #include <rapidxml-1.13/rapidxml_utils.hpp>

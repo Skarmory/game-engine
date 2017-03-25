@@ -96,8 +96,8 @@ void LevelManager::_load(const string& name)
 				for (int x = 0; x < l->_base_map.width(); x++)
 				{
 					char ch = line[x];
-					bool walkable;
-					bool blocks_los;
+					bool walkable = false;
+					bool blocks_los = false;
 					Color fg, bg;
 
 					switch (ch)

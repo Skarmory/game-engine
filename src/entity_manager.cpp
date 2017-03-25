@@ -23,13 +23,24 @@ unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 	unique_ptr<Entity> ptr(new Entity(-1));
 
 	auto node = _xml_data.first_node();
+	bool found = false;
 
 	while (node)
 	{
 		if (node->first_attribute()->value() == entity_id)
+		{
+			found = true;
 			break;
+		}
 
 		node = node->next_sibling();
+	}
+
+	if (!found)
+	{
+		std::stringstream ss;
+		ss << "Could not find data for: " << entity_id;
+		throw std::runtime_error(ss.str().c_str());
 	}
 
 	auto child_node = node->first_node();

@@ -15,7 +15,7 @@ void CollisionSystem::init(void)
 
 void CollisionSystem::update(void)
 {
-	clean();
+	_clean();
 
 	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{
@@ -78,7 +78,7 @@ void CollisionSystem::update(void)
 	}
 }
 
-void CollisionSystem::clean(void)
+void CollisionSystem::_clean(void)
 {
 	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
 	{

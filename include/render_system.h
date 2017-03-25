@@ -10,23 +10,31 @@
 
 class RenderSystem : public System, public sov::Observer<EntityCreated> {
 public:
-	RenderSystem(const Camera& camera) : _camera(camera) {}
+	RenderSystem(Viewport& viewport) : _viewport(viewport) {}
 
 	virtual void init(void) override;
 	virtual void update(void) override;
 	virtual void receive(const EntityCreated& e) override;
 
-	const Map<sov::Glyph>& get_composed_map(void) const;
+	//const Map<sov::Glyph>& get_composed_map(void) const;
 
 private:
+
+	const int SPRITE_WIDTH = 8;
+	const int SPRITE_HEIGHT = 8;
+	const int SPRITE_SHEET_WIDTH = 16;
+	const int SPRITE_SHEET_HEIGHT = 16;
+
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
-	void clean(void);
+	void _clean(void);
 
-	void map_drawable_entities(void);
-	void map_base_terrain(void);
+	void _map_drawable_entities(void);
+	void _map_base_terrain(void);
+	void _draw(void);
 
-	const Camera& _camera;
+	Viewport& _viewport;
 	Map<sov::Glyph> _composed_map;
+	sf::Texture _spritemap; // Temp
 };
 
 #endif

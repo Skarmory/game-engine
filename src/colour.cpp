@@ -92,7 +92,7 @@ void set_hsv(Color& colour, float hue, float saturation, float value)
 
 	if (saturation == 0.0f)
 	{
-		colour.r = colour.g = colour.b = (int)(value * 255.0f + 0.5f);
+		colour.r = colour.g = colour.b = (sf::Uint8)(value * 255.0f + 0.5f);
 		return;
 	}
 
@@ -113,39 +113,39 @@ void set_hsv(Color& colour, float hue, float saturation, float value)
 	switch (i)
 	{
 	case 0:
-		colour.r = (int)(value * 255.0f + 0.5f);
-		colour.g = (int)(t * 255.0f + 0.5f);
-		colour.b = (int)(p * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(value * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(t * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(p * 255.0f + 0.5f);
 		break;
 
 	case 1:
-		colour.r = (int)(q * 255.0f + 0.5f);
-		colour.g = (int)(value * 255.0f + 0.5f);
-		colour.b = (int)(p * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(q * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(value * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(p * 255.0f + 0.5f);
 		break;
 
 	case 2:
-		colour.r = (int)(p * 255.0f + 0.5f);
-		colour.g = (int)(value * 255.0f + 0.5f);
-		colour.b = (int)(t * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(p * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(value * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(t * 255.0f + 0.5f);
 		break;
 
 	case 3:
-		colour.r = (int)(p * 255.0f + 0.5f);
-		colour.g = (int)(q * 255.0f + 0.5f);
-		colour.b = (int)(value * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(p * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(q * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(value * 255.0f + 0.5f);
 		break;
 
 	case 4:
-		colour.r = (int)(t * 255.0f + 0.5f);
-		colour.g = (int)(p * 255.0f + 0.5f);
-		colour.b = (int)(value * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(t * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(p * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(value * 255.0f + 0.5f);
 		break;
 
 	default:
-		colour.r = (int)(value * 255.0f + 0.5f);
-		colour.g = (int)(p * 255.0f + 0.5f);
-		colour.b = (int)(q * 255.0f + 0.5f);
+		colour.r = (sf::Uint8)(value * 255.0f + 0.5f);
+		colour.g = (sf::Uint8)(p * 255.0f + 0.5f);
+		colour.b = (sf::Uint8)(q * 255.0f + 0.5f);
 		break;
 	}
 }

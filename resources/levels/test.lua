@@ -6,5 +6,6 @@ function onLoad()
 	create_entity("fire", 35, 5, 0)
 	create_entity("fire", 5, 20, 0)
 	create_entity("fire", 40, 20, 0)
+	create_entity("tree", 5, 10, 0)
 	io.write("onLoad finished\n")
 end

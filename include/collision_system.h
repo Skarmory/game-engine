@@ -14,7 +14,7 @@ public:
 	virtual void receive(const EntityCreated& e) override;
 
 private:
-	void clean(void);
+	void _clean(void);
 };
 
 #endif

@@ -24,7 +24,7 @@ layers:
 <entity name="fire">
 	<graphic>
 		<character/>
-		<foregroundColour>light_orange</foregroundColour>
+		<foregroundColour>transparent</foregroundColour>
 		<backgroundColour>dark_orange</backgroundColour>
 		<layer>4</layer>
 	</graphic>
@@ -58,4 +58,15 @@ layers:
 	</graphic>
 	<location />
 	<levelTransition/>
+</entity>
+
+<entity name="tree">
+	<graphic>
+		<character>t</character>
+		<foregroundColour>white</foregroundColour>
+		<backgroundColour>transparent</backgroundColour>
+		<layer>1</layer>
+	</graphic>
+	<location />
+	<collision />
 </entity>

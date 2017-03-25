@@ -1,7 +1,9 @@
 #ifndef sprite_h
 #define sprite_h
 
+#include <SFML/Graphics/Texture.hpp>
 #include <map>
+#include <memory>
 
 static const std::map<char, int> spritemap = {
 	{' ', 0}, {'.', 226}, {'-', 210}, {'|', 59}, {'@', 4}, {'+', 30}, {'}', 215}, {'>', 227},
@@ -10,6 +12,18 @@ static const std::map<char, int> spritemap = {
 
 	{'a', 22}, {'b', 38}, {'c', 54}, {'d', 70}, {'e', 86}, {'f', 102}, {'g', 118}, {'h', 134}, {'i', 150}, {'j', 166}, {'k', 182}, {'l', 198}, {'m', 214}, {'n', 230}, {'o', 246}, {'p', 7},
 	{'q', 23}, {'r', 39}, {'s', 55}, {'t', 71}, {'u', 87}, {'v', 103}, {'w', 119}, {'x', 135}, {'y', 151}, {'z', 167},
+};
+
+class SpriteCache
+{
+private:
+	std::map<std::string, std::shared_ptr<sf::Sprite>> _cache;
+
+	bool _has(const std::string& sprite_id);
+	void _load(const std::string& sprite_id);
+
+public:
+	std::shared_ptr<sf::Sprite> get_sprite(const std::string& sprite_id);
 };
 
 #endif

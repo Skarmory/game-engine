@@ -93,10 +93,11 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 				continue;
 
 			int dx2dy2 = dx * dx + dy * dy;
-			float root_dx2dy2 = (float)sqrt(dx2dy2);
+			//
 
-			if (root_dx2dy2 < radius + 0.25f)
+			if (dx2dy2 < ((radius + 0.25f) * (radius + 0.25)))
 			{
+				float root_dx2dy2 = (float)sqrt(dx2dy2);
 				float light_percent = max(MAX_LIGHT_PERCENT - root_dx2dy2 * dropoff, MIN_LIGHT_PERCENT);
 
 				if (_level._base_map.get(ax, ay)->_light_value < light_percent)

@@ -64,7 +64,7 @@ void VisibilitySystem::calculate_fov(int x, int y, int radius, int row, double s
 
 			int dx2dy2 = dx * dx + dy * dy;
 
-			if (sqrt(dx2dy2) < radius + 0.25f)
+			if (dx2dy2 < (radius + 0.25f) * (radius + 0.25f))
 			{
 				_level._base_map.get(ax, ay)->_visible = true;
 			}
