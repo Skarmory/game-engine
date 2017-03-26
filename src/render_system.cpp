@@ -49,7 +49,6 @@ void RenderSystem::map_drawable_entities(void)
 			continue;
 
 		RenderItem r = {*gfx, *loc};
-		_render_entities.push_back(r);
 
 		sov::Glyph& glyph = r.graphic.glyph;
 
@@ -60,25 +59,27 @@ void RenderSystem::map_drawable_entities(void)
 
 		if (lit && visible)
 		{
-			if (gfx->glyph.fg_colour != sf::Color::Transparent)
+			if (r.graphic.glyph.fg_colour != sf::Color::Transparent)
 			{
-				HSV hsv = get_hsv(gfx->glyph.fg_colour);
+				HSV hsv = get_hsv(r.graphic.glyph.fg_colour);
 				hsv.hue *= cell->_light_value;
 				hsv.saturation *= cell->_light_value;
 				hsv.value *= cell->_light_value;
 
 				set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
-				glyph.glyph = gfx->glyph.glyph;
+				glyph.glyph = r.graphic.glyph.glyph;
 			}
 
-			if (gfx->glyph.bg_colour != sf::Color::Transparent)
+			if (r.graphic.glyph.bg_colour != sf::Color::Transparent)
 			{
-				HSV hsv = get_hsv(gfx->glyph.bg_colour);
+				HSV hsv = get_hsv(r.graphic.glyph.bg_colour);
 				hsv.saturation *= cell->_light_value;
 				hsv.value *= cell->_light_value;
 
 				set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
 			}
+
+			_render_entities.push_back(r);
 		}
 	}
 }
