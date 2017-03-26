@@ -3,6 +3,7 @@
 
 #include "colour.h"
 #include "component.h"
+#include "location.h"
 
 namespace sov
 {
@@ -36,6 +37,12 @@ namespace sov
 
 		Glyph     glyph;
 		DrawLayer layer;
+	};
+
+	struct RenderItem
+	{
+		Graphic graphic;
+		Location location;
 	};
 };
 

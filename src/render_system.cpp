@@ -53,35 +53,39 @@ void RenderSystem::map_drawable_entities(void)
 		if (!_camera.is_in_bounds(p.first, p.second))
 			continue;
 
-		sov::Glyph& glyph = _composed_map.get(p.first, p.second);
+		RenderItem r = {*gfx, *loc};
+		_render_entities.push_back(r);
 
-		Cell*& cell = _level._base_map.get(loc->x, loc->y);
+		//sov::Glyph& glyph = _composed_map.get(p.first, p.second);
+		// sov::Glyp& glyph = r.graphic.glyph;
 
-		bool lit     = cell->_light_value > 0.0f;
-		bool visible = cell->_visible;
+		// Cell*& cell = _level._base_map.get(loc->x, loc->y);
 
-		if (lit && visible)
-		{
-			if (gfx->glyph.fg_colour != sf::Color::Transparent)
-			{
-				HSV hsv = get_hsv(gfx->glyph.fg_colour);
-				hsv.hue *= cell->_light_value;
-				hsv.saturation *= cell->_light_value;
-				hsv.value *= cell->_light_value;
+		// bool lit     = cell->_light_value > 0.0f;
+		// bool visible = cell->_visible;
 
-				set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
-				glyph.glyph = gfx->glyph.glyph;
-			}
+		// if (lit && visible)
+		// {
+		// 	if (gfx->glyph.fg_colour != sf::Color::Transparent)
+		// 	{
+		// 		HSV hsv = get_hsv(gfx->glyph.fg_colour);
+		// 		hsv.hue *= cell->_light_value;
+		// 		hsv.saturation *= cell->_light_value;
+		// 		hsv.value *= cell->_light_value;
 
-			if (gfx->glyph.bg_colour != sf::Color::Transparent)
-			{
-				HSV hsv = get_hsv(gfx->glyph.bg_colour);
-				hsv.saturation *= cell->_light_value;
-				hsv.value *= cell->_light_value;
+		// 		set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
+		// 		glyph.glyph = gfx->glyph.glyph;
+		// 	}
 
-				set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
-			}
-		}
+		// 	if (gfx->glyph.bg_colour != sf::Color::Transparent)
+		// 	{
+		// 		HSV hsv = get_hsv(gfx->glyph.bg_colour);
+		// 		hsv.saturation *= cell->_light_value;
+		// 		hsv.value *= cell->_light_value;
+
+		// 		set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
+		// 	}
+		// }
 	}
 }
 
@@ -146,6 +150,8 @@ void RenderSystem::clean(void)
 
 		++it;
 	}
+
+	_render_entities.clear();
 }
 
 bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Entity>& w2)
@@ -165,4 +171,9 @@ void RenderSystem::receive(const EntityCreated& event)
 const Map<sov::Glyph>& RenderSystem::get_composed_map(void) const
 {
 	return _composed_map;
+}
+
+const std::vector<sov::RenderItem>& RenderSystem::get_render_items(void) const
+{
+	return _render_entities;
 }

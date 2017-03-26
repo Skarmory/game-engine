@@ -17,6 +17,7 @@ public:
 	virtual void receive(const EntityCreated& e) override;
 
 	const Map<sov::Glyph>& get_composed_map(void) const;
+	const std::vector<sov::RenderItem>& get_render_items(void) const;
 
 private:
 	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
@@ -27,6 +28,7 @@ private:
 
 	const Camera& _camera;
 	Map<sov::Glyph> _composed_map;
+	std::vector<sov::RenderItem> _render_entities;
 };
 
 #endif

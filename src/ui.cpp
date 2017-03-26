@@ -79,19 +79,16 @@ void Camera::draw(void)
 		_rtexture.draw(s);
 	}
 
-	const std::vector<std::weak_ptr<Entity>> entities = Environment::get().get_system_manager()->get<RenderSystem>().get_entities();
+	const std::vector<RenderItem>& render_items = Environment::get().get_system_manager()->get<RenderSystem>().get_render_items();
 
-	for (std::vector<std::weak_ptr<Entity>>::const_iterator it = entities.begin(); it != entities.end(); ++it)
+	for (std::vector<RenderItem>::const_iterator it = render_items.begin(); it != render_items.end(); ++it)
 	{
-		shared_ptr<Entity> e = it->lock();
+		RenderItem r = *it;
 
-		shared_ptr<Graphic> gfx = e->get_component<Graphic>();
-		shared_ptr<Location> loc = e->get_component<Location>();
+		float x = r.location.x;
+		float y = r.location.y;
 
-		float x = loc->x;
-		float y = loc->y;
-
-		const sov::Glyph& glyph = gfx->glyph;
+		const sov::Glyph& glyph = r.graphic.glyph;
 
 		int position = spritemap.at(glyph.glyph);
 		float i = (position % 16) * 8;
