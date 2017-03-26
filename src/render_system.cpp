@@ -40,11 +40,6 @@ void RenderSystem::map_drawable_entities(void)
 
 		shared_ptr<Graphic>  gfx = e->get_component<Graphic>();
 		shared_ptr<Location> loc = e->get_component<Location>();
-
-		//int id = e->get_id();
-		//if (id == 0) {
-		//	std::cout << "x=" << loc->x << " y=" << loc->y << std::endl;  
-		//}
 	
 		if (loc->z != _level._depth)
 			continue;
@@ -56,36 +51,35 @@ void RenderSystem::map_drawable_entities(void)
 		RenderItem r = {*gfx, *loc};
 		_render_entities.push_back(r);
 
-		//sov::Glyph& glyph = _composed_map.get(p.first, p.second);
-		// sov::Glyp& glyph = r.graphic.glyph;
+		sov::Glyph& glyph = r.graphic.glyph;
 
-		// Cell*& cell = _level._base_map.get(loc->x, loc->y);
+		Cell*& cell = _level._base_map.get(loc->x, loc->y);
 
-		// bool lit     = cell->_light_value > 0.0f;
-		// bool visible = cell->_visible;
+		bool lit     = cell->_light_value > 0.0f;
+		bool visible = cell->_visible;
 
-		// if (lit && visible)
-		// {
-		// 	if (gfx->glyph.fg_colour != sf::Color::Transparent)
-		// 	{
-		// 		HSV hsv = get_hsv(gfx->glyph.fg_colour);
-		// 		hsv.hue *= cell->_light_value;
-		// 		hsv.saturation *= cell->_light_value;
-		// 		hsv.value *= cell->_light_value;
+		if (lit && visible)
+		{
+			if (gfx->glyph.fg_colour != sf::Color::Transparent)
+			{
+				HSV hsv = get_hsv(gfx->glyph.fg_colour);
+				hsv.hue *= cell->_light_value;
+				hsv.saturation *= cell->_light_value;
+				hsv.value *= cell->_light_value;
 
-		// 		set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
-		// 		glyph.glyph = gfx->glyph.glyph;
-		// 	}
+				set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
+				glyph.glyph = gfx->glyph.glyph;
+			}
 
-		// 	if (gfx->glyph.bg_colour != sf::Color::Transparent)
-		// 	{
-		// 		HSV hsv = get_hsv(gfx->glyph.bg_colour);
-		// 		hsv.saturation *= cell->_light_value;
-		// 		hsv.value *= cell->_light_value;
+			if (gfx->glyph.bg_colour != sf::Color::Transparent)
+			{
+				HSV hsv = get_hsv(gfx->glyph.bg_colour);
+				hsv.saturation *= cell->_light_value;
+				hsv.value *= cell->_light_value;
 
-		// 		set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
-		// 	}
-		// }
+				set_hsv(glyph.bg_colour, hsv.hue, hsv.saturation, hsv.value);
+			}
+		}
 	}
 }
 
