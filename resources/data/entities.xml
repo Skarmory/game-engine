@@ -24,9 +24,9 @@ layers:
 <entity name="fire">
 	<graphic>
 		<character/>
-		<foregroundColour>transparent</foregroundColour>
+		<foregroundColour>light_orange</foregroundColour>
 		<backgroundColour>dark_orange</backgroundColour>
-		<layer>4</layer>
+		<layer>0</layer>
 	</graphic>
 	<location/>
 	<collision/>
@@ -39,7 +39,7 @@ layers:
 		<character/>
 		<foregroundColour>light_skyblue</foregroundColour>
 		<backgroundColour>skyblue</backgroundColour> 
-		<layer>4</layer>
+		<layer>0</layer>
 	</graphic>
 	<location/>
 	<collision/>

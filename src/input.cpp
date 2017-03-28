@@ -31,7 +31,7 @@ c_uptr InputManager::handle_input(void)
 				return c_uptr(new MoveCommand(-1, 1));
 			case 'n':
 				return c_uptr(new MoveCommand(1, 1));
-			case 'H':
+			/*case 'H':
 				return c_uptr(new AttackCommand(-1, 0));
 			case 'J':
 				return c_uptr(new AttackCommand(0, 1));
@@ -46,7 +46,7 @@ c_uptr InputManager::handle_input(void)
 			case 'B':
 				return c_uptr(new AttackCommand(-1, 1));
 			case 'N':
-				return c_uptr(new AttackCommand(1, 1));
+				return c_uptr(new AttackCommand(1, 1));*/
 			case 'q':
 				return c_uptr(new QuitCommand(_is_running));
 			case '>':

@@ -76,7 +76,8 @@ void RenderSystem::_map_drawable_entities(void)
 				hsv.value *= cell->_light_value;
 
 				set_hsv(glyph.fg_colour, hsv.hue, hsv.saturation, hsv.value);
-				glyph.glyph = gfx->glyph.glyph;
+				if(gfx->glyph.glyph != ' ')
+					glyph.glyph = gfx->glyph.glyph;
 			}
 
 			if (gfx->glyph.bg_colour != sf::Color::Transparent)
