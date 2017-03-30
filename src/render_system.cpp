@@ -22,7 +22,7 @@ void RenderSystem::init(void)
 
 	Image img;
 	if (!img.loadFromFile("terminal.png"))
-		throw std::runtime_error("Terminal.png not found!");
+		throw std::runtime_error("terminal.png not found!");
 
 	img.createMaskFromColor(Color::Black);
 
@@ -160,20 +160,17 @@ void RenderSystem::_draw(void)
 	sf::RenderTexture rtex;
 	rtex.create(_viewport.get_width() * SPRITE_WIDTH, _viewport.get_height() * SPRITE_HEIGHT);
 	
-	sf::Sprite s;
+	sf::Sprite s(_spritemap);
 	RectangleShape rect(Vector2f(8, 8));
 
-	s.setTexture(_spritemap);
-
-	for (int x = 0; x < _viewport.get_width(); x++)
 	for (int y = 0; y < _viewport.get_height(); y++)
+	for (int x = 0; x < _viewport.get_width(); x++)
 	{
 		const sov::Glyph& glyph = _composed_map.get(x, y);
 
 		int position = spritemap.at(glyph.glyph);
 		int i = (position % SPRITE_SHEET_WIDTH) * SPRITE_WIDTH;
 		int j = (position / SPRITE_SHEET_HEIGHT) * SPRITE_HEIGHT;
-
 
 		s.setTextureRect(IntRect(i, j, SPRITE_WIDTH, SPRITE_HEIGHT));
 
@@ -205,8 +202,3 @@ void RenderSystem::receive(const EntityCreated& event)
 	if(event.entity->has_component<Location>() && event.entity->has_component<Graphic>())
 		add_entity(event.entity);
 }
-
-//const Map<sov::Glyph>& RenderSystem::get_composed_map(void) const
-//{
-//	return _composed_map;
-//}

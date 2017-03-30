@@ -16,8 +16,6 @@ public:
 	virtual void update(void) override;
 	virtual void receive(const EntityCreated& e) override;
 
-	//const Map<sov::Glyph>& get_composed_map(void) const;
-
 private:
 
 	const int SPRITE_WIDTH = 8;
