@@ -1,0 +1,25 @@
+# Entities
+#
+# Separate entries by blank lines
+#
+# name - Name of the entity
+# graphic - Glyph : foreground colour : background colour : draw layer
+# 	
+#		Draw Layers: 
+#			0 - Effect
+#			1 - Static objects
+# 			2 - Items
+#			3 - Creatures
+
+name=player
+graphic=@:white:transparent:3
+collision=block
+health=1
+sight=20
+light=10
+
+name=fire
+graphic= :light_orange:dark_orange:0
+collision=trigger
+damage=1
+light=10

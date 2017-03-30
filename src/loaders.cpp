@@ -1,6 +1,5 @@
 #include "loaders.h"
 
-#include <sstream>
 #include <string>
 #include <memory>
 
@@ -13,115 +12,72 @@
 #include "light.h"
 #include "level_transition.h"
 
-void LocationLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void LocationLoader::load(Entity& prototype, const std::string& value)
 {
 	prototype.add_component(make_shared<Location>());
 }
 
-void CollisionLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void CollisionLoader::load(Entity& prototype, const std::string& value)
 {
 	prototype.add_component(make_shared<Collision>());
 }
 
-void DamageLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void DamageLoader::load(Entity& prototype, const std::string& value)
 {
-	stringstream ss;
-	int damage = 0;
-	ss << node->value();
-	ss >> damage;
-	prototype.add_component(make_shared<Damage>(damage));
+	prototype.add_component(make_shared<Damage>(std::stoi(value)));
 }
 
-void PeriodicDamageLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void PeriodicDamageLoader::load(Entity& prototype, const std::string& value)
 {
-	stringstream ss;
 	int damage = 0;
 	int period = 0;
-
-	auto n = node->first_node();
-
-	do
-	{
-		ss.clear();
-		ss << n->value();
-
-		if (n->name() == string("damage"))
-			ss >> damage;
-		else if (n->name() == string("period"))
-			ss >> period;
-
-	} while ((n = n->next_sibling()) != 0);
 
 	prototype.add_component(make_shared<PeriodicDamage>(damage, period));
 }
 
-void GraphicLoader::load(rapidxml::xml_node<char>* node, Entity& entity)
+void GraphicLoader::load(Entity& entity, const std::string& value)
 {
-	using namespace sov;
-
-	stringstream ss;
-	auto n = node->first_node();
-
 	char c;
 	Color fg, bg;
-	DrawLayer l;
+	sov::DrawLayer l;
 
-	do
+	std::string vals[4];
+
+	size_t ppos = 0, pos = 0;
+	for (int i = 0; i < 4; i++)
 	{
-		if (strcmp(n->name(), "character") == 0)
-		{
-			c = n->value()[0] != '\0' ? n->value()[0] : ' ';
-		}
-		else if (strcmp(n->name(), "foregroundColour") == 0)
-		{
-			string colour_name = n->value();
-			fg = colours_map.at(colour_name);
-		}
-		else if (strcmp(n->name(), "backgroundColour") == 0)
-		{
-			string colour_name = n->value();
-			bg = colours_map.at(colour_name);
-		}
-		else if (strcmp(n->name(), "layer") == 0)
-		{
-			ss << n->value();
-			int i;
-			ss >> i;
-			l = static_cast<DrawLayer>(i);
-		}
-	} while ((n = n->next_sibling()) != 0);
+		pos = value.find(':', ppos);
+		if (pos == std::string::npos)
+			pos = value.length();
 
-	entity.add_component(make_shared<Graphic>(c, fg, bg, l));
+		vals[i] = value.substr(ppos, pos-ppos);
+		ppos = pos + 1;
+	}
+
+	c = vals[0][0];
+	fg = colours_map.at(vals[1]);
+	bg = colours_map.at(vals[2]);
+	l = static_cast<sov::DrawLayer>(std::stoi(vals[3]));
+
+	entity.add_component(std::make_shared<sov::Graphic>(c, fg, bg, l));
 }
 
-void HealthLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void HealthLoader::load(Entity& prototype, const std::string& value)
 {
-	stringstream ss;
-	int health = 0;
-	ss << node->value();
-	ss >> health;
-	prototype.add_component(make_shared<Health>(health));
+	prototype.add_component(make_shared<Health>(std::stoi(value)));
 }
 
-void SightLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void SightLoader::load(Entity& prototype, const std::string& value)
 {
-	stringstream ss;
-	int radius = 0;
-	ss << node->value();
-	ss >> radius;
-	prototype.add_component(make_shared<Sight>(radius));
+	prototype.add_component(make_shared<Sight>(std::stoi(value)));
 }
 
-void LightSourceLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void LightSourceLoader::load(Entity& prototype, const std::string& value)
 {
-	stringstream ss;
-	int radius = 0;
-	ss << node->value();
-	ss >> radius;
-	prototype.add_component(make_shared<LightSource>(radius));
+	prototype.add_component(make_shared<LightSource>(std::stoi(value)));
 }
 
-void LevelTransitionLoader::load(rapidxml::xml_node<char>* node, Entity& prototype)
+void LevelTransitionLoader::load(Entity& prototype, const std::string& value)
 {
 	prototype.add_component(make_shared<LevelTransition>());
 }

@@ -1,61 +1,58 @@
 #ifndef loaders_h
 #define loaders_h
 
-#include <cstring>
-#include <rapidxml-1.13/rapidxml.hpp>
-
 #include "entity.h"
 
 class ComponentLoader
 {
 public:
 	virtual ~ComponentLoader(void) = default;
-	virtual void load(rapidxml::xml_node<char>* node, Entity& entity) = 0;
+	virtual void load(Entity& prototype, const std::string& value) = 0;
 };
 
 class LocationLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class CollisionLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class DamageLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class PeriodicDamageLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class GraphicLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& entity) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class HealthLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class SightLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class LightSourceLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 class LevelTransitionLoader : public ComponentLoader
 {
-	void load(rapidxml::xml_node<char>* node, Entity& prototype) override;
+	void load(Entity& prototype, const std::string& value) override;
 };
 
 #endif
