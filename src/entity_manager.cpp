@@ -1,16 +1,12 @@
 #include "entity_manager.h"
 
+#include <sstream>
+#include <fstream>
+
 #include "environment.h"
 #include "location.h"
 
 using namespace std;
-
-EntityLoader::EntityLoader(void)
-{
-	_file_path = "resources/data/entities.xml";
-	_file = unique_ptr<rapidxml::file<>>(new rapidxml::file<>(_file_path));
-	_xml_data.parse<0>(_file->data());
-}
 
 EntityLoader::~EntityLoader(void)
 {
@@ -20,20 +16,26 @@ EntityLoader::~EntityLoader(void)
 
 unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 {
-	unique_ptr<Entity> ptr(new Entity(-1));
+	std::unique_ptr<Entity> ptr(new Entity(-1));
+	std::ifstream fs;
+	std::string line, option, value;
 
-	auto node = _xml_data.first_node();
+	fs.open(_file_path);
+
 	bool found = false;
 
-	while (node)
+	while (!found && std::getline(fs, line))
 	{
-		if (node->first_attribute()->value() == entity_id)
-		{
-			found = true;
-			break;
-		}
+		// Skip comments and blank lines
+		if (line[0] == '#' || line.find_first_not_of(' ') == std::string::npos)
+			continue;
 
-		node = node->next_sibling();
+		size_t position = line.find('=');
+		option = line.substr(0, position);
+		value = line.substr(position + 1, line.length());
+
+		if (option == "name" && value == entity_id)
+			found = true;
 	}
 
 	if (!found)
@@ -43,42 +45,39 @@ unique_ptr<Entity> EntityLoader::load(const string& entity_id)
 		throw std::runtime_error(ss.str().c_str());
 	}
 
-	auto child_node = node->first_node();
-	while (child_node)
+	_component_loaders["location"]->load(*ptr, "");
+
+	while (line.find_first_not_of(' ') != std::string::npos)
 	{
-		string node_name = child_node->name();
-		if (_component_loaders.find(node_name) != _component_loaders.end())
-			_component_loaders[node_name]->load(child_node, *ptr);
-		
-		child_node = child_node->next_sibling();
+		std::getline(fs, line);
+
+		size_t position = line.find('=');
+		option = line.substr(0, position);
+		value = line.substr(position + 1, line.length());
+
+		if (_component_loaders.find(option) != _component_loaders.end())
+			_component_loaders[option]->load(*ptr, value);
 	}
 
 	return ptr;
 }
 
-EntityCache::~EntityCache(void)
+bool EntityCache::_has(const string& entity_id)
 {
-
-}
-
-bool EntityCache::_has_entity(const string& entity_id)
-{
-	if(_entities.find(entity_id) != _entities.end())
-		return true;
-	return false;
+	return _entities.find(entity_id) != _entities.end();
 }
 
 unique_ptr<Entity> EntityCache::get_entity(const string& entity_id)
 {
-	if(!_has_entity(entity_id))
+	if(!_has(entity_id))
 	{
-		_load_entity(entity_id);
+		_load(entity_id);
 	}
 
 	return unique_ptr<Entity>(new Entity(*_entities[entity_id]));
 }
 
-void EntityCache::_load_entity(const string& entity_id)
+void EntityCache::_load(const string& entity_id)
 {
 	_entities[entity_id] = _loader.load(entity_id);
 }

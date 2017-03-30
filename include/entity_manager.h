@@ -4,10 +4,6 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <sstream>
-
-#include <rapidxml-1.13/rapidxml.hpp>
-#include <rapidxml-1.13/rapidxml_utils.hpp>
 
 #include "entity.h"
 #include "events.h"
@@ -18,15 +14,13 @@
 class EntityLoader
 {
 public:
-	explicit EntityLoader(void);
+	explicit EntityLoader(void) {}
 	~EntityLoader(void);
 
 	unique_ptr<Entity> load(const string& entity_id);
 
 private:
-	const char* _file_path; // = "resources/data/entities.xml";
-	rapidxml::xml_document<> _xml_data;
-	unique_ptr<rapidxml::file<>> _file;
+	const std::string _file_path = "resources/data/entities.txt";
 
 	map<string, ComponentLoader*>  _component_loaders = {
 		{ "graphic", new GraphicLoader() },
@@ -46,15 +40,14 @@ private:
 class EntityCache
 {
 public:
-	~EntityCache(void);
 	unique_ptr<Entity> get_entity(const string& entity_id);
 
 private:
 	EntityLoader _loader;
 	map<string, unique_ptr<Entity>> _entities;
 
-	void _load_entity(const string& entity_id);
-	bool _has_entity(const string& entity_id);
+	void _load(const string& entity_id);
+	bool _has(const string& entity_id);
 };
 
 class EntityManager

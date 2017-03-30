@@ -12,8 +12,7 @@ namespace sov
 		EFFECT = 0,
 		OBJECT = 1,
 		ITEM = 2,
-		CREATURE = 3,
-		DAMAGE_EFFECT = 4
+		CREATURE = 3
 	};
 
 	struct Glyph
