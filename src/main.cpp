@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	
 	sm->init();
 
-	lm->load("testing_map");
+	lm->load("testing_map.dat");
 	lua->load_script("test.lua");
 	lua->call("onLoad");
 

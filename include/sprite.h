@@ -1,7 +1,7 @@
 #ifndef sprite_h
 #define sprite_h
 
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics.hpp>
 #include <map>
 #include <memory>
 

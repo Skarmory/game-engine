@@ -38,7 +38,7 @@ void LevelManager::_load(const string& name)
 	std::string path, line, option, value, delimiter = "=";
 	std::ifstream file;
 
-	sstream << _path << name << ".dat";
+	sstream << _path << name;
 	path = sstream.str();
 
 	file.open(path);
