@@ -40,7 +40,7 @@ private:
 class EntityCache
 {
 public:
-	unique_ptr<Entity> get_entity(const string& entity_id);
+	unique_ptr<Entity> get(const string& entity_id);
 
 private:
 	EntityLoader _loader;

@@ -33,44 +33,35 @@ bool UIElement::is_in_bounds(int x, int y) const
 	return (0 <= x && x <= _w) && (0 <= y && y <= _h);
 }
 
-Viewport::Viewport(int x, int y, int w, int h) : UIElement(x, y, w, h), sf::RenderWindow(VideoMode(640, 480), "Sovereign Incarnate"), _world_x(0), _world_y(0)
+Viewport::Viewport(int x, int y, int w, int h) : UIElement(x, y, w, h), sf::RenderWindow(VideoMode(640, 480), "Sovereign Incarnate", sf::Style::Resize), _screen_origin_x(0), _screen_origin_y(0)
 {
 	setKeyRepeatEnabled(false);
 }
 
+// Sets the world space coordinate origin of the screen coordinates, and updates the view.
 void Viewport::update(void)
-{
-	std::pair<int, int> world_coords = get_screen_origin();
-	_world_x = world_coords.first;
-	_world_y = world_coords.second;
-}
-
-pair<int, int> Viewport::world_to_screen(int x, int y) const
-{
-	return pair<int, int>(x - _world_x, y - _world_y);
-}
-
-pair<int, int> Viewport::screen_to_world(int x, int y) const
-{
-	return pair<int, int>(_world_x + x, _world_y + y);
-}
-
-pair<int, int> Viewport::get_screen_origin(void) const
 {
 	const shared_ptr<const Location> loc = Environment::get().get_entity_manager()->get_player().get_component<Location>();
 	const Level& level = Environment::get().get_level_manager()->get_current();
 
-	int x0 = 0, y0 = 0;
+	_screen_origin_x = clamp(0.0f, (float)level.get_map_width() - (float)_w, loc->x - ((float)_w / 2.0f));
+	_screen_origin_y = clamp(0.0f, (float)level.get_map_height() - (float)_h, loc->y - ((float)_h / 2.0f));
 
-	if (level.get_map_width() > _w)
-	{
-		x0 = clamp(0, level.get_map_width() - _w, loc->x - (_w / 2));
-	}
+	std::pair<int, int> screen_coords = world_to_screen(_screen_origin_x, _screen_origin_y);
 
-	if (level.get_map_height() > _h)
-	{
-		y0 = clamp(0, level.get_map_height() - _h, loc->y - (_h / 2));
-	}
+	_view.setCenter(screen_coords.first * 32.0f + ((_w / 2.0f) * 32.0f), screen_coords.second * 32.0f + ((_h / 2.0f) * 32.0f));
+	_view.setSize(640.0f, 480.0f);
+	setView(_view);
+}
 
-	return pair<int, int>(x0, y0);
+// Convert world space cell coordinates to screen space cell coordinates. (0, 0) is in the top left
+pair<int, int> Viewport::world_to_screen(int x, int y) const
+{
+	return pair<int, int>(x - _screen_origin_x, y - _screen_origin_y);
+}
+
+// Convert screen space cell coordinates to world space cell coordinates.
+pair<int, int> Viewport::screen_to_world(int x, int y) const
+{
+	return pair<int, int>(_screen_origin_x + x, _screen_origin_y + y);
 }

@@ -6,6 +6,7 @@
 #include "input.h"
 #include "level_manager.h"
 #include "system.h"
+#include "sprite.h"
 
 // This class is an access point for all the managers in the game
 
@@ -18,6 +19,7 @@ class Environment
 	SystemManager* _system_manager;
 	sov::EventManager* _event_manager;
 	LevelManager* _level_manager;
+	SpriteCache* _sprite_cache;
 
 public:
 	explicit Environment(void);
@@ -28,12 +30,14 @@ public:
 	void set_event_manager(sov::EventManager* event_manager);
 	void set_level_manager(LevelManager* level_manager);
 	void set_input_manager(InputManager* input_manager);
+	void set_sprite_cache(SpriteCache* sprite_cache);
 
 	EntityManager* get_entity_manager(void) const;
 	SystemManager* get_system_manager(void) const;
 	sov::EventManager* get_event_manager(void) const;
 	LevelManager* get_level_manager(void) const;
 	InputManager* get_input_manager(void) const;
+	SpriteCache* get_sprite_cache(void) const;
 
 	static const Environment& get(void);
 };

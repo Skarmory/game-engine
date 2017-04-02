@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 
+#include "environment.h"
 #include "location.h"
 #include "collision.h"
 #include "damage.h"
@@ -37,14 +38,14 @@ void PeriodicDamageLoader::load(Entity& prototype, const std::string& value)
 
 void GraphicLoader::load(Entity& entity, const std::string& value)
 {
-	char c;
-	Color fg, bg;
-	sov::DrawLayer l;
+	sf::Sprite sprite;
+	sf::Transform trans;
+	sov::DrawLayer layer;
 
-	std::string vals[4];
+	std::string vals[2];
 
 	size_t ppos = 0, pos = 0;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		pos = value.find(':', ppos);
 		if (pos == std::string::npos)
@@ -54,12 +55,10 @@ void GraphicLoader::load(Entity& entity, const std::string& value)
 		ppos = pos + 1;
 	}
 
-	c = vals[0][0];
-	fg = colours_map.at(vals[1]);
-	bg = colours_map.at(vals[2]);
-	l = static_cast<sov::DrawLayer>(std::stoi(vals[3]));
+	sprite = sf::Sprite(*(Environment::get().get_sprite_cache()->get(vals[0])));
+	layer = static_cast<sov::DrawLayer>(std::stoi(vals[1]));
 
-	entity.add_component(std::make_shared<sov::Graphic>(c, fg, bg, l));
+	entity.add_component(make_shared<sov::Graphic>(sprite, trans, layer));
 }
 
 void HealthLoader::load(Entity& prototype, const std::string& value)

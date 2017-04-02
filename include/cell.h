@@ -6,12 +6,11 @@
 class Cell 
 {
 public:
-	Cell(char display, Color fg, Color bg, bool walkable, bool los_blocker) :
-		_glyph(display, fg, bg), _light_value(0.0f),
+	Cell(sov::Graphic graphic, bool walkable, bool los_blocker) :
+		_graphic(graphic), _light_value(0.0f),
 		_walkable(walkable), _los_blocker(los_blocker),
 		_explored(false), _visible(false) {}
 
-	const sov::Glyph& get_glyph(void) const;
 	float get_light_value(void) const;
 
 	bool is_explored(void) const;
@@ -20,7 +19,7 @@ public:
 	bool is_los_blocker(void) const;
 
 private:
-	sov::Glyph _glyph;
+	sov::Graphic _graphic;
 	float _light_value;
 	bool  _los_blocker;
 	bool  _explored;

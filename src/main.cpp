@@ -2,7 +2,6 @@
 #define main_h
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
 
 #include <vector>
 #include <time.h>
@@ -19,6 +18,7 @@
 #include "level_manager.h"
 #include "input.h"
 #include "environment.h"
+#include "sprite.h"
 
 // Systems
 #include "render_system.h"
@@ -60,9 +60,12 @@ int main(int argc, char** argv)
 	LevelManager* lm = new LevelManager();
 	env->set_level_manager(lm);
 
+	SpriteCache* sprite_cache = new SpriteCache();
+	env->set_sprite_cache(sprite_cache);
+
 	LuaVM* lua = new LuaVM();
 
-	Viewport viewport(0, 0, 80, 40);
+	Viewport viewport(0, 0, 20, 15);
 	//StatusDisplay status(window, 0, 40, 80, 10, turn_timer, turn, font);
 	//InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
@@ -127,10 +130,6 @@ int main(int argc, char** argv)
 
 			sm->update<RenderSystem>();
 
-			//viewport.draw();
-			//status.draw();
-			//inventory.draw();
-
 			viewport.display();
 		}
 		
@@ -138,6 +137,7 @@ int main(int argc, char** argv)
 		em->update();
 	}
 
+	delete sprite_cache;
 	delete input;
 	delete lua;
 	delete lm;

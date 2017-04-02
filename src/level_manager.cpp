@@ -1,11 +1,10 @@
 #include "level_manager.h"
 
-#include <random>
 #include <sstream>
 #include <fstream>
 
+#include "graphic.h"
 #include "environment.h"
-#include "util.h"
 
 LevelManager::LevelManager(void)
 {
@@ -31,9 +30,6 @@ void LevelManager::load(const string& name)
 
 void LevelManager::_load(const string& name)
 {
-	mt19937 rng;
-	rng.seed(random_device()());
-	poisson_distribution<int> dist(6.75);
 	std::stringstream sstream;
 	std::string path, line, option, value, delimiter = "=";
 	std::ifstream file;
@@ -63,11 +59,11 @@ void LevelManager::_load(const string& name)
 				value = line.substr(pos + 1, line.length());
 
 				if (option == "x")
-					x = atoi(value.c_str());
+					x = stoi(value);
 				if (option == "y")
-					y = atoi(value.c_str());
+					y = stoi(value);
 				if (option == "z")
-					z = atoi(value.c_str());
+					z = stoi(value);
 			}
 
 			l->_depth = z;
@@ -77,15 +73,6 @@ void LevelManager::_load(const string& name)
 		else if (line == "MAP DATA")
 		{
 			// TODO: Define "tilesets" of some description
-			Color grass_fg_colour_map[9];
-			Color grass_bg_colour_map[9];
-			lerp_colour_map(grass_fg_colour_map, Color(0, 60, 0), Color(0, 200, 0), 9);
-			lerp_colour_map(grass_bg_colour_map, Color(0, 10, 0), Color(0, 50, 0), 9);
-
-			Color water_fg_colour_map[9];
-			Color water_bg_colour_map[9];
-			lerp_colour_map(water_fg_colour_map, Color(0, 0, 60), Color(0, 0, 200), 9);
-			lerp_colour_map(water_fg_colour_map, Color(0, 0, 10), Color(0, 0, 50), 9);
 
 			int y = 0;
 			while (getline(file, line))
@@ -98,41 +85,67 @@ void LevelManager::_load(const string& name)
 					char ch = line[x];
 					bool walkable = false;
 					bool blocks_los = false;
-					Color fg, bg;
+					sov::Graphic gfx;
 
 					switch (ch)
 					{
 					case '.':
-						fg = grass_fg_colour_map[clamp(0, 8, dist(rng))];
-						bg = grass_bg_colour_map[clamp(0, 8, dist(rng))];
+						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("grass2.png"));
+						gfx.layer = sov::DrawLayer::EFFECT;
+						gfx.brightness = 0.0f;
+
 						walkable = true;
 						blocks_los = false;
 						break;
 
-					case '|':
+					case '[':
+					case ']':
+					case '_':
 					case '-':
-						fg = Color(75, 75, 75);
-						bg = Color(10, 10, 10);
+						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("stone-wall2.png"));
+						gfx.layer = sov::DrawLayer::EFFECT;
+						gfx.brightness = 0.0f;
+						
+						/*if (ch == '-' || ch == '_')
+						{
+							sf::Transform t = sf::Transform::Identity;
+							t.rotate(90);
+							gfx.sprite_transform = t;
+						}*/
+
 						walkable = false;
 						blocks_los = true;
 						break;
 
-					case '}':
-						fg = water_fg_colour_map[clamp(0, 8, dist(rng))];
-						bg = water_bg_colour_map[clamp(0, 8, dist(rng))];
-						walkable = false;
-						blocks_los = false;
-						break;
+					case '0':
+					case '1':
+					case '2':
+					case '3':
 
-					case '+':
-						fg = colours_map.at("brown");
-						bg = colours_map.at("dark_brown");
-						walkable = true;
-						blocks_los = false;
+						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("stone-wall-corner2.png"));
+						gfx.layer = sov::DrawLayer::EFFECT;
+						gfx.brightness = 0.0f;
+
+						/*if (ch == '1')
+						{
+							gfx.sprite.setRotation(90.0f);
+						}
+						else if (ch == '3')
+						{
+							gfx.sprite.setRotation(180.0f);
+						}
+						else if (ch == '2')
+						{
+							gfx.sprite.setRotation(270.0f);
+						}*/
+
+						walkable = false;
+						blocks_los = true;
+
 						break;
 					}
 
-					l->_base_map.set(x, y, new Cell(ch, fg, bg, walkable, blocks_los));
+					l->_base_map.set(x, y, new Cell(gfx, walkable, blocks_los));
 				}
 
 				y++;

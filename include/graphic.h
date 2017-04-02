@@ -1,12 +1,12 @@
 #ifndef graphic_component_h
 #define graphic_component_h
 
-#include "colour.h"
+#include <SFML\Graphics.hpp>
+
 #include "component.h"
 
 namespace sov
 {
-
 	enum DrawLayer
 	{
 		EFFECT = 0,
@@ -15,25 +15,14 @@ namespace sov
 		CREATURE = 3
 	};
 
-	struct Glyph
-	{
-		Glyph(char glyph, Color fg_colour, Color bg_colour) : glyph(glyph), fg_colour(fg_colour), bg_colour(bg_colour) {}
-		Glyph(void) : glyph(' '), fg_colour(Color::Black), bg_colour(Color::Black) {}
-		Glyph(const Glyph& rhs) : glyph(rhs.glyph), fg_colour(rhs.fg_colour), bg_colour(rhs.bg_colour) {}
-
-		char glyph;
-		Color fg_colour;
-		Color bg_colour;
-	};
-
-	static const Glyph NULL_GLYPH;
-
 	struct Graphic : public Component<Graphic>
 	{
-		Graphic(char graphic, Color fg_colour, Color bg_colour, DrawLayer layer) : glyph(graphic, fg_colour, bg_colour), layer(layer) {}
-		Graphic(Glyph glyph, DrawLayer layer) : glyph(glyph), layer(layer) {}
+		Graphic(void) {}
+		Graphic(sf::Sprite sprite, sf::Transform sprite_transform, DrawLayer layer) : sprite(sprite), layer(layer) {}
 
-		Glyph     glyph;
+		sf::Sprite sprite;
+		sf::Transform sprite_transform;
+		float brightness;
 		DrawLayer layer;
 	};
 };

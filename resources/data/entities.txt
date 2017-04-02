@@ -12,14 +12,14 @@
 #			3 - Creatures
 
 name=player
-graphic=@:white:transparent:3
+graphic=knight.png:3
 collision=block
 health=1
 sight=20
-light=10
+light=5
 
 name=fire
-graphic= :light_orange:dark_orange:0
+graphic=fire2.png:0
 collision=trigger
 damage=1
 light=10

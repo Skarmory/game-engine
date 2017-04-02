@@ -1,10 +1,5 @@
 #include "cell.h"
 
-const sov::Glyph& Cell::get_glyph(void) const
-{
-	return _glyph;
-}
-
 float Cell::get_light_value(void) const
 {
 	return _light_value;

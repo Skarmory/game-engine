@@ -4,7 +4,7 @@ Environment* Environment::env = nullptr;
 
 Environment::Environment(void) 
 	: _entity_manager(nullptr), _event_manager(nullptr), _level_manager(nullptr), _input_manager(nullptr),
-	_system_manager(nullptr)
+	_system_manager(nullptr), _sprite_cache(nullptr)
 {
 	Environment::env = this;
 }
@@ -54,6 +54,11 @@ void Environment::set_level_manager(LevelManager* level_manager)
 	_level_manager = level_manager;
 }
 
+void Environment::set_sprite_cache(SpriteCache* sprite_cache)
+{
+	_sprite_cache = sprite_cache;
+}
+
 EntityManager* Environment::get_entity_manager(void) const
 {
 	return _entity_manager;
@@ -77,6 +82,11 @@ LevelManager* Environment::get_level_manager(void) const
 InputManager* Environment::get_input_manager(void) const
 {
 	return _input_manager;
+}
+
+SpriteCache* Environment::get_sprite_cache(void) const
+{
+	return _sprite_cache;
 }
 
 const Environment& Environment::get(void)

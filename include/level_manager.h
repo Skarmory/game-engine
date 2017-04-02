@@ -23,5 +23,4 @@ private:
 
 	void _load(const string& name);
 };
-
 #endif

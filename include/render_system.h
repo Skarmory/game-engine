@@ -18,8 +18,8 @@ public:
 
 private:
 
-	const int SPRITE_WIDTH = 8;
-	const int SPRITE_HEIGHT = 8;
+	const int SPRITE_WIDTH = 32;
+	const int SPRITE_HEIGHT = 32;
 	const int SPRITE_SHEET_WIDTH = 16;
 	const int SPRITE_SHEET_HEIGHT = 16;
 
@@ -28,11 +28,9 @@ private:
 
 	void _map_drawable_entities(void);
 	void _map_base_terrain(void);
-	void _draw(void);
 
 	Viewport& _viewport;
-	Map<sov::Glyph> _composed_map;
-	sf::Texture _spritemap; // Temp
+	sf::RenderTexture _rtex;
 };
 
 #endif
