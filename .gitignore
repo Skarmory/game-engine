@@ -3,7 +3,6 @@ tags
 incarnate
 *~
 *.sw*
-*.png
 *.supp
 *Debug/*
 *x64/*
