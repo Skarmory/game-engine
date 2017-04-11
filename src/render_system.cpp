@@ -44,10 +44,8 @@ void RenderSystem::_map_drawable_entities(void)
 
 	for (entity_iterator it = _entities.begin(); it != _entities.end(); ++it)
 	{
-		std::shared_ptr<Entity> e = it->lock();
-
-		std::shared_ptr<sov::Graphics>  gfx = e->get_component<sov::Graphics>();
-		std::shared_ptr<Location> loc = e->get_component<Location>();
+		sov::Graphics*  gfx = (*it)->get_component<sov::Graphics>();
+		Location* loc = (*it)->get_component<Location>();
 	
 		if (loc->z != _level._depth)
 			continue;
@@ -118,7 +116,7 @@ void RenderSystem::_map_base_terrain(void)
 void RenderSystem::_clean(void)
 {
 	
-	for(entity_iterator it = _entities.begin(); it != _entities.end();)
+	/*for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
 		std::shared_ptr<Entity> e = it->lock();
 
@@ -126,15 +124,12 @@ void RenderSystem::_clean(void)
 			_entities.erase(it);
 
 		++it;
-	}
+	}*/
 }
 
-bool RenderSystem::layer_compare(const weak_ptr<Entity>& w1, const weak_ptr<Entity>& w2)
+bool RenderSystem::layer_compare(Entity* e1, Entity* e2)
 {
-	std::shared_ptr<Entity> s1 = w1.lock();
-	std::shared_ptr<Entity> s2 = w2.lock();
-
-	return s1->get_component<sov::Graphics>()->layer < s2->get_component<sov::Graphics>()->layer;
+	return e1->get_component<sov::Graphics>()->layer < e2->get_component<sov::Graphics>()->layer;
 }
 
 void RenderSystem::receive(const EntityCreated& event)

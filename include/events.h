@@ -8,27 +8,27 @@
 
 struct EntityCreated : sov::Event
 {
-	explicit EntityCreated(const std::shared_ptr<Entity>& entity) : entity(entity) {}
-	std::shared_ptr<Entity> entity;
+	explicit EntityCreated(Entity* entity) : entity(entity) {}
+	Entity* entity;
 };
 
 struct CollisionEvent : sov::Event
 {
-	explicit CollisionEvent(const std::shared_ptr<Entity>& e1, const std::shared_ptr<Entity>& e2) : e1(e1), e2(e2) {}
-	std::shared_ptr<Entity> e1;
-	std::shared_ptr<Entity> e2;
+	explicit CollisionEvent(Entity* entity1, Entity* entity2) : e1(entity1), e2(entity2) {}
+	Entity* e1;
+	Entity* e2;
 };
 
 struct LevelTransitionEvent : sov::Event
 {
-	explicit LevelTransitionEvent(const std::shared_ptr<LevelTransition>& transition) : level_transition(transition) {}
-	std::shared_ptr<LevelTransition> level_transition;
+	explicit LevelTransitionEvent(LevelTransition* transition) : level_transition(transition) {}
+	LevelTransition* level_transition;
 };
 
 struct MoveEvent : sov::Event
 {
-	explicit MoveEvent(const std::shared_ptr<Entity>& entity) : entity(entity) {}
-	std::shared_ptr<Entity> entity;
+	explicit MoveEvent(Entity* entity) : entity(entity) {}
+	Entity* entity;
 };
 
 #endif

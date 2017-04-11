@@ -10,8 +10,8 @@ public:
 	explicit LuaVM(void);
 	~LuaVM(void);
 
-	int call(std::string name);
-	int load_script(std::string path);
+	int call(const std::string& name);
+	int load_script(const std::string& path);
 
 private:
 	lua_State* _vm;

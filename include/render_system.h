@@ -12,7 +12,7 @@ class RenderSystem : public System, public sov::Observer<EntityCreated>
 {
 
 public:
-	RenderSystem(Viewport& viewport) : _viewport(viewport) {}
+	explicit RenderSystem(Viewport& viewport) : _viewport(viewport) {}
 
 	virtual void init(void) override;
 	virtual void update(void) override;
@@ -25,7 +25,7 @@ private:
 	const int SPRITE_SHEET_WIDTH = 16;
 	const int SPRITE_SHEET_HEIGHT = 16;
 
-	static bool layer_compare(const weak_ptr<Entity>&, const weak_ptr<Entity>&);
+	static bool layer_compare(Entity*, Entity*);
 	void _clean(void);
 
 	void _map_drawable_entities(void);

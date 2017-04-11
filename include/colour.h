@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-#include <map>
+#include <unordered_map>
 #include <string>
 
 using namespace sf;
@@ -103,7 +103,7 @@ static const Color LightBrown(200, 100, 0);
 static const Color Silver(192, 192, 192);
 static const Color Gold(255, 215, 0);
 
-static const std::map<const std::string, const Color&> colours_map = {
+static const std::unordered_map<std::string, const Color&> colours_map = {
 	{ "transparent", Color::Transparent },
 	{ "dark_red", DarkRed },{ "red", Color::Red },{ "light_red", LightRed },
 	{ "dark_flame", DarkFlame },{ "flame", Flame },{ "light_flame", LightFlame },

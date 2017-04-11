@@ -22,7 +22,7 @@ namespace sov
 
 		sf::Sprite sprite;
 		sf::Transform sprite_transform;
-		float brightness;
+		//float brightness;
 		DrawLayer layer;
 	};
 };

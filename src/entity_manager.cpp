@@ -13,9 +13,9 @@ EntityLoader::~EntityLoader(void)
 		delete loader.second;
 }
 
-std::unique_ptr<Entity> EntityLoader::load(const std::string& entity_id)
+Entity* EntityLoader::load(const std::string& entity_id)
 {
-	std::unique_ptr<Entity> ptr(new Entity(-1));
+	Entity* ptr = new Entity(-1);
 	std::ifstream fs;
 	std::string line, option, value;
 
@@ -66,14 +66,12 @@ bool EntityCache::_has(const std::string& entity_id)
 	return _entities.find(entity_id) != _entities.end();
 }
 
-std::unique_ptr<Entity> EntityCache::get(const std::string& entity_id)
+Entity* EntityCache::get(const std::string& entity_id)
 {
 	if(!_has(entity_id))
-	{
 		_load(entity_id);
-	}
 
-	return std::unique_ptr<Entity>(new Entity(_entities[entity_id]->clone()));
+	return new Entity(_entities[entity_id]->clone());
 }
 
 void EntityCache::_load(const std::string& entity_id)
@@ -83,9 +81,9 @@ void EntityCache::_load(const std::string& entity_id)
 
 int EntityManager::NEXT_ID = 0;
 
-std::shared_ptr<Entity> EntityManager::create_entity(const std::string& entity_type)
+Entity* EntityManager::create_entity(const std::string& entity_type)
 {
-	std::shared_ptr<Entity> e(_cache.get(entity_type));
+	Entity* e = _cache.get(entity_type);
 	e->_id = NEXT_ID;
 	_entities[NEXT_ID] = e;
 
@@ -99,15 +97,15 @@ std::shared_ptr<Entity> EntityManager::create_entity(const std::string& entity_t
 	return e;
 }
 
-std::shared_ptr<Entity> EntityManager::create_entity_at_loc(const std::string& entity_type, int x, int y, int z)
+Entity* EntityManager::create_entity_at_loc(const std::string& entity_type, int x, int y, int z)
 {
-	std::shared_ptr<Entity> e = create_entity(entity_type);
-	std::shared_ptr<Location> loc = e->get_component<Location>();
+	Entity* e = create_entity(entity_type);
+	Location* loc = e->get_component<Location>();
 	loc->x = x;
 	loc->y = y;
 	loc->z = z;
 
-	std::shared_ptr<sov::Graphics> gfx = e->get_component<sov::Graphics>();
+	sov::Graphics* gfx = e->get_component<sov::Graphics>();
 	if(gfx != nullptr)
 		gfx->sprite.setPosition(loc->x * 32.0f, loc->y * 32.0f);
 
@@ -116,36 +114,33 @@ std::shared_ptr<Entity> EntityManager::create_entity_at_loc(const std::string& e
 
 void EntityManager::update(void)
 {
-	for(std::map<int, std::shared_ptr<Entity>>::iterator it = _entities.begin(); it !=_entities.end();)
+	for(std::unordered_map<int, Entity*>::iterator it = _entities.begin(); it !=_entities.end();)
 	{
 		if(it->second->obsolete)
-		{
-			it = _entities.erase(it);
-			continue;
-		}
+			_entities.erase(it);
 
 		++it;
 	}	
 }
 
-const std::shared_ptr<Entity>& EntityManager::get_player(void) const
+const Entity* EntityManager::get_player(void) const
 {
 	return _entities.at(_player_id);
 }
 
-std::shared_ptr<Entity>& EntityManager::get_player(void)
+Entity* EntityManager::get_player(void)
 {
 	return _entities.at(_player_id);
 }
 
 // TODO: Spatial partitioning of some kind
-std::vector<std::shared_ptr<Entity>> EntityManager::get_entities_at_loc(int x, int y, int z) const
+std::vector<Entity*> EntityManager::get_entities_at_loc(int x, int y, int z) const
 {
-	std::vector<std::shared_ptr<Entity>> ret;
+	std::vector<Entity*> ret;
 
 	for (auto& entity : _entities)
 	{
-		std::shared_ptr<Location> lc = entity.second->get_component<Location>();
+		Location* lc = entity.second->get_component<Location>();
 
 		if (lc->x == x && lc->y == y && lc->z == z)
 			ret.push_back(entity.second);

@@ -41,7 +41,7 @@ Viewport::Viewport(int x, int y, int w, int h) : UIElement(x, y, w, h), sf::Rend
 // Sets the world space coordinate origin of the screen coordinates, and updates the view.
 void Viewport::update(void)
 {
-	const std::shared_ptr<const sov::Graphics> gfx = Environment::get().get_entity_manager()->get_player()->get_component<sov::Graphics>();
+	sov::Graphics* gfx = Environment::get().get_entity_manager()->get_player()->get_component<sov::Graphics>();
 	const Level& level = Environment::get().get_level_manager()->get_current();
 	Vector2f sprite_pos = gfx->sprite.getPosition();
 

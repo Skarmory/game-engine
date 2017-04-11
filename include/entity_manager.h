@@ -1,8 +1,7 @@
 #ifndef entity_manager_h
 #define entity_manager_h
 
-#include <map>
-#include <memory>
+#include <unordered_map>
 #include <string>
 
 #include "entity.h"
@@ -17,12 +16,12 @@ public:
 	explicit EntityLoader(void) {}
 	~EntityLoader(void);
 
-	unique_ptr<Entity> load(const string& entity_id);
+	Entity* load(const std::string& entity_id);
 
 private:
 	const std::string _file_path = "resources/data/entities.txt";
 
-	map<string, ComponentLoader*>  _component_loaders = {
+	std::unordered_map<std::string, ComponentLoader*>  _component_loaders = {
 		{ "graphic", new GraphicLoader() },
 		{ "location", new LocationLoader() },
 		{ "collision", new CollisionLoader() },
@@ -39,14 +38,14 @@ private:
 class EntityCache
 {
 public:
-	unique_ptr<Entity> get(const string& entity_id);
+	Entity* get(const std::string& entity_id);
 
 private:
 	EntityLoader _loader;
-	map<string, unique_ptr<Entity>> _entities;
+	std::unordered_map<std::string, Entity*> _entities;
 
-	void _load(const string& entity_id);
-	bool _has(const string& entity_id);
+	void _load(const std::string& entity_id);
+	bool _has(const std::string& entity_id);
 };
 
 class EntityManager
@@ -55,17 +54,17 @@ public:
 	
 	explicit EntityManager(void) : _player_id(-1) {};
 
-	shared_ptr<Entity> create_entity(const string& entity_type);
-	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y, int z);
+	Entity* create_entity(const string& entity_type);
+	Entity* create_entity_at_loc(const string& entity_type, int x, int y, int z);
 
-	const std::shared_ptr<Entity>& get_player(void) const;
-	std::shared_ptr<Entity>& get_player(void);
-	vector<shared_ptr<Entity>> get_entities_at_loc(int x, int y, int z) const;
+	const Entity* get_player(void) const;
+	Entity* get_player(void);
+	std::vector<Entity*> get_entities_at_loc(int x, int y, int z) const;
 	
 	void update(void);
 
 private:
-	map<int, shared_ptr<Entity>> _entities;
+	std::unordered_map<int, Entity*> _entities;
 	EntityCache _cache;
 	int _player_id;
 

@@ -19,7 +19,7 @@ public:
 private:
 	const string _path = "resources/levels/";
 	Level* _current;
-	map<string, Level*> _levels;
+	std::unordered_map<std::string, Level*> _levels;
 
 	void _load(const string& name);
 };

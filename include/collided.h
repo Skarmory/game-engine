@@ -8,12 +8,12 @@ using namespace std;
 
 struct Collided : public Component<Collided>
 {
-	explicit Collided(const shared_ptr<Entity>& collided) 
+	explicit Collided(Entity* collided) 
 	{
 		collided_with.push_back(collided);
 	}
 
-	vector<shared_ptr<Entity>> collided_with;
+	std::vector<Entity*> collided_with;
 };
 
 #endif

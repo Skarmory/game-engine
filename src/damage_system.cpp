@@ -17,28 +17,22 @@ void DamageSystem::update(void)
 {
 	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{
-		shared_ptr<Entity> e = it->lock();
-		if(e != nullptr)
+		Collided* cc = (*it)->get_component<Collided>();
+		
+		for(auto& collided : cc->collided_with)
 		{
-			shared_ptr<Collided> cc = e->get_component<Collided>();
-			shared_ptr<Health>   hc;
-			
-			for(auto& collided : cc->collided_with)
+			Health* hc;
+			if((hc = collided->get_component<Health>()) != nullptr && hc->is_alive)
 			{
-				if((hc = collided->get_component<Health>()) != nullptr && hc->is_alive)
-				{
-					int dmg = e->get_component<Damage>()->damage;
+				int dmg = (*it)->get_component<Damage>()->damage;
 
+				hc->health -= dmg;
 
-					hc->health -= dmg;
-
-					if(hc->health < 0)
-					{
-						hc->is_alive = false;
-					}
-				}
+				if(hc->health < 0)
+					hc->is_alive = false;
 			}
 		}
+		
 
 		it = _entities.erase(it);
 	}

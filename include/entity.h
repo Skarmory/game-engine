@@ -2,7 +2,7 @@
 #define entity_h
 
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <typeindex>
 
@@ -13,6 +13,11 @@ using namespace std;
 class Entity {
 public:
 	explicit Entity(int id) : obsolete(false), _id(id) {}
+	~Entity(void)
+	{
+		for (auto& elem : _components)
+			delete elem.second;
+	}
 
 	Entity clone(void)
 	{
@@ -21,14 +26,14 @@ public:
 		for (const auto& elem : _components)
 		{
 			BaseComponent* b = elem.second->clone();
-			e._components.insert(std::make_pair(elem.first, std::shared_ptr<BaseComponent>(b)));
+			e._components.insert(std::make_pair(elem.first, b));
 		}
 
 		return e;
 	}
 
 	// Add component to the entity
-	void add_component(const shared_ptr<BaseComponent> c)
+	void add_component(BaseComponent* c)
 	{
 		_components[typeid(*c)] = c;
 	}
@@ -40,22 +45,21 @@ public:
 		_components.erase(typeid(T));
 	}
 
-	// Return const pointer to component
 	template<class T>
-	const shared_ptr<T> get_component(void)
+	T* get_component(void)
 	{
 		if(has_component<T>())
-			return static_pointer_cast<T>(_components.at(typeid(T)));
+			return static_cast<T*>(_components.at(typeid(T)));
 		
 		return nullptr;
 	}
 
 	// Return const pointer to const component
 	template<class T>
-	const shared_ptr<const T> get_component(void) const
+	const T const* get_component(void) const
 	{
 		if(has_component<T>())
-			return static_pointer_cast<const T>(_components.at(typeid(T)));
+			return static_cast<const T const*>(_components.at(typeid(T)));
 
 		return nullptr;
 	}
@@ -79,7 +83,7 @@ public:
 private:
 
 	int _id;
-	map<type_index, shared_ptr<BaseComponent>> _components;
+	std::unordered_map<std::type_index, BaseComponent*> _components;
 
 	friend class EntityManager;
 };

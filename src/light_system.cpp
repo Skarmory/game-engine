@@ -25,15 +25,8 @@ void LightSystem::update(void)
 
 	for (entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
-		shared_ptr<Entity> e;
-		if (!(e = it->lock()))
-		{
-			it = _entities.erase(it);
-			continue;
-		}
-
-		shared_ptr<LightSource> light = e->get_component<LightSource>();
-		shared_ptr<Location>    loc = e->get_component<Location>();
+		LightSource* light = (*it)->get_component<LightSource>();
+		Location*    loc = (*it)->get_component<Location>();
 
 		if (loc->z != _level._depth)
 		{
@@ -54,7 +47,7 @@ void LightSystem::update(void)
 			_level._base_map.get(x0, y0)->_light_value = MAX_LIGHT_PERCENT;
 		}
 
-		it++;
+		++it;
 	}
 }
 

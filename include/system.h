@@ -2,30 +2,34 @@
 #define system_h
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <typeindex>
 
 #include "entity.h"
 
-typedef std::vector<std::weak_ptr<Entity>>::iterator entity_iterator;
+typedef std::vector<Entity*>::iterator entity_iterator;
 
 class System 
 {
 public:
 	explicit System(void) {};
-	virtual ~System(void) = default;
+	virtual ~System(void)
+	{
+		for (auto elem : _entities)
+			delete elem;
+	}
 
 	virtual void init(void) = 0;
 	virtual void update(void) = 0;
 	
-	virtual void add_entity(const std::shared_ptr<Entity>& entity)
+	virtual void add_entity(Entity* entity)
 	{
 		_entities.push_back(entity);
 	}
 
 protected:
-	std::vector<std::weak_ptr<Entity>> _entities;
+	std::vector<Entity*> _entities;
 };
 
 class SystemManager
@@ -33,7 +37,7 @@ class SystemManager
 public:
 	explicit SystemManager(void) {}
 
-	typedef std::map<std::type_index, std::shared_ptr<System>>::iterator system_iterator;
+	typedef std::unordered_map<std::type_index, std::shared_ptr<System>>::iterator system_iterator;
 
 	void init(void)
 	{
@@ -78,7 +82,7 @@ public:
 	}
 
 private:
-	std::map<std::type_index, std::shared_ptr<System>> _systems;
+	std::unordered_map<std::type_index, std::shared_ptr<System>> _systems;
 };
 
 #endif

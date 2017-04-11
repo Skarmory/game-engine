@@ -2,7 +2,7 @@
 #define observer_h
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <typeindex>
 #include <memory>
 #include <algorithm>
@@ -61,7 +61,7 @@ namespace sov
 		}
 
 	private:
-		std::map<std::type_index, std::vector<BaseCallback*>> _observers;
+		std::unordered_map<std::type_index, std::vector<BaseCallback*>> _observers;
 
 		struct BaseCallback {
 			virtual ~BaseCallback(void) = default;

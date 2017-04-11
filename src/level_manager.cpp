@@ -6,7 +6,7 @@
 #include "graphics.h"
 #include "environment.h"
 
-LevelManager::LevelManager(void)
+LevelManager::LevelManager(void) : _current(nullptr)
 {
 	Environment::get().get_event_manager()->subscribe<LevelTransitionEvent>(*this);
 }
@@ -92,7 +92,7 @@ void LevelManager::_load(const string& name)
 					case '.':
 						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("grass2.png"));
 						gfx.layer = sov::DrawLayer::EFFECT;
-						gfx.brightness = 0.0f;
+						//gfx.brightness = 0.0f;
 
 						walkable = true;
 						blocks_los = false;
@@ -104,7 +104,7 @@ void LevelManager::_load(const string& name)
 					case '-':
 						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("stone-wall2.png"));
 						gfx.layer = sov::DrawLayer::EFFECT;
-						gfx.brightness = 0.0f;
+						//gfx.brightness = 0.0f;
 						
 						if (ch == '-' || ch == '_')
 							gfx.sprite_transform.rotate(90.0f);
@@ -120,7 +120,7 @@ void LevelManager::_load(const string& name)
 
 						gfx.sprite = sf::Sprite(*Environment::get().get_sprite_cache()->get("stone-wall-corner2.png"));
 						gfx.layer = sov::DrawLayer::EFFECT;
-						gfx.brightness = 0.0f;
+						//gfx.brightness = 0.0f;
 
 						if (ch == '1')
 							gfx.sprite_transform.rotate(90.0f);

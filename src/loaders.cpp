@@ -15,17 +15,17 @@
 
 void LocationLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<Location>());
+	prototype.add_component(new Location());
 }
 
 void CollisionLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<Collision>());
+	prototype.add_component(new Collision());
 }
 
 void DamageLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<Damage>(std::stoi(value)));
+	prototype.add_component(new Damage(std::stoi(value)));
 }
 
 void GraphicLoader::load(Entity& entity, const std::string& value)
@@ -36,10 +36,10 @@ void GraphicLoader::load(Entity& entity, const std::string& value)
 
 	std::string vals[2];
 
-	size_t ppos = 0, pos = 0;
+	size_t ppos = 0;
 	for (int i = 0; i < 2; i++)
 	{
-		pos = value.find(':', ppos);
+		size_t pos = value.find(':', ppos);
 		if (pos == std::string::npos)
 			pos = value.length();
 
@@ -50,25 +50,25 @@ void GraphicLoader::load(Entity& entity, const std::string& value)
 	sprite = sf::Sprite(*(Environment::get().get_sprite_cache()->get(vals[0])));
 	layer = static_cast<sov::DrawLayer>(std::stoi(vals[1]));
 
-	entity.add_component(make_shared<sov::Graphics>(sprite, trans, layer));
+	entity.add_component(new sov::Graphics(sprite, trans, layer));
 }
 
 void HealthLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<Health>(std::stoi(value)));
+	prototype.add_component(new Health(std::stoi(value)));
 }
 
 void SightLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<Sight>(std::stoi(value)));
+	prototype.add_component(new Sight(std::stoi(value)));
 }
 
 void LightSourceLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<LightSource>(std::stoi(value)));
+	prototype.add_component(new LightSource(std::stoi(value)));
 }
 
 void LevelTransitionLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(make_shared<LevelTransition>());
+	prototype.add_component(new LevelTransition());
 }

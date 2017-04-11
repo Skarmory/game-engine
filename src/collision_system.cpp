@@ -19,16 +19,8 @@ void CollisionSystem::update(void)
 
 	for(entity_iterator it = _entities.begin();	it != _entities.end();)
 	{
-		shared_ptr<Entity> e = it->lock();
-
-		if(e == nullptr)
-		{
-			it = _entities.erase(it);
-			continue;
-		}
-
-		shared_ptr<Location>  lc = e->get_component<Location>();
-		shared_ptr<Collision> cc = e->get_component<Collision>();
+		Location*  lc = (*it)->get_component<Location>();
+		Collision* cc = (*it)->get_component<Collision>();
 		
 		if(!cc->enabled)
 		{
@@ -39,16 +31,8 @@ void CollisionSystem::update(void)
 		// Check for collision with other entities. Game is simple enough that no spatial hashing is necessary
 		for(entity_iterator check_it = it + 1; check_it != _entities.end();)
 		{
-			shared_ptr<Entity> check_e = check_it->lock();
-
-			if(check_e == nullptr)
-			{
-				check_it = _entities.erase(check_it);
-				continue;
-			}
-
-			shared_ptr<Location>  check_lc = check_e->get_component<Location>();
-			shared_ptr<Collision> check_cc = check_e->get_component<Collision>();
+			Location*  check_lc = (*check_it)->get_component<Location>();
+			Collision* check_cc = (*check_it)->get_component<Collision>();
 
 			if(!check_cc->enabled)
 			{
@@ -58,17 +42,17 @@ void CollisionSystem::update(void)
 
 			if(lc->x == check_lc->x && lc->y == check_lc->y)
 			{
-				if(e->has_component<Collided>())
-					e->get_component<Collided>()->collided_with.push_back(check_e);
+				if((*it)->has_component<Collided>())
+					(*it)->get_component<Collided>()->collided_with.push_back((*check_it));
 				else
-					e->add_component(make_shared<Collided>(check_e));
+					(*it)->add_component(new Collided(*check_it));
 
-				if(check_e->has_component<Collided>())
-					check_e->get_component<Collided>()->collided_with.push_back(e);
+				if((*check_it)->has_component<Collided>())
+					(*check_it)->get_component<Collided>()->collided_with.push_back((*it));
 				else
-					check_e->add_component(make_shared<Collided>(e));
+					(*check_it)->add_component(new Collided(*it));
 
-				Environment::get().get_event_manager()->broadcast<CollisionEvent>(e, check_e);
+				Environment::get().get_event_manager()->broadcast<CollisionEvent>((*it), (*check_it));
 			}
 
 			++check_it;
@@ -80,17 +64,10 @@ void CollisionSystem::update(void)
 
 void CollisionSystem::_clean(void)
 {
-	for(vector<weak_ptr<Entity>>::iterator it = _entities.begin(); it != _entities.end();)
+	for(entity_iterator it = _entities.begin(); it != _entities.end();)
 	{
-		shared_ptr<Entity> e;
-		if((e = it->lock()) == nullptr)
-		{
-			it = _entities.erase(it);
-			continue;
-		}
-
-		if(e->has_component<Collided>())
-			e->remove_component<Collided>();
+		if((*it)->has_component<Collided>())
+			(*it)->remove_component<Collided>();
 
 		++it;
 	}
