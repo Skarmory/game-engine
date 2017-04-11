@@ -5,6 +5,7 @@
 
 #include "environment.h"
 #include "location.h"
+#include "graphics.h"
 
 EntityLoader::~EntityLoader(void)
 {
@@ -72,7 +73,7 @@ std::unique_ptr<Entity> EntityCache::get(const std::string& entity_id)
 		_load(entity_id);
 	}
 
-	return std::unique_ptr<Entity>(new Entity(*_entities[entity_id]));
+	return std::unique_ptr<Entity>(new Entity(_entities[entity_id]->clone()));
 }
 
 void EntityCache::_load(const std::string& entity_id)
@@ -106,6 +107,10 @@ std::shared_ptr<Entity> EntityManager::create_entity_at_loc(const std::string& e
 	loc->y = y;
 	loc->z = z;
 
+	std::shared_ptr<sov::Graphics> gfx = e->get_component<sov::Graphics>();
+	if(gfx != nullptr)
+		gfx->sprite.setPosition(loc->x * 32.0f, loc->y * 32.0f);
+
 	return e;
 }
 
@@ -123,14 +128,14 @@ void EntityManager::update(void)
 	}	
 }
 
-const Entity& EntityManager::get_player(void) const
+const std::shared_ptr<Entity>& EntityManager::get_player(void) const
 {
-	return *_entities.at(_player_id);
+	return _entities.at(_player_id);
 }
 
-Entity& EntityManager::get_player(void)
+std::shared_ptr<Entity>& EntityManager::get_player(void)
 {
-	return *_entities.at(_player_id);
+	return _entities.at(_player_id);
 }
 
 // TODO: Spatial partitioning of some kind

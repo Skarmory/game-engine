@@ -4,11 +4,11 @@ using namespace std::chrono;
 
 void GameTime::tick(void)
 {
+	_previous = _current;
+
 	_current = high_resolution_clock::now();
 
 	_delta = _current - _previous;
-
-	_previous = _current;
 }
 
 double GameTime::delta(void) const
@@ -20,7 +20,7 @@ void Timer::tick(const GameTime& time)
 {
 	if(!_finished)
 	{
-		_elapsed += duration<double>(time.delta());
+		_elapsed += time.delta();
 		
 		if(_elapsed >= _count_to)
 		{
@@ -31,13 +31,13 @@ void Timer::tick(const GameTime& time)
 
 double Timer::time_elapsed(void) const
 {
-	return _elapsed.count();
+	return _elapsed;
 }
 
 void Timer::reset(void)
 {
 	_finished = false;
-	_elapsed = duration<double>(0);
+	_elapsed = 0;
 }
 
 bool Timer::finished(void) const

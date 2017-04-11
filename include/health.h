@@ -11,12 +11,4 @@ struct Health : public Component<Health>
 	bool is_alive;
 };
 
-struct TimedHealth : public Component<TimedHealth>
-{
-	explicit TimedHealth(int turns) : turns(turns), remaining(turns) {} 
-
-	const int turns;
-	int remaining;
-};
-
 #endif

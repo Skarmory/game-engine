@@ -27,16 +27,8 @@ void DamageSystem::update(void)
 			{
 				if((hc = collided->get_component<Health>()) != nullptr && hc->is_alive)
 				{
-					int dmg = 0;
+					int dmg = e->get_component<Damage>()->damage;
 
-					if (e->has_component<PeriodicDamage>())
-					{
-						dmg = e->get_component<PeriodicDamage>()->damage;
-					}
-					else
-					{
-						dmg = e->get_component<Damage>()->damage;
-					}
 
 					hc->health -= dmg;
 
@@ -54,9 +46,9 @@ void DamageSystem::update(void)
 
 void DamageSystem::receive(const CollisionEvent& event)
 {
-	if(event.e1->has_component<Damage>() || event.e1->has_component<PeriodicDamage>())
+	if(event.e1->has_component<Damage>())
 		add_entity(event.e1);
 
-	if(event.e2->has_component<Damage>() || event.e2->has_component<PeriodicDamage>())
+	if(event.e2->has_component<Damage>())
 		add_entity(event.e2);
 }

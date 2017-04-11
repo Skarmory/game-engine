@@ -58,7 +58,7 @@ c_uptr InputManager::handle_input(void)
 	}
 	else if (event.type == sf::Event::Closed)
 	{
-		//return c_uptr(new QuitCommand(_is_running));
+		return c_uptr(new QuitCommand(_is_running));
 	}
 
 	return nullptr;

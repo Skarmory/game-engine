@@ -17,8 +17,8 @@ void VisibilitySystem::update(void)
 		_level._base_map.get(i, j)->_visible = false;
 	}
 
-	const shared_ptr<const Sight> sight  = Environment::get().get_entity_manager()->get_player().get_component<Sight>();
-	const shared_ptr<const Location> loc = Environment::get().get_entity_manager()->get_player().get_component<Location>();
+	const shared_ptr<const Sight> sight  = Environment::get().get_entity_manager()->get_player()->get_component<Sight>();
+	const shared_ptr<const Location> loc = Environment::get().get_entity_manager()->get_player()->get_component<Location>();
 
 	if (sight->radius > 0)
 	{

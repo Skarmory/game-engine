@@ -30,7 +30,6 @@ private:
 		{ "light", new LightSourceLoader() },
 		{ "sight", new SightLoader() },
 		{ "damage", new DamageLoader() },
-		{ "periodicDamage", new PeriodicDamageLoader() },
 		{ "levelTransition", new LevelTransitionLoader() }
 	};
 };
@@ -59,8 +58,8 @@ public:
 	shared_ptr<Entity> create_entity(const string& entity_type);
 	shared_ptr<Entity> create_entity_at_loc(const string& entity_type, int x, int y, int z);
 
-	const Entity& get_player(void) const;
-	Entity& get_player(void);
+	const std::shared_ptr<Entity>& get_player(void) const;
+	std::shared_ptr<Entity>& get_player(void);
 	vector<shared_ptr<Entity>> get_entities_at_loc(int x, int y, int z) const;
 	
 	void update(void);

@@ -8,6 +8,7 @@
 #include "location.h"
 #include "level_transition.h"
 #include "level.h"
+#include "move_system.h"
 
 using namespace std;
 
@@ -15,18 +16,25 @@ MoveCommand::MoveCommand(int x, int y) : _x(x), _y(y) {}
 
 void MoveCommand::execute(void)
 {
+	std::shared_ptr<Entity>& player = Environment::get().get_entity_manager()->get_player();
+
+	// Player already moving
+	if (player->has_component<Move>())
+		return;
+
 	Level& _level = Environment::get().get_level_manager()->get_current();
-	Entity& player = Environment::get().get_entity_manager()->get_player();
-	int dx, dy;
-	shared_ptr<Location> lc = player.get_component<Location>();
-			
-	dx = lc->x + _x;
-	dy = lc->y + _y;
+	shared_ptr<Location> lc = player->get_component<Location>();
+
+	int dx = lc->x + _x;
+	int dy = lc->y + _y;
 
 	if(_level.is_in_bounds(dx, dy) && _level.is_walkable(dx, dy))
 	{
+		player->add_component(std::make_shared<Move>(dx, dy, lc->x * 32.0f, lc->y * 32.0f));
+		Environment::get().get_event_manager()->broadcast<MoveEvent>(player);
+
 		lc->x = dx;
-		lc->y = dy;	
+		lc->y = dy;
 	}
 }
 
@@ -34,9 +42,9 @@ AttackCommand::AttackCommand(int x, int y) : _x(x), _y(y) {}
 
 void AttackCommand::execute(void)
 {
-	Entity& player = Environment::get().get_entity_manager()->get_player();
+	std::shared_ptr<Entity>& player = Environment::get().get_entity_manager()->get_player();
 	
-	shared_ptr<Location> loc = player.get_component<Location>();
+	shared_ptr<Location> loc = player->get_component<Location>();
 	Environment::get().get_entity_manager()->create_entity_at_loc("damage", loc->x + _x, loc->y + _y, loc->z);
 	
 }	
@@ -52,8 +60,8 @@ LevelTransitionCommand::LevelTransitionCommand(void) {}
 
 void LevelTransitionCommand::execute(void)
 {
-	Entity& player = Environment::get().get_entity_manager()->get_player();
-	shared_ptr<Location> loc = player.get_component<Location>();
+	std::shared_ptr<Entity>& player = Environment::get().get_entity_manager()->get_player();
+	shared_ptr<Location> loc = player->get_component<Location>();
 
 	auto location_entities = Environment::get().get_entity_manager()->get_entities_at_loc(loc->x, loc->y, loc->z);
 

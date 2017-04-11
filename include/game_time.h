@@ -28,8 +28,8 @@ public:
 	bool finished(void) const;
 
 private:
-	std::chrono::duration<double> _elapsed;
-	std::chrono::duration<double> _count_to;
+	double _elapsed;
+	double _count_to;
 	bool _finished;
 };
 

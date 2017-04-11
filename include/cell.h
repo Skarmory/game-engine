@@ -1,12 +1,12 @@
 #ifndef cell_h
 #define cell_h
 
-#include "graphic.h"
+#include "graphics.h"
 
 class Cell 
 {
 public:
-	Cell(sov::Graphic graphic, bool walkable, bool los_blocker) :
+	Cell(sov::Graphics graphic, bool walkable, bool los_blocker) :
 		_graphic(graphic), _light_value(0.0f),
 		_walkable(walkable), _los_blocker(los_blocker),
 		_explored(false), _visible(false) {}
@@ -19,7 +19,7 @@ public:
 	bool is_los_blocker(void) const;
 
 private:
-	sov::Graphic _graphic;
+	sov::Graphics _graphic;
 	float _light_value;
 	bool  _los_blocker;
 	bool  _explored;

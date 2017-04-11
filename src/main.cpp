@@ -14,20 +14,19 @@
 // Managers
 #include "event.h"
 #include "entity_manager.h"
-#include "system.h"
 #include "level_manager.h"
 #include "input.h"
 #include "environment.h"
 #include "sprite.h"
 
 // Systems
+#include "system.h"
 #include "render_system.h"
 #include "light_system.h"
 #include "visibility_system.h"
-#include "periodic_damage_system.h"
 #include "collision_system.h"
-#include "timed_health_system.h"
 #include "damage_system.h"
+#include "move_system.h"
 
 #include "ui.h"
 
@@ -43,7 +42,7 @@ int main(int argc, char** argv)
 
 	GameTime game_time;
 	Timer turn_timer(3);
-	Timer draw_timer(0.03);
+	Timer draw_timer(1.0f / 30.0f);
 	int turn = 1;
 
 	Environment* env = new Environment();
@@ -72,11 +71,10 @@ int main(int argc, char** argv)
 	sm->create<VisibilitySystem>();
 	sm->create<RenderSystem>(viewport);
 	sm->create<LightSystem>();
-	sm->create<PeriodicDamageUpdateSystem>();
 	sm->create<CollisionSystem>();
 	sm->create<DamageSystem>();
-	sm->create<TimedHealthSystem>();
-	
+	sm->create<MoveSystem>();
+
 	sm->init();
 
 	lm->load("testing_map.dat");
@@ -101,28 +99,27 @@ int main(int argc, char** argv)
 		turn_timer.tick(game_time);
 		draw_timer.tick(game_time);
 
-		unique_ptr<Command> input_command = input->handle_input();
+		std::unique_ptr<Command> input_command = input->handle_input();
 
 		// Input
 		if(input_command != nullptr || turn_timer.finished())
 		{
 			turn_timer.reset();
 			turn++;
-
-			sm->update<PeriodicDamageUpdateSystem>();
 			
 			if(input_command != nullptr)
 				input_command->execute();
 
 			sm->update<CollisionSystem>();
 			sm->update<DamageSystem>();
-			sm->update<TimedHealthSystem>();
 		}
+		
+		sm->update<MoveSystem>();
 		
 		if (draw_timer.finished())
 		{
-			viewport.clear();
 			viewport.update();
+			viewport.clear();
 
 			// Drawing	
 			sm->update<LightSystem>();

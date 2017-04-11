@@ -25,11 +25,6 @@ class DamageLoader : public ComponentLoader
 	void load(Entity& prototype, const std::string& value) override;
 };
 
-class PeriodicDamageLoader : public ComponentLoader
-{
-	void load(Entity& prototype, const std::string& value) override;
-};
-
 class GraphicLoader : public ComponentLoader
 {
 	void load(Entity& prototype, const std::string& value) override;

@@ -15,10 +15,10 @@ namespace sov
 		CREATURE = 3
 	};
 
-	struct Graphic : public Component<Graphic>
+	struct Graphics : public Component<Graphics>
 	{
-		Graphic(void) {}
-		Graphic(sf::Sprite sprite, sf::Transform sprite_transform, DrawLayer layer) : sprite(sprite), layer(layer) {}
+		Graphics(void) {}
+		Graphics(sf::Sprite sprite, sf::Transform sprite_transform, DrawLayer layer) : sprite(sprite), layer(layer) {}
 
 		sf::Sprite sprite;
 		sf::Transform sprite_transform;

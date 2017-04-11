@@ -3,7 +3,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "graphic.h"
+#include "graphics.h"
 #include "environment.h"
 
 LevelManager::LevelManager(void)
@@ -85,7 +85,7 @@ void LevelManager::_load(const string& name)
 					char ch = line[x];
 					bool walkable = false;
 					bool blocks_los = false;
-					sov::Graphic gfx;
+					sov::Graphics gfx;
 
 					switch (ch)
 					{
@@ -106,12 +106,8 @@ void LevelManager::_load(const string& name)
 						gfx.layer = sov::DrawLayer::EFFECT;
 						gfx.brightness = 0.0f;
 						
-						/*if (ch == '-' || ch == '_')
-						{
-							sf::Transform t = sf::Transform::Identity;
-							t.rotate(90);
-							gfx.sprite_transform = t;
-						}*/
+						if (ch == '-' || ch == '_')
+							gfx.sprite_transform.rotate(90.0f);
 
 						walkable = false;
 						blocks_los = true;
@@ -126,18 +122,12 @@ void LevelManager::_load(const string& name)
 						gfx.layer = sov::DrawLayer::EFFECT;
 						gfx.brightness = 0.0f;
 
-						/*if (ch == '1')
-						{
-							gfx.sprite.setRotation(90.0f);
-						}
+						if (ch == '1')
+							gfx.sprite_transform.rotate(90.0f);
 						else if (ch == '3')
-						{
-							gfx.sprite.setRotation(180.0f);
-						}
+							gfx.sprite_transform.rotate(180.0f);
 						else if (ch == '2')
-						{
-							gfx.sprite.setRotation(270.0f);
-						}*/
+							gfx.sprite_transform.rotate(270.0f);
 
 						walkable = false;
 						blocks_los = true;

@@ -7,7 +7,7 @@
 #include "location.h"
 #include "collision.h"
 #include "damage.h"
-#include "graphic.h"
+#include "graphics.h"
 #include "health.h"
 #include "sight.h"
 #include "light.h"
@@ -26,14 +26,6 @@ void CollisionLoader::load(Entity& prototype, const std::string& value)
 void DamageLoader::load(Entity& prototype, const std::string& value)
 {
 	prototype.add_component(make_shared<Damage>(std::stoi(value)));
-}
-
-void PeriodicDamageLoader::load(Entity& prototype, const std::string& value)
-{
-	int damage = 0;
-	int period = 0;
-
-	prototype.add_component(make_shared<PeriodicDamage>(damage, period));
 }
 
 void GraphicLoader::load(Entity& entity, const std::string& value)
@@ -58,7 +50,7 @@ void GraphicLoader::load(Entity& entity, const std::string& value)
 	sprite = sf::Sprite(*(Environment::get().get_sprite_cache()->get(vals[0])));
 	layer = static_cast<sov::DrawLayer>(std::stoi(vals[1]));
 
-	entity.add_component(make_shared<sov::Graphic>(sprite, trans, layer));
+	entity.add_component(make_shared<sov::Graphics>(sprite, trans, layer));
 }
 
 void HealthLoader::load(Entity& prototype, const std::string& value)

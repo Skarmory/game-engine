@@ -8,7 +8,9 @@
 #include "ui.h"
 #include "map.h"
 
-class RenderSystem : public System, public sov::Observer<EntityCreated> {
+class RenderSystem : public System, public sov::Observer<EntityCreated>
+{
+
 public:
 	RenderSystem(Viewport& viewport) : _viewport(viewport) {}
 

@@ -13,15 +13,18 @@ using namespace std;
 class Entity {
 public:
 	explicit Entity(int id) : obsolete(false), _id(id) {}
-	Entity(const Entity& entity)
+
+	Entity clone(void)
 	{
-		_id = -1;
-		obsolete = false;
-		for (const auto& elem : entity._components)
+		Entity e(-1);
+
+		for (const auto& elem : _components)
 		{
 			BaseComponent* b = elem.second->clone();
-			_components.insert(make_pair(elem.first, shared_ptr<BaseComponent>(b)));
+			e._components.insert(std::make_pair(elem.first, std::shared_ptr<BaseComponent>(b)));
 		}
+
+		return e;
 	}
 
 	// Add component to the entity
