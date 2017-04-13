@@ -40,12 +40,14 @@ int main(int argc, char** argv)
 	if (!font.loadFromFile("arial.ttf"))
 		return -1;*/
 
-	GameTime game_time;
+	GameTime* game_time = new GameTime();
 	Timer turn_timer(3);
-	Timer draw_timer(1.0f / 30.0f);
+	Timer fixed(1.0f / 30.0f);
 	int turn = 1;
 
 	Environment* env = new Environment();
+
+	env->set_game_time(game_time);
 
 	sov::EventManager* evm = new sov::EventManager();
 	env->set_event_manager(evm);
@@ -95,40 +97,38 @@ int main(int argc, char** argv)
 
 	while(running && viewport.isOpen())
 	{
-		game_time.tick();
-		turn_timer.tick(game_time);
-		draw_timer.tick(game_time);
+		game_time->tick();
+		turn_timer.tick(*game_time);
+		fixed.tick(*game_time);
 
-		std::unique_ptr<Command> input_command = input->handle_input();
-
-		// Input
-		if(input_command != nullptr || turn_timer.finished())
+		if (fixed.finished())
 		{
-			turn_timer.reset();
-			turn++;
-			
-			if(input_command != nullptr)
-				input_command->execute();
+			std::unique_ptr<Command> input_command = input->handle_input();
+
+			// Input
+			if (input_command != nullptr || turn_timer.finished())
+			{
+				turn_timer.reset();
+				turn++;
+
+				if (input_command != nullptr)
+					input_command->execute();
+			}
 
 			sm->update<CollisionSystem>();
 			sm->update<DamageSystem>();
-		}
-		
-		sm->update<MoveSystem>();
-		
-		if (draw_timer.finished())
-		{
-			viewport.update();
-			viewport.clear();
-
-			// Drawing	
+			sm->update<MoveSystem>();
 			sm->update<LightSystem>();
 			sm->update<VisibilitySystem>();
-
-			sm->update<RenderSystem>();
-
-			viewport.display();
 		}
+		
+		viewport.update();
+		viewport.clear();
+
+		// Drawing
+		sm->update<RenderSystem>();
+
+		viewport.display();
 		
 		// Cleanup
 		em->update();

@@ -59,6 +59,11 @@ void Environment::set_sprite_cache(SpriteCache* sprite_cache)
 	_sprite_cache = sprite_cache;
 }
 
+void Environment::set_game_time(GameTime* game_time)
+{
+	_game_time = game_time;
+}
+
 EntityManager* Environment::get_entity_manager(void) const
 {
 	return _entity_manager;
@@ -87,6 +92,11 @@ InputManager* Environment::get_input_manager(void) const
 SpriteCache* Environment::get_sprite_cache(void) const
 {
 	return _sprite_cache;
+}
+
+GameTime* Environment::get_game_time(void) const
+{
+	return _game_time;
 }
 
 const Environment& Environment::get(void)

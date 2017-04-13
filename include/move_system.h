@@ -20,7 +20,7 @@ public:
 	virtual void update(void) override;
 	virtual void receive(const MoveEvent& e) override;
 
-	const float MOVE_SPEED = 4.0f;
+	const float MOVE_SPEED = 128.0f;
 };
 
 #endif
