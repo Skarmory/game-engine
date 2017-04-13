@@ -19,14 +19,14 @@ public:
 			delete elem.second;
 	}
 
-	Entity clone(void)
+	Entity* clone(void)
 	{
-		Entity e(-1);
+		Entity* e = new Entity(-1);
 
 		for (const auto& elem : _components)
 		{
 			BaseComponent* b = elem.second->clone();
-			e._components.insert(std::make_pair(elem.first, b));
+			e->_components.insert(std::make_pair(elem.first, b));
 		}
 
 		return e;

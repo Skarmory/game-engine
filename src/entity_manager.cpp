@@ -71,7 +71,7 @@ Entity* EntityCache::get(const std::string& entity_id)
 	if(!_has(entity_id))
 		_load(entity_id);
 
-	return new Entity(_entities[entity_id]->clone());
+	return _entities[entity_id]->clone();
 }
 
 void EntityCache::_load(const std::string& entity_id)

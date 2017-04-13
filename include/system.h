@@ -14,11 +14,6 @@ class System
 {
 public:
 	explicit System(void) {};
-	virtual ~System(void)
-	{
-		for (auto elem : _entities)
-			delete elem;
-	}
 
 	virtual void init(void) = 0;
 	virtual void update(void) = 0;
