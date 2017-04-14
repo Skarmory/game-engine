@@ -15,7 +15,7 @@ void DamageSystem::init(void)
 
 void DamageSystem::update(void)
 {
-	for(entity_iterator it = _entities.begin();	it != _entities.end();)
+	for(auto it = _entities.begin();	it != _entities.end();)
 	{
 		Collided* cc = (*it)->get_component<Collided>();
 		

@@ -17,7 +17,7 @@ void CollisionSystem::update(void)
 {
 	_clean();
 
-	for(entity_iterator it = _entities.begin();	it != _entities.end();)
+	for(auto it = _entities.begin();	it != _entities.end();)
 	{
 		Location*  lc = (*it)->get_component<Location>();
 		Collision* cc = (*it)->get_component<Collision>();
@@ -29,7 +29,7 @@ void CollisionSystem::update(void)
 		}
 
 		// Check for collision with other entities. Game is simple enough that no spatial hashing is necessary
-		for(entity_iterator check_it = it + 1; check_it != _entities.end();)
+		for(auto check_it = it + 1; check_it != _entities.end();)
 		{
 			Location*  check_lc = (*check_it)->get_component<Location>();
 			Collision* check_cc = (*check_it)->get_component<Collision>();
@@ -64,7 +64,7 @@ void CollisionSystem::update(void)
 
 void CollisionSystem::_clean(void)
 {
-	for(entity_iterator it = _entities.begin(); it != _entities.end();)
+	for(auto it = _entities.begin(); it != _entities.end();)
 	{
 		if((*it)->has_component<Collided>())
 			(*it)->remove_component<Collided>();

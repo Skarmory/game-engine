@@ -8,13 +8,12 @@
 
 #include "entity.h"
 
-typedef std::vector<Entity*>::iterator entity_iterator;
-
 class System 
 {
 public:
 	explicit System(void) {};
-
+	virtual ~System(void) {};
+	
 	virtual void init(void) = 0;
 	virtual void update(void) = 0;
 	
@@ -31,8 +30,6 @@ class SystemManager
 {
 public:
 	explicit SystemManager(void) {}
-
-	typedef std::unordered_map<std::type_index, std::shared_ptr<System>>::iterator system_iterator;
 
 	void init(void)
 	{

@@ -12,7 +12,7 @@ void MoveSystem::init(void)
 
 void MoveSystem::update(void)
 {
-	for (entity_iterator it = _entities.begin(); it != _entities.end();)
+	for (auto it = _entities.begin(); it != _entities.end();)
 	{
 		Move* move = (*it)->get_component<Move>();
 		sov::Graphics* gfx = (*it)->get_component<sov::Graphics>();

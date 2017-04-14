@@ -42,7 +42,7 @@ void RenderSystem::_map_drawable_entities(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 
-	for (entity_iterator it = _entities.begin(); it != _entities.end(); ++it)
+	for (auto it = _entities.begin(); it != _entities.end(); ++it)
 	{
 		sov::Graphics*  gfx = (*it)->get_component<sov::Graphics>();
 		Location* loc = (*it)->get_component<Location>();
@@ -79,7 +79,7 @@ void RenderSystem::_map_base_terrain(void)
 {
 	Level& _level = Environment::get().get_level_manager()->get_current();
 
-	for(int y = 0; y < _level._base_map.height(); y++)
+	for (int y = 0; y < _level._base_map.height(); y++)
 	for (int x = 0; x < _level._base_map.width(); x++)
 	{
 		sov::Graphics& gfx = _level._base_map.get(x, y)->_graphic;

@@ -23,7 +23,7 @@ void LightSystem::update(void)
 		_level._base_map.get(i, j)->_light_value = 0.0f;
 	}
 
-	for (entity_iterator it = _entities.begin(); it != _entities.end();)
+	for (auto it = _entities.begin(); it != _entities.end();)
 	{
 		LightSource* light = (*it)->get_component<LightSource>();
 		Location*    loc = (*it)->get_component<Location>();
@@ -60,7 +60,6 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 
 	for (int i = row; i <= radius; i++) 
 	{
-
 		bool blocked = false;
 
 		for (int dx = -i, dy = -i; dx <= 0; dx++) 
@@ -86,7 +85,6 @@ void LightSystem::cast_light(int x, int y, int radius, int row, double start_slo
 				continue;
 
 			int dx2dy2 = dx * dx + dy * dy;
-			//
 
 			if (dx2dy2 < ((radius + 0.25f) * (radius + 0.25)))
 			{
