@@ -81,6 +81,12 @@ void EntityCache::_load(const std::string& entity_id)
 
 int EntityManager::NEXT_ID = 0;
 
+EntityManager::~EntityManager(void)
+{
+	for (auto& id_entity : _entities)
+		delete id_entity.second;
+}
+
 Entity* EntityManager::create_entity(const std::string& entity_type)
 {
 	Entity* e = _cache.get(entity_type);

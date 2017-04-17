@@ -31,8 +31,8 @@ public:
 
 	void update(void);
 	/*std::pair<int, int> cell_world_to_screen(int x, int y) const;
-	std::pair<int, int> cell_screen_to_world(int x, int y) const;
-	std::pair<float, float> world_to_screen(float x, float y) const;*/
+	std::pair<int, int> cell_screen_to_world(int x, int y) const;*/
+	sf::Vector2i world_to_screen(float x, float y) const;
 
 private:
 	float _screen_origin_x, _screen_origin_y;

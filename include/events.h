@@ -12,6 +12,12 @@ struct EntityCreated : sov::Event
 	Entity* entity;
 };
 
+struct EntityDestroyed : sov::Event
+{
+	explicit EntityDestroyed(Entity* entity) : entity(entity) {}
+	Entity* entity;
+};
+
 struct CollisionEvent : sov::Event
 {
 	explicit CollisionEvent(Entity* entity1, Entity* entity2) : e1(entity1), e2(entity2) {}

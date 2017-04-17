@@ -66,13 +66,13 @@ int main(int argc, char** argv)
 
 	LuaVM* lua = new LuaVM();
 
-	Viewport viewport(0, 0, 20, 15);
+	Viewport* viewport = new Viewport(0, 0, 20, 15);
 	//StatusDisplay status(window, 0, 40, 80, 10, turn_timer, turn, font);
 	//InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
 	sm->create<VisibilitySystem>();
 	sm->create<RenderSystem>(viewport);
-	sm->create<LightSystem>();
+	sm->create<LightSystem>(viewport);
 	sm->create<CollisionSystem>();
 	sm->create<DamageSystem>();
 	sm->create<MoveSystem>();
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 	InputManager* input = new InputManager(viewport, running);
 	env->set_input_manager(input);
 
-	while(running && viewport.isOpen())
+	while(running && viewport->isOpen())
 	{
 		game_time->tick();
 		turn_timer.tick(*game_time);
@@ -122,25 +122,18 @@ int main(int argc, char** argv)
 			sm->update<VisibilitySystem>();
 		}
 		
-		viewport.update();
-		viewport.clear();
+		viewport->update();
+		viewport->clear();
 
 		// Drawing
 		sm->update<RenderSystem>();
 
-		viewport.display();
+		viewport->display();
 		
 		// Cleanup
 		em->update();
 	}
 
-	delete sprite_cache;
-	delete input;
-	delete lua;
-	delete lm;
-	delete sm;
-	delete em;
-	delete evm;
 	delete env;
 
 	return 0;

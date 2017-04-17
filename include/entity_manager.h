@@ -53,6 +53,7 @@ class EntityManager
 public:
 	
 	explicit EntityManager(void) : _player_id(-1) {};
+	~EntityManager(void);
 
 	Entity* create_entity(const string& entity_type);
 	Entity* create_entity_at_loc(const string& entity_type, int x, int y, int z);

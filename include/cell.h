@@ -8,8 +8,8 @@ class Cell
 public:
 	Cell(sov::Graphics graphic, bool walkable, bool los_blocker) :
 		_graphic(graphic), _light_value(0.0f),
-		_walkable(walkable), _los_blocker(los_blocker),
-		_explored(false), _visible(false) {}
+		_los_blocker(los_blocker),
+		_explored(false), _visible(false), _walkable(walkable) {}
 
 	float get_light_value(void) const;
 

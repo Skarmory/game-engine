@@ -3,28 +3,21 @@
 Environment* Environment::env = nullptr;
 
 Environment::Environment(void) 
-	: _entity_manager(nullptr), _event_manager(nullptr), _level_manager(nullptr), _input_manager(nullptr),
-	_system_manager(nullptr), _sprite_cache(nullptr)
+	: _entity_manager(nullptr), _input_manager(nullptr), _system_manager(nullptr), _event_manager(nullptr), _level_manager(nullptr),
+	 _sprite_cache(nullptr), _game_time(nullptr)
 {
 	Environment::env = this;
 }
 
 Environment::~Environment(void)
 {
-	/*if(_entity_manager != nullptr)
-		delete _entity_manager;
-
-	if (_system_manager != nullptr)
-		delete _system_manager;
-
-	if (_level_manager != nullptr)
-		delete _level_manager;
-
-	if (_input_manager != nullptr)
-		delete _input_manager;
-
-	if (_event_manager != nullptr)
-		delete _event_manager;*/
+	delete _entity_manager;
+	delete _input_manager;
+	delete _system_manager;
+	delete _event_manager;
+	delete _level_manager;
+	delete _sprite_cache;
+	delete _game_time;
 
 	env = nullptr;
 }

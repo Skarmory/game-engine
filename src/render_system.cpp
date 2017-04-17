@@ -12,14 +12,15 @@
 #include "graphics.h"
 #include "light.h"
 #include "sprite.h"
+#include "light_system.h"
 
 void RenderSystem::init(void)
 {
 	Environment::get().get_event_manager()->subscribe<EntityCreated>(*this);
 
-	// Temporarily just create a 100x100 cell texture.
-	// 100x100 is the largest size for the time being.
-	_rtex.create(100 * SPRITE_WIDTH, 100 * SPRITE_HEIGHT);
+	// Temporarily just create a 80x40 cell texture.
+	// 80x40 is the largest size for the time being.
+	_rtex.create(80 * SPRITE_WIDTH, 40 * SPRITE_HEIGHT);
 }
 
 void RenderSystem::update(void)
@@ -35,7 +36,10 @@ void RenderSystem::update(void)
 
 	_rtex.display();
 
-	_viewport.draw(Sprite(_rtex.getTexture()));
+	const sf::RenderTexture& lightmap = Environment::get().get_system_manager()->get<LightSystem>().get_lightmap();
+
+	_viewport->draw(Sprite(_rtex.getTexture()));
+	_viewport->draw(Sprite(lightmap.getTexture()), sf::BlendMultiply);
 }
 
 void RenderSystem::_map_drawable_entities(void)
@@ -50,25 +54,21 @@ void RenderSystem::_map_drawable_entities(void)
 		if (loc->z != _level._depth)
 			continue;
 
-		Cell* cell = _level._base_map.get(loc->x, loc->y);
+		//Cell* cell = _level._base_map.get(loc->x, loc->y);
 
-		bool lit     = cell->_light_value > 0.0f;
-		bool visible = cell->_visible;
+		bool lit = true;// cell->_light_value > 0.0f;
+		bool visible = true;//cell->_visible;
 
 		if (lit && visible)
 		{
-			Color c = Color::White;
-			set_hsv(c, get_hue(c), get_saturation(c) * cell->_light_value, get_value(c) * cell->_light_value);
 
 			Sprite s = gfx->sprite;
 			sf::Transform t = sf::Transform::Identity;
 			Vector2f sprite_pos = s.getPosition();
-			s.setPosition(0.0f, 0.0f);
 
-			s.setColor(c);
 			t.translate(sprite_pos.x + 16.0f, sprite_pos.y + 16.0f);
 			t.combine(gfx->sprite_transform);
-			t.translate(-16.0f, -16.0f);
+			t.translate(-sprite_pos.x - 16.0f, -sprite_pos.y - 16.0f);
 
 			_rtex.draw(s, t);
 		}
@@ -100,7 +100,7 @@ void RenderSystem::_map_base_terrain(void)
 		
 		Color c = Color::White;
 		Sprite s = gfx.sprite;
-		set_hsv(c, get_hue(c), get_saturation(c) * light_value, get_value(c) * light_value);
+		//set_hsv(c, get_hue(c), get_saturation(c) * light_value, get_value(c) * light_value);
 
 		s.setColor(c);
 		
@@ -135,5 +135,5 @@ bool RenderSystem::layer_compare(Entity* e1, Entity* e2)
 void RenderSystem::receive(const EntityCreated& event)
 {
 	if(event.entity->has_component<Location>() && event.entity->has_component<sov::Graphics>())
-		add_entity(event.entity);
+		_entities.push_back(event.entity);
 }

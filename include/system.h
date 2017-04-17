@@ -16,11 +16,6 @@ public:
 	
 	virtual void init(void) = 0;
 	virtual void update(void) = 0;
-	
-	virtual void add_entity(Entity* entity)
-	{
-		_entities.push_back(entity);
-	}
 
 protected:
 	std::vector<Entity*> _entities;

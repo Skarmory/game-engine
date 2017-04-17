@@ -76,5 +76,17 @@ void CollisionSystem::_clean(void)
 void CollisionSystem::receive(const EntityCreated& e)
 {
 	if(e.entity->has_component<Collision>() && e.entity->has_component<Location>())
-		add_entity(e.entity);
+		_entities.push_back(e.entity);
+}
+
+void CollisionSystem::receive(const EntityDestroyed& e)
+{
+	for (auto it = _entities.begin(); it != _entities.end(); ++it)
+	{
+		if ((*it)->get_id() == e.entity->get_id())
+		{
+			_entities.erase(it);
+			return;
+		}
+	}
 }

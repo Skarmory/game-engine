@@ -2,14 +2,14 @@
 
 typedef std::unique_ptr<Command> c_uptr;
 
-InputManager::InputManager(sf::Window& handle, bool& is_running) : _handle(handle), _is_running(is_running)
+InputManager::InputManager(sf::Window* handle, bool& is_running) : _handle(handle), _is_running(is_running)
 {}
 
 c_uptr InputManager::handle_input(void)
 {	
 	sf::Event event;
 
-	_handle.pollEvent(event);
+	_handle->pollEvent(event);
 
 	if(event.type == sf::Event::TextEntered)
 	{

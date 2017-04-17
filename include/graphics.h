@@ -17,7 +17,7 @@ namespace sov
 
 	struct Graphics : public Component<Graphics>
 	{
-		Graphics(void) {}
+		Graphics(void) : layer(DrawLayer::EFFECT) {}
 		Graphics(sf::Sprite sprite, sf::Transform sprite_transform, DrawLayer layer) : sprite(sprite), layer(layer) {}
 
 		sf::Sprite sprite;

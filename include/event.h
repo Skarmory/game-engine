@@ -38,10 +38,11 @@ namespace sov
 
 	public:
 
-		template<typename E, typename Observer>
-		void subscribe(Observer& o)
+		template<typename E>
+		void subscribe(Observer<E>& o)
 		{
-			_observers[typeid(E)].push_back(new Callback<E>(std::bind(&Observer::receive, &o, std::placeholders::_1)));
+			void(Observer<E>::*receive)(const E&) = &Observer<E>::receive;
+			_observers[typeid(E)].push_back(new Callback<E>(std::bind(receive, &o, std::placeholders::_1)));
 		}
 
 		template<typename E>

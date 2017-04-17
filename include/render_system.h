@@ -12,26 +12,25 @@ class RenderSystem : public System, public sov::Observer<EntityCreated>
 {
 
 public:
-	explicit RenderSystem(Viewport& viewport) : _viewport(viewport) {}
+	explicit RenderSystem(Viewport* viewport) : _viewport(viewport) {}
 
 	virtual void init(void) override;
 	virtual void update(void) override;
 	virtual void receive(const EntityCreated& e) override;
 
+	static const int SPRITE_WIDTH = 32;
+	static const int SPRITE_HEIGHT = 32;
+	static const int SPRITE_SHEET_WIDTH = 16;
+	static const int SPRITE_SHEET_HEIGHT = 16;
+
 private:
-
-	const int SPRITE_WIDTH = 32;
-	const int SPRITE_HEIGHT = 32;
-	const int SPRITE_SHEET_WIDTH = 16;
-	const int SPRITE_SHEET_HEIGHT = 16;
-
 	static bool layer_compare(Entity*, Entity*);
 	void _clean(void);
 
 	void _map_drawable_entities(void);
 	void _map_base_terrain(void);
 
-	Viewport& _viewport;
+	Viewport* _viewport;
 	sf::RenderTexture _rtex;
 };
 

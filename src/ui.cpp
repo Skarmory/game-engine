@@ -68,7 +68,8 @@ void Viewport::update(void)
 //	return pair<int, int>(_screen_origin_x + x, _screen_origin_y + y);
 //}
 //
-//pair<float, float> Viewport::world_to_screen(float x, float y) const
-//{
-//	return std::pair<float, float>(x - _screen_origin_x * 32.0f, y - _screen_origin_y * 32.0f);
-//}
+sf::Vector2i Viewport::world_to_screen(float x, float y) const
+{
+	return mapCoordsToPixel(sf::Vector2f(x, y));
+	//return std::pair<float, float>(x - _screen_origin_x * 32.0f, y - _screen_origin_y * 32.0f);
+}

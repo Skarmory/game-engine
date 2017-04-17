@@ -41,8 +41,8 @@ void DamageSystem::update(void)
 void DamageSystem::receive(const CollisionEvent& event)
 {
 	if(event.e1->has_component<Damage>())
-		add_entity(event.e1);
+		_entities.push_back(event.e1);
 
 	if(event.e2->has_component<Damage>())
-		add_entity(event.e2);
+		_entities.push_back(event.e2);
 }
