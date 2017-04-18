@@ -25,7 +25,6 @@ public:
 
 private:
 	static bool layer_compare(Entity*, Entity*);
-	void _clean(void);
 
 	void _map_drawable_entities(void);
 	void _map_base_terrain(void);

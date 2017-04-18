@@ -1,10 +1,5 @@
 #include "cell.h"
 
-float Cell::get_light_value(void) const
-{
-	return _light_value;
-}
-
 bool Cell::is_explored(void) const
 {
 	return _explored;

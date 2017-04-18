@@ -3,9 +3,6 @@
 
 #include "component.h"
 
-const float MIN_LIGHT_PERCENT = 0.1f;
-const float MAX_LIGHT_PERCENT = 1.0f;
-
 struct LightSource : public Component<LightSource>
 {
 	explicit LightSource(int radius) : radius(radius), dropoff(1.0f/radius) {}

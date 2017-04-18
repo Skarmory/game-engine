@@ -24,9 +24,7 @@ void RenderSystem::init(void)
 }
 
 void RenderSystem::update(void)
-{
-	_clean();	
-	
+{	
 	sort(_entities.begin(), _entities.end(), layer_compare);
 
 	_rtex.clear();
@@ -54,14 +52,13 @@ void RenderSystem::_map_drawable_entities(void)
 		if (loc->z != _level._depth)
 			continue;
 
-		//Cell* cell = _level._base_map.get(loc->x, loc->y);
+		Cell* cell = _level._base_map.get(loc->x, loc->y);
 
-		bool lit = true;// cell->_light_value > 0.0f;
-		bool visible = true;//cell->_visible;
+		/*bool lit = true;*/
+		bool visible = true;// cell->_visible;
 
-		if (lit && visible)
+		if (visible)
 		{
-
 			Sprite s = gfx->sprite;
 			sf::Transform t = sf::Transform::Identity;
 			Vector2f sprite_pos = s.getPosition();
@@ -84,25 +81,14 @@ void RenderSystem::_map_base_terrain(void)
 	{
 		sov::Graphics& gfx = _level._base_map.get(x, y)->_graphic;
 
-		float light_value = _level._base_map.get(x, y)->get_light_value();
-		bool lit = light_value > 0.0f;
-
 		bool visible = _level._base_map.get(x, y)->is_visible();
 		bool explored = _level.get_cell(x, y).is_explored();
 		
 		// Do the correct lighting depending on if the cell is lit, shrouded, or in FoW
-		if (lit && visible)
+		if (visible)
 			_level._base_map.get(x, y)->_explored = true;
-		else if (explored)
-			light_value = MIN_LIGHT_PERCENT;
-		else
-			light_value = 0.05f;
 		
-		Color c = Color::White;
 		Sprite s = gfx.sprite;
-		//set_hsv(c, get_hue(c), get_saturation(c) * light_value, get_value(c) * light_value);
-
-		s.setColor(c);
 		
 		sf::Transform t = sf::Transform::Identity;
 		t.translate(x * SPRITE_WIDTH + 16.0f, y * SPRITE_HEIGHT + 16.0f);
@@ -111,20 +97,6 @@ void RenderSystem::_map_base_terrain(void)
 		
 		_rtex.draw(s, t);
 	}
-}
-
-void RenderSystem::_clean(void)
-{
-	
-	/*for(entity_iterator it = _entities.begin(); it != _entities.end();)
-	{
-		std::shared_ptr<Entity> e = it->lock();
-
-		if(e == nullptr)
-			_entities.erase(it);
-
-		++it;
-	}*/
 }
 
 bool RenderSystem::layer_compare(Entity* e1, Entity* e2)
