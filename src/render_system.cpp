@@ -32,12 +32,12 @@ void RenderSystem::update(void)
 	_map_base_terrain();
 	_map_drawable_entities();
 
-	_rtex.display();
-
 	const sf::RenderTexture& lightmap = Environment::get().get_system_manager()->get<LightSystem>().get_lightmap();
 
+	_rtex.draw(Sprite(lightmap.getTexture()), sf::BlendMultiply);
+	_rtex.display();
+
 	_viewport->draw(Sprite(_rtex.getTexture()));
-	_viewport->draw(Sprite(lightmap.getTexture()), sf::BlendMultiply);
 }
 
 void RenderSystem::_map_drawable_entities(void)

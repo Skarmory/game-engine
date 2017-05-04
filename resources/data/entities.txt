@@ -16,10 +16,10 @@ graphic=knight.png:3
 collision=block
 health=1
 sight=20
-light=5
+light=5:1
 
 name=fire
 graphic=fire2.png:0
 collision=trigger
 damage=1
-light=10
+light=10:1

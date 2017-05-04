@@ -70,9 +70,9 @@ int main(int argc, char** argv)
 	//StatusDisplay status(window, 0, 40, 80, 10, turn_timer, turn, font);
 	//InventoryDisplay inventory(window, 80, 0, 20, 50, font);
 
-	sm->create<VisibilitySystem>();
+	//sm->create<VisibilitySystem>();
 	sm->create<RenderSystem>(viewport);
-	sm->create<LightSystem>(viewport);
+	sm->create<LightSystem>();
 	sm->create<CollisionSystem>();
 	sm->create<DamageSystem>();
 	sm->create<MoveSystem>();
@@ -94,12 +94,15 @@ int main(int argc, char** argv)
 	bool running = true;
 	InputManager* input = new InputManager(viewport, running);
 	env->set_input_manager(input);
+	float accumulate = 0.f;
 
 	while(running && viewport->isOpen())
 	{
 		game_time->tick();
+		std::cout << game_time->delta() << std::endl;
 		turn_timer.tick(*game_time);
 		fixed.tick(*game_time);
+		accumulate += game_time->delta();
 
 		if (fixed.finished())
 		{
@@ -118,20 +121,25 @@ int main(int argc, char** argv)
 			sm->update<CollisionSystem>();
 			sm->update<DamageSystem>();
 			sm->update<MoveSystem>();
-			sm->update<LightSystem>();
-			sm->update<VisibilitySystem>();
+
+			em->update();
+			//sm->update<VisibilitySystem>();
 		}
 		
-		viewport->update();
-		viewport->clear();
+		if (accumulate >= (1.f / 30.f))
+		{
+			sm->update<LightSystem>();
 
-		// Drawing
-		sm->update<RenderSystem>();
+			viewport->update();
+			viewport->clear();
 
-		viewport->display();
-		
-		// Cleanup
-		em->update();
+			// Drawing
+			sm->update<RenderSystem>();
+
+			viewport->display();
+
+			accumulate = 0.f;
+		}
 	}
 
 	delete env;

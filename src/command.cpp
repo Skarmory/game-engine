@@ -30,7 +30,7 @@ void MoveCommand::execute(void)
 
 	if(_level.is_in_bounds(dx, dy) && _level.is_walkable(dx, dy))
 	{
-		player->add_component(new Move(dx, dy, lc->x * 32.0f, lc->y * 32.0f));
+		player->add_component(new Move(dx, dy, lc->x * 32.0f, lc->y * 32.0f, 0.f));
 		Environment::get().get_event_manager()->broadcast<MoveEvent>(player);
 
 		lc->x = dx;

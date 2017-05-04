@@ -10,6 +10,7 @@ class Level
 public:
 	explicit Level(void);
 	explicit Level(int depth);
+	~Level(void);
 
 	int get_map_width(void) const;
 	int get_map_height(void) const;
@@ -24,6 +25,7 @@ private:
 	int _depth;
 
 	TerrainMap _base_map;
+	std::vector<Cell*> _occluders;
 
 	friend class RenderSystem;
 	friend class LightSystem;

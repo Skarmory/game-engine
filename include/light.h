@@ -5,10 +5,11 @@
 
 struct LightSource : public Component<LightSource>
 {
-	explicit LightSource(int radius) : radius(radius), dropoff(1.0f/radius) {}
+	explicit LightSource(int radius, bool occludes) : radius(radius), dropoff(1.0f/radius), occludes(occludes) {}
 
 	int radius;
 	float dropoff;
+	bool occludes;
 };
 
 #endif

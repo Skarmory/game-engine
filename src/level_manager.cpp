@@ -135,7 +135,12 @@ void LevelManager::_load(const string& name)
 						break;
 					}
 
-					l->_base_map.set(x, y, new Cell(gfx, walkable, blocks_los));
+					Cell* cell = new Cell(x, y, gfx, walkable, blocks_los);
+
+					l->_base_map.set(x, y, cell);
+
+					if (blocks_los)
+						l->_occluders.push_back(cell);
 				}
 
 				y++;

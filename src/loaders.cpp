@@ -65,7 +65,20 @@ void SightLoader::load(Entity& prototype, const std::string& value)
 
 void LightSourceLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(new LightSource(std::stoi(value)));
+	std::string vals[2];
+
+	size_t ppos = 0;
+	for (int i = 0; i < 2; i++)
+	{
+		size_t pos = value.find(':', ppos);
+		if (pos == std::string::npos)
+			pos = value.length();
+
+		vals[i] = value.substr(ppos, pos - ppos);
+		ppos = pos + 1;
+	}
+
+	prototype.add_component(new LightSource(std::stoi(vals[0]), std::stoi(vals[1])));
 }
 
 void LevelTransitionLoader::load(Entity& prototype, const std::string& value)

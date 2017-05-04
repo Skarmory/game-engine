@@ -6,9 +6,10 @@
 class Cell 
 {
 public:
-	Cell(sov::Graphics graphic, bool walkable, bool los_blocker) :
+	Cell(int x, int y, sov::Graphics graphic, bool walkable, bool los_blocker) :
 		_graphic(graphic), _los_blocker(los_blocker),
-		_explored(false), _visible(false), _walkable(walkable) {}
+		_explored(false), _visible(false), _walkable(walkable),
+		_x(x), _y(y) {}
 
 	bool is_explored(void) const;
 	bool is_visible(void) const;
@@ -21,6 +22,7 @@ private:
 	bool  _explored;
 	bool  _visible;
 	bool  _walkable;
+	int _x, _y;
 
 	friend class RenderSystem;
 	friend class LightSystem;

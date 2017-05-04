@@ -8,7 +8,7 @@
 class LightSystem : public System, public sov::Observer<EntityCreated>
 {
 public:
-	explicit LightSystem(Viewport* viewport) : _viewport(viewport) {}
+	explicit LightSystem(void) {}
 
 	virtual void init(void) override;
 	virtual void update(void) override;
@@ -17,31 +17,17 @@ public:
 	const sf::RenderTexture& get_lightmap(void) const;
 
 private:
+	const std::string _shader_path = "resources/shaders/";
 
-	const char* _light_vshader_src =
-		"void main()"
-		"{"
-		"gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
-		"gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;"
-		"gl_FrontColor = gl_Color;"
-		"}";
-
-	const char* _light_fshader_src =
-		"uniform vec4 colour;"
-		"uniform vec2 centre;"
-		"uniform float radius;"
-		"uniform float window_height;"
-
-		"void main(void)"
-		"{"
-		"vec2 centerFromSfml = vec2(centre.x, window_height - centre.y);"
-		"float distance = length(centerFromSfml - gl_FragCoord.xy)/radius;"
-		"gl_FragColor = mix(colour, gl_Color, distance);"
-		"}";
-
-	Viewport* _viewport;
-	sf::RenderTexture _light_texture;
+	//Viewport* _viewport;
+	sf::RenderTexture _light_map;
+	sf::RenderTexture _occlusion_map;
 	sf::Shader _light_shader;
+	
+	bool occluder_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, float& s);
+	bool level_bound_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, float& s);
+
+	static bool compare_ray_angle(const sf::Vector2f& lhs, const sf::Vector2f& rhs);
 };
 
 #endif

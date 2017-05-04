@@ -8,6 +8,9 @@ Level::Level(void) : _depth(-1)
 Level::Level(int depth) : _depth(depth)
 {}
 
+Level::~Level(void)
+{}
+
 bool Level::is_walkable(int x, int y) const
 {
 	return _base_map.is_walkable(x, y);
