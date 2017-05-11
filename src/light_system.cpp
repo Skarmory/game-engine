@@ -51,6 +51,10 @@ void LightSystem::update(void)
 
 		sf::Vector2f light_centre = gfx->sprite.getPosition() + sf::Vector2f(16.f, 16.f);
 
+		_light_shader.setUniform("centre", light_centre);
+		_light_shader.setUniform("radius", light->radius * 32.f);
+		_light_shader.setUniform("tex", _light_map.getTexture());
+
 		// Block lighting based on light occluders within the level
 		for(auto& occ : level._occluders)
 		{
@@ -72,54 +76,57 @@ void LightSystem::update(void)
 			// For each ray, find out whether it intersects anything
 			for (auto& ray = rays.begin(); ray != rays.end(); ++ray)
 			{
-				// The scalars of the parametric line intersection equation
-				float ray_t = 1.f;
-				float line_s = 0.0f;
+				sf::Vector2f closest;
 
-				if (occluder_intersect(light_centre, *ray, ray_t, line_s))
+				// The scalar of the parametric line intersection equation
+				float ray_t = INFINITY;
+
+				if (occluder_intersect(light_centre, *ray, ray_t, closest))
 				{
 					light_geom.push_back(sf::Vector2f(ray->x * ray_t, ray->y * ray_t));
-				}
-				
-				// If the coefficients are these values, then we are hitting a corner of an occluder
-				// Fire two more rays, + and - 0.00001f radians different from original ray
-				if (ray_t == 1.f && (line_s == 0.f || line_s == 1.f))
-				{
-					ray_t = INFINITY;
-					line_s = 0.f;
-						
-					float dx = ray->x * (std::cos(0.00001f)) - ray->y * (std::sin(0.00001f));
-					float dy = ray->x * (std::sin(0.00001f)) + ray->y * (std::cos(0.00001f));
 
-					sf::Vector2f new_ray(dx, dy);
+					sf::RectangleShape rect;
+					rect.setOrigin(16.f, 16.f);
+					rect.setPosition(closest);
+					rect.setSize(sf::Vector2f(32.f, 32.f));
+					_occlusion_map.draw(rect, &_light_shader);
 
-					level_bound_intersect(light_centre, new_ray, ray_t, line_s);
+					 // If the coefficients are these values, then we are hitting a corner of an occluder
+					 // Fire two more rays, + and - 0.00001f radians different from original ray
+					if (ray_t == 1.f)
+					{
+						ray_t = INFINITY;
 
-					new_ray *= ray_t;
-					ray_t = 1.f;
-					line_s = 0.f;
+						float dx = ray->x * (std::cos(0.00001f)) - ray->y * (std::sin(0.00001f));
+						float dy = ray->x * (std::sin(0.00001f)) + ray->y * (std::cos(0.00001f));
 
-					occluder_intersect(light_centre, new_ray, ray_t, line_s);
+						sf::Vector2f new_ray(dx, dy);
 
-					light_geom.push_back(new_ray * ray_t);
-					
-					ray_t = INFINITY;
-					line_s = 0.f;
+						level_bound_intersect(light_centre, new_ray, ray_t);
 
-					dx = ray->x * (std::cos(-0.00001f)) - ray->y * (std::sin(-0.00001f));
-					dy = ray->x * (std::sin(-0.00001f)) + ray->y * (std::cos(-0.00001f));
+						new_ray *= ray_t;
+						ray_t = 1.f;
 
-					new_ray = sf::Vector2f(dx, dy);
+						occluder_intersect(light_centre, new_ray, ray_t, closest);
 
-					level_bound_intersect(light_centre, new_ray, ray_t, line_s);
+						light_geom.push_back(new_ray * ray_t);
 
-					new_ray *= ray_t;
-					ray_t = 1.f;
-					line_s = 0.f;
+						ray_t = INFINITY;
 
-					occluder_intersect(light_centre, new_ray, ray_t, line_s);
+						dx = ray->x * (std::cos(-0.00001f)) - ray->y * (std::sin(-0.00001f));
+						dy = ray->x * (std::sin(-0.00001f)) + ray->y * (std::cos(-0.00001f));
 
-					light_geom.push_back(new_ray * ray_t);
+						new_ray = sf::Vector2f(dx, dy);
+
+						level_bound_intersect(light_centre, new_ray, ray_t);
+
+						new_ray *= ray_t;
+						ray_t = 1.f;
+
+						occluder_intersect(light_centre, new_ray, ray_t, closest);
+
+						light_geom.push_back(new_ray * ray_t);
+					}
 				}
 			}
 		}
@@ -140,9 +147,8 @@ void LightSystem::update(void)
 			for (auto& ray : rays)
 			{
 				float ray_t = 1.0f;
-				float line_s = 0.f;
 
-				occluder_intersect(light_centre, ray, ray_t, line_s);
+				occluder_intersect(light_centre, ray, ray_t);
 				light_geom.push_back(ray * ray_t);
 			}
 		}
@@ -163,10 +169,6 @@ void LightSystem::update(void)
 		varr.append(sf::Vertex(light_centre + light_geom[light_geom.size() - 1]));
 		varr.append(sf::Vertex(light_centre + light_geom[0]));
 
-		_light_shader.setUniform("centre", light_centre);
-		_light_shader.setUniform("radius", light->radius * 32.f);
-		_light_shader.setUniform("tex", _light_map.getTexture());
-
 		_occlusion_map.draw(varr, &_light_shader);
 		_occlusion_map.display();
 
@@ -176,7 +178,7 @@ void LightSystem::update(void)
 	_light_map.display();
 }
 
-bool LightSystem::occluder_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, float& s)
+bool LightSystem::occluder_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, sf::Vector2f& closest)
 {
 	const Level& level = Environment::get().get_level_manager()->get_current();
 	bool intersects = false;
@@ -186,41 +188,15 @@ bool LightSystem::occluder_intersect(const sf::Vector2f& origin, const sf::Vecto
 	{
 		sf::Vector2f oc(occ2->_x * 32.f + 16.f, occ2->_y * 32.f + 16.f);
 
-		// Corners of the square that the occluder occupies
-		sf::Vector2f tl = oc + sf::Vector2f(-16.f, -16.f);
-		sf::Vector2f tr = oc + sf::Vector2f(16.f, -16.f);
-		sf::Vector2f bl = oc + sf::Vector2f(-16.f, 16.f);
-		sf::Vector2f br = oc + sf::Vector2f(16.f, 16.f);
-
-		// Lines of the occluder square in parametric form (u + tv)
-		std::pair<sf::Vector2f, sf::Vector2f> lines[4];
-		lines[0] = std::pair<sf::Vector2f, sf::Vector2f>(tl, tr - tl);
-		lines[1] = std::pair<sf::Vector2f, sf::Vector2f>(tr, br - tr);
-		lines[2] = std::pair<sf::Vector2f, sf::Vector2f>(tl, bl - tl);
-		lines[3] = std::pair<sf::Vector2f, sf::Vector2f>(bl, br - bl);
-
-		for (int i = 0; i < 4; i++)
+		float xsect1, xsect2;
+		int xsect_amount;
+		if (line_rect_intersect(Line(origin, direction), oc, xsect1, xsect2, xsect_amount))
 		{
-			float determinant = lines[i].second.x * direction.y - lines[i].second.y * direction.x;
-
-			if (determinant == 0.0f)
-				continue;
-
-			float _s = (direction.x * (lines[i].first.y - origin.y) + direction.y * (origin.x - lines[i].first.x)) / determinant;
-
-			if (_s < 0.0f || _s > 1.0f)
-				continue;
-
-			float _t = (lines[i].first.x + (lines[i].second.x * _s) - origin.x) / direction.x;
-
-			if (_t <= 0.0f)
-				continue;
-
-			if (_t <= t)
+			if (xsect1 < t)
 			{
-				t = _t;
-				s = _s;
 				intersects = true;
+				t = xsect1;
+				closest = oc;
 			}
 		}
 	}
@@ -228,7 +204,7 @@ bool LightSystem::occluder_intersect(const sf::Vector2f& origin, const sf::Vecto
 	return intersects;
 }
 
-bool LightSystem::level_bound_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, float& s)
+bool LightSystem::level_bound_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t)
 {
 	const Level& level = Environment::get().get_level_manager()->get_current();
 	bool intersects = false;
@@ -266,7 +242,6 @@ bool LightSystem::level_bound_intersect(const sf::Vector2f& origin, const sf::Ve
 		if (_t <= t)
 		{
 			t = _t;
-			s = _s;
 			intersects = true;
 		}
 	}
