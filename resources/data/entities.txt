@@ -12,7 +12,7 @@
 #			3 - Creatures
 
 name=player
-graphic=knight.png:3
+graphic=yl-mage.png:3
 collision=block
 health=1
 sight=20
