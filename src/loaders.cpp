@@ -12,6 +12,7 @@
 #include "sight.h"
 #include "light.h"
 #include "level_transition.h"
+#include "animation.h"
 
 void LocationLoader::load(Entity& prototype, const std::string& value)
 {
@@ -84,4 +85,9 @@ void LightSourceLoader::load(Entity& prototype, const std::string& value)
 void LevelTransitionLoader::load(Entity& prototype, const std::string& value)
 {
 	prototype.add_component(new LevelTransition());
+}
+
+void AnimatorLoader::load(Entity& prototype, const std::string& value)
+{
+	prototype.add_component(new Animator());
 }

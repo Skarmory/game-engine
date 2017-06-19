@@ -50,4 +50,9 @@ class LevelTransitionLoader : public ComponentLoader
 	void load(Entity& prototype, const std::string& value) override;
 };
 
+class AnimatorLoader : public ComponentLoader
+{
+	void load(Entity& prototype, const std::string& value) override;
+};
+
 #endif
