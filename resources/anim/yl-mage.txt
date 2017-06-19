@@ -1,0 +1,7 @@
+# yl-mage sprite sheet animation data
+
+name=idle
+count=1
+start=0
+end=0
+duration=1000
