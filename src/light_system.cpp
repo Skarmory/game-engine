@@ -1,8 +1,6 @@
-#include "light_system.h"
-
-#ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
-#endif
+
+#include "light_system.h"
 
 #include <math.h>
 #include <cmath>
