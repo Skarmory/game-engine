@@ -27,7 +27,7 @@ struct Animator : public Component<Animator>
 	double running_time;
 	double frame_time;
 
-	Animator(void) : current(nullptr), current_frame(0), running_time(0.0), frame_time(0.0f) {}
+	bool play(const std::string& anim_id);
 };
 
 class AnimationSystem : public System, public sov::Observer<EntityCreated>
@@ -38,26 +38,27 @@ public:
 	void receive(const EntityCreated& e) override;
 };
 
-class AnimationCache
-{
-private:	
-	std::unordered_map<std::string, Animation*> _cache;
-	AnimationLoader _loader;
-
-	bool _has(const std::string& anim_id);
-	bool _load(const std::string& anim_id);
-
-public:
-	Animation* get(const std::string& anim_id);
-};
-
 class AnimationLoader
 {
 private:
 	const std::string _path = "resources/anim/";
 
 public:
-	bool load(const std::string& anim_id, Animation* anim);
+	bool load(const std::string& anim_id, std::vector<Animation*>* anim);
+};
+
+class AnimationCache
+{
+private:	
+	std::unordered_map<std::string, std::vector<Animation*>> _cache;
+	AnimationLoader _loader;
+
+	bool _has(const std::string& anim_id);
+	bool _load(const std::string& anim_id);
+
+public:
+	~AnimationCache(void);
+	std::vector<Animation*>* get(const std::string& anim_id);
 };
 
 #endif

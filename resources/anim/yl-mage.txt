@@ -1,7 +1,19 @@
-# yl-mage sprite sheet animation data
+# yl-mage animation data
+
+# name: Name of animation, must be unique
+# count: Amount of frames animation uses
+# start: Start frame in the sprite sheet
+# end: End frame in the sprite sheet
+# duration: Length of animation in ms
 
 name=idle
 count=1
 start=0
 end=0
+duration=1000
+
+name=walk
+count=8
+start=8
+end=15
 duration=1000

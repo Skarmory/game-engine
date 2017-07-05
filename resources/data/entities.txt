@@ -12,7 +12,8 @@
 #			3 - Creatures
 
 name=player
-graphic=yl-mage.png:3
+graphic=yl-mage-sheet.png:3
+animation=yl-mage
 collision=block
 health=1
 sight=20
@@ -20,6 +21,7 @@ light=5:1
 
 name=fire
 graphic=fire2.png:0
+animation=null
 collision=trigger
 damage=1
 light=10:1

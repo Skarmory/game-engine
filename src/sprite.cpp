@@ -12,7 +12,6 @@ bool SpriteCache::_has(const std::string& sprite_id)
 bool SpriteCache::_load(const std::string& sprite_id)
 {
 	std::stringstream ss;
-	//std::string filepath;
 
 	ss << _path << sprite_id;
 

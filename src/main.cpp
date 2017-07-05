@@ -64,6 +64,9 @@ int main(int argc, char** argv)
 	SpriteCache* sprite_cache = new SpriteCache();
 	env->set_sprite_cache(sprite_cache);
 
+	AnimationCache* anim_cache = new AnimationCache();
+	env->set_animation_cache(anim_cache);
+
 	LuaVM* lua = new LuaVM();
 
 	Viewport* viewport = new Viewport(0, 0, 20, 15);
@@ -74,7 +77,8 @@ int main(int argc, char** argv)
 	sm->create<RenderSystem>(viewport);
 	sm->create<LightSystem>();
 	sm->create<CollisionSystem>();
-	sm->create<DamageSystem>();
+	sm->create<AnimationSystem>();
+	////sm->create<DamageSystem>();
 	sm->create<MoveSystem>();
 
 	sm->init();
@@ -99,7 +103,7 @@ int main(int argc, char** argv)
 	while(running && viewport->isOpen())
 	{
 		game_time->tick();
-		std::cout << game_time->delta() << std::endl;
+		//std::cout << game_time->delta() << std::endl;
 		turn_timer.tick(*game_time);
 		fixed.tick(*game_time);
 		accumulate += game_time->delta();
@@ -119,15 +123,14 @@ int main(int argc, char** argv)
 			}
 
 			sm->update<CollisionSystem>();
-			sm->update<DamageSystem>();
 			sm->update<MoveSystem>();
 
 			em->update();
-			//sm->update<VisibilitySystem>();
 		}
 		
-		if (accumulate >= (1.f / 30.f))
-		{
+		/*if (accumulate >= (1.f / 30.f))
+		{*/
+			sm->update<AnimationSystem>();
 			sm->update<LightSystem>();
 
 			viewport->update();
@@ -138,8 +141,8 @@ int main(int argc, char** argv)
 
 			viewport->display();
 
-			accumulate = 0.f;
-		}
+		/*	accumulate = 0.f;
+		}*/
 	}
 
 	delete env;

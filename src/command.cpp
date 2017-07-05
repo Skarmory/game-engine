@@ -9,6 +9,7 @@
 #include "level_transition.h"
 #include "level.h"
 #include "move_system.h"
+#include "animation.h"
 
 using namespace std;
 
@@ -32,6 +33,10 @@ void MoveCommand::execute(void)
 	{
 		player->add_component(new Move(dx, dy, lc->x * 32.0f, lc->y * 32.0f, 0.f));
 		Environment::get().get_event_manager()->broadcast<MoveEvent>(player);
+
+		// TODO: Refactor
+		Animator* anim = player->get_component<Animator>();
+		anim->play("walk");
 
 		lc->x = dx;
 		lc->y = dy;

@@ -29,7 +29,8 @@ private:
 		{ "light", new LightSourceLoader() },
 		{ "sight", new SightLoader() },
 		{ "damage", new DamageLoader() },
-		{ "levelTransition", new LevelTransitionLoader() }
+		{ "levelTransition", new LevelTransitionLoader() },
+		{ "animation", new AnimatorLoader() }
 	};
 };
 

@@ -3,7 +3,24 @@
 #include <fstream>
 #include <sstream>
 
+#include <iostream>
+
 #include "environment.h"
+
+bool Animator::play(const std::string& anim_id)
+{
+	if (animations.find(anim_id) != animations.end())
+	{
+		current = animations.at(anim_id);
+		running_time = 0.0;
+		frame_time = 0.0;
+		current_frame = current->start_frame;
+
+		return true;
+	}
+
+	return false;
+}
 
 void AnimationSystem::init(void)
 {
@@ -16,7 +33,7 @@ void AnimationSystem::update(void)
 	{
 		Animator* anim = entity->get_component<Animator>();
 
-		if (anim->current->frame_count == 0)
+		if (anim->current == nullptr || anim->current->frame_count <= 1)
 			continue;
 
 		anim->running_time += Environment::get().get_game_time()->delta();
@@ -53,9 +70,9 @@ bool AnimationCache::_has(const std::string& anim_id)
 bool AnimationCache::_load(const std::string& anim_id)
 {
 	bool ret = false;
-	Animation* anim = new Animation;
+	std::vector<Animation*> anim;
 	
-	ret = _loader.load(anim_id, anim);
+	ret = _loader.load(anim_id, &anim);
 
 	if(ret)
 		_cache[anim_id] = anim;
@@ -63,15 +80,22 @@ bool AnimationCache::_load(const std::string& anim_id)
 	return ret;
 }
 
-Animation* AnimationCache::get(const std::string& anim_id)
+AnimationCache::~AnimationCache(void)
+{
+	for (auto& anim : _cache)
+		for (auto& elem : anim.second)
+			delete elem;
+}
+
+std::vector<Animation*>* AnimationCache::get(const std::string& anim_id)
 {
 	if (!_has(anim_id))
 		_load(anim_id);
 
-	return _cache[anim_id];
+	return &_cache[anim_id];
 }
 
-bool AnimationLoader::load(const std::string& anim_id, Animation* anim)
+bool AnimationLoader::load(const std::string& anim_id, std::vector<Animation*>* anim)
 {
 	std::stringstream ss;
 	std::ifstream fs;
@@ -88,32 +112,44 @@ bool AnimationLoader::load(const std::string& anim_id, Animation* anim)
 			continue;
 
 		found = true;
+		Animation* a = new Animation();
 
-		std::size_t position = line.find('=');
-		option = line.substr(0, position);
-		value = line.substr(position + 1, line.length());
+		while (line[0] != '#' && line.find_first_not_of(' ') != std::string::npos)
+		{
+			std::size_t position = line.find('=');
+			option = line.substr(0, position);
+			value = line.substr(position + 1, line.length());
 
-		if (option == "name")
-		{
-			anim->name = value;
+			if (option == "name")
+			{
+				a->name = value;
+			}
+			else if (option == "count")
+			{
+				a->frame_count = std::stoi(value);
+			}
+			else if (option == "start")
+			{
+				a->start_frame = std::stoi(value);
+			}
+			else if (option == "end")
+			{
+				a->end_frame = std::stoi(value);
+			}
+			else if (option == "duration")
+			{
+				a->duration = std::stoi(value) / 1000.f;
+			}
+
+			a->interval = (a->duration / a->frame_count);
+
+			std::getline(fs, line);
 		}
-		else if (option == "count")
-		{
-			anim->duration = std::stoi(value);
-		}
-		else if (option == "start")
-		{
-			anim->start_frame = std::stoi(value);
-		}
-		else if (option == "end")
-		{
-			anim->end_frame = std::stoi(value);
-		}
-		else if (option == "duration")
-		{
-			anim->duration = std::stoi(value);
-		}
+
+		anim->push_back(a);
 	}
+
+	fs.close();
 
 	return found;
 }

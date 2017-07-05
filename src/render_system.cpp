@@ -1,5 +1,7 @@
 #include "render_system.h"
 
+#include <iostream>
+
 #include <stdexcept>
 #include <algorithm>
 #include <vector>
@@ -47,6 +49,7 @@ void RenderSystem::_map_drawable_entities(void)
 	for (auto it = _entities.begin(); it != _entities.end(); ++it)
 	{
 		sov::Graphics*  gfx = (*it)->get_component<sov::Graphics>();
+		Animator* anim = (*it)->get_component<Animator>();
 		Location* loc = (*it)->get_component<Location>();
 	
 		if (loc->z != _level._depth)
@@ -59,15 +62,19 @@ void RenderSystem::_map_drawable_entities(void)
 
 		if (visible)
 		{
-			Sprite s = gfx->sprite;
+			int tex_w = gfx->sprite.getTexture()->getSize().x;
+			int anim_row = anim->current_frame / (tex_w / 32);
+			int anim_col = anim->current_frame % (tex_w / 32);
 			sf::Transform t = sf::Transform::Identity;
-			Vector2f sprite_pos = s.getPosition();
+
+			Vector2f sprite_pos = gfx->sprite.getPosition();
+			gfx->sprite.setTextureRect(sf::IntRect(anim_col * SPRITE_HEIGHT, anim_row * SPRITE_WIDTH, SPRITE_WIDTH, SPRITE_HEIGHT));
 
 			t.translate(sprite_pos.x + 16.0f, sprite_pos.y + 16.0f);
 			t.combine(gfx->sprite_transform);
 			t.translate(-sprite_pos.x - 16.0f, -sprite_pos.y - 16.0f);
 
-			_rtex.draw(s, t);
+			_rtex.draw(gfx->sprite, t);
 		}
 	}
 }
@@ -88,14 +95,12 @@ void RenderSystem::_map_base_terrain(void)
 		if (visible)
 			_level._base_map.get(x, y)->_explored = true;
 		
-		Sprite s = gfx.sprite;
-		
 		sf::Transform t = sf::Transform::Identity;
 		t.translate(x * SPRITE_WIDTH + 16.0f, y * SPRITE_HEIGHT + 16.0f);
 		t.combine(gfx.sprite_transform);
 		t.translate(-16.0f, -16.0f);
 		
-		_rtex.draw(s, t);
+		_rtex.draw(gfx.sprite, t);
 	}
 }
 

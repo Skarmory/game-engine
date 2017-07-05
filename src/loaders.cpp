@@ -89,5 +89,21 @@ void LevelTransitionLoader::load(Entity& prototype, const std::string& value)
 
 void AnimatorLoader::load(Entity& prototype, const std::string& value)
 {
-	prototype.add_component(new Animator());
+	Animator* animator = new Animator();
+
+	if (value != "null")
+	{
+		std::vector<Animation*>* anims = Environment::get().get_animation_cache()->get(value);
+
+		for (auto anim : *anims)
+			animator->animations[anim->name] = anim;
+
+		animator->current = animator->animations["idle"];
+	}
+
+	animator->current_frame = 0;
+	animator->frame_time = 0.0;
+	animator->running_time = 0.0;
+
+	prototype.add_component(animator);
 }

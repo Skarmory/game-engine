@@ -2,8 +2,7 @@
 
 #include "environment.h"
 #include "graphics.h"
-
-#include <iostream>
+#include "animation.h"
 
 void MoveSystem::init(void)
 {
@@ -25,35 +24,20 @@ void MoveSystem::update(void)
 		float x = (1 - move->t) * move->from_x + move->t * dest_x;
 		float y = (1 - move->t) * move->from_y + move->t * dest_y;
 
-		/*if(dest_x > move->current_x)
-			move->current_x += MOVE_SPEED * delta;
-		else if (dest_x < move->current_x)
-			move->current_x -= MOVE_SPEED * delta;
-
-		if (dest_y > move->current_y)
-			move->current_y += MOVE_SPEED * delta;
-		else if (dest_y < move->current_y)
-			move->current_y -= MOVE_SPEED * delta;
-
-		if (std::abs(move->current_x - dest_x) <= 2.f)
-			move->current_x = dest_x;
-
-		if (std::abs(move->current_y - dest_y) <= 2.f)
-			move->current_y = dest_y;*/
-
 		gfx->sprite.setPosition(x, y);
 
 		if (move->t >= 1.f)
 		{
 			gfx->sprite.setPosition(dest_x, dest_y);
 			(*it)->remove_component<Move>();
+
+			// TODO: Refactor
+			Animator* anim = (*it)->get_component<Animator>();
+			anim->play("idle");
+
 			it = _entities.erase(it);
 			continue;
 		}
-
-		
-
-		
 
 		++it;
 	}
