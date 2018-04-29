@@ -1,7 +1,7 @@
 #ifndef graphic_component_h
 #define graphic_component_h
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "component.h"
 

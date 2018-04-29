@@ -56,10 +56,10 @@ public:
 
 	// Return const pointer to const component
 	template<class T>
-	const T const* get_component(void) const
+	const T* get_component(void) const
 	{
 		if(has_component<T>())
-			return static_cast<const T const*>(_components.at(typeid(T)));
+			return static_cast<const T*>(_components.at(typeid(T)));
 
 		return nullptr;
 	}

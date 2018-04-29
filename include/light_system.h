@@ -24,7 +24,7 @@ private:
 	sf::RenderTexture _occlusion_map;
 	sf::Shader _light_shader;
 
-	bool occluder_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, sf::Vector2f& closest = sf::Vector2f(0.f, 0.f));
+	bool occluder_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t, sf::Vector2f& closest);
 	bool level_bound_intersect(const sf::Vector2f& origin, const sf::Vector2f& direction, float& t);
 
 	static bool compare_ray_angle(const sf::Vector2f& lhs, const sf::Vector2f& rhs);

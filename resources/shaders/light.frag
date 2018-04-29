@@ -28,4 +28,4 @@ void main(void)
 	{
 		discard;
 	}
-};
+}
