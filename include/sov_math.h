@@ -7,7 +7,7 @@
 #endif
 
 #include <set>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 const sf::Vector2f world_up(0.f, -1.0f);
 const sf::Vector2f world_right(1.f, 0.f);

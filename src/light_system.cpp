@@ -38,7 +38,7 @@ void LightSystem::update(void)
 	const Level& level = Environment::get().get_level_manager()->get_current();
 	_light_map.clear(sf::Color::Black);
 
-	for (auto& it = _entities.begin(); it != _entities.end(); ++it)
+	for (auto it = _entities.begin(); it != _entities.end(); ++it)
 	{
 		_occlusion_map.clear(sf::Color::Transparent);
 
@@ -72,7 +72,7 @@ void LightSystem::update(void)
 			rays.push_back(bottom_right - light_centre);
 
 			// For each ray, find out whether it intersects anything
-			for (auto& ray = rays.begin(); ray != rays.end(); ++ray)
+			for (auto ray = rays.begin(); ray != rays.end(); ++ray)
 			{
 				sf::Vector2f closest;
 
@@ -142,11 +142,11 @@ void LightSystem::update(void)
 			rays.push_back(map_bl - light_centre);
 			rays.push_back(map_br - light_centre);
 
-			for (auto& ray : rays)
+			for (auto ray : rays)
 			{
 				float ray_t = 1.0f;
-
-				occluder_intersect(light_centre, ray, ray_t);
+				sf::Vector2f vec_init = sf::Vector2f(0.f, 0.f);
+				occluder_intersect(light_centre, ray, ray_t, vec_init);
 				light_geom.push_back(ray * ray_t);
 			}
 		}
